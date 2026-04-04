@@ -1,5 +1,6 @@
 package services;
 
+import entities.Roles;
 import entities.User;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.DBConnection;
@@ -48,8 +49,12 @@ public class UserService implements ICrud <User>{
         user.setPassword(hashedPassword);
 
         // 📌 4. Valeurs par défaut (si null)
-        if (user.getType() == null) {
-            user.setType("local");
+        if (user.getRole()== Roles.ROLE_ADMIN) {
+            user.setType("user");
+        }else if (user.getRole()== Roles.ROLE_COACH) {
+            user.setType("coach");
+        }else{
+            user.setType("player");
         }
 
         if (user.getProfileImage() == null) {

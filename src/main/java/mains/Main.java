@@ -10,8 +10,8 @@ public class Main {
     public static void main(String[] args) {
         User user = new User();
         user.setPassword("rany123");
-        user.setEmail("ranessala@gmail.com");
-        user.setRole(Roles.ROLE_COACH);
+        user.setEmail("ranessala1@gmail.com");
+        user.setRole(Roles.ROLE_ADMIN);
         UserService userService = new UserService();
         try {
             userService.insertOne(user);

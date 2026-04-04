@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DBConnection {
 
     //private static final String URL = "jdbc:mysql://localhost:3306/fit_keep";
-    private static final String URL = "jdbc:mysql://localhost:3306/esports_db";
+    private static final String URL = "jdbc:mysql://localhost:3307/esports_db";
 
     private static final String USER = "root";
     private static final String PASSWORD = "";
