@@ -85,9 +85,11 @@
 
                 <HBox spacing="12" alignment="CENTER">
                     <Button text="🎮  Inscription Joueur"
-                            styleClass="signup-outline-btn"  />
+                            styleClass="signup-outline-btn"
+                            onAction="#onSignupPlayer" />
                     <Button text="🏆  Inscription Coach"
-                            styleClass="signup-outline-btn" onAction="#onSignupCoach" />
+                            styleClass="signup-outline-btn"
+                            onAction="#onSignupCoach" />
                 </HBox>
 
             </VBox>

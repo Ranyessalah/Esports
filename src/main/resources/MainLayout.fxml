@@ -1,49 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<<<<<<< HEAD
-
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.shape.*?>
-
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.MainLayoutController"
-            stylesheets="clutchx-theme.css">
-
-    <!-- ═══════════════════ TOP HEADER BAR ═══════════════════ -->
-    <top>
-        <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="0">
-
-            <!-- Logo Zone (left, same width as sidebar) -->
-            <HBox styleClass="logo-zone" alignment="CENTER" minWidth="250" maxWidth="250" prefWidth="250">
-                <Label styleClass="logo-x-btn" text="X" />
-                <Label styleClass="logo-text" text="CLUTCH" />
-                <Label styleClass="logo-text-accent" text="X" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Button styleClass="hamburger-btn" fx:id="hamburgerBtn" onAction="#toggleSidebar">
-                    <graphic>
-                        <Label text="☰" styleClass="hamburger-icon" />
-                    </graphic>
-                </Button>
-            </HBox>
-
-            <!-- Header content area -->
-            <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" styleClass="header-content-zone" spacing="12">
-                <Button styleClass="icon-btn-close" text="✕" />
-                <Region HBox.hgrow="ALWAYS" />
-
-                <!-- User Profile Dropdown -->
-                <HBox styleClass="user-profile-area" alignment="CENTER" spacing="8">
-                    <ImageView fx:id="userAvatarHeader" styleClass="avatar-header" fitWidth="36" fitHeight="36" preserveRatio="true">
-                        <image>
-                            <Image url="@/images/default-avatar.png" />
-                        </image>
-                    </ImageView>
-                    <Label fx:id="userEmailLabel" styleClass="user-email-label" text="rany.essalah@esprit.tn" />
-=======
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -85,64 +41,12 @@
                     </ImageView>
                     <Label fx:id="userEmailLabel" styleClass="user-email-label"
                            text="rany.essalah@esprit.tn" />
->>>>>>> fa93614ad86cdc72a85100622304ce9f69e3e54a
                     <Label text="▾" styleClass="dropdown-arrow" />
                 </HBox>
             </HBox>
         </HBox>
     </top>
 
-<<<<<<< HEAD
-    <!-- ═══════════════════ LEFT SIDEBAR ═══════════════════ -->
-    <left>
-        <VBox styleClass="sidebar" minWidth="250" maxWidth="250" prefWidth="250" fx:id="sidebar">
-
-            <!-- User info at top of sidebar -->
-            <HBox styleClass="sidebar-user-info" alignment="CENTER_LEFT" spacing="12">
-                <ImageView fx:id="sidebarAvatar" styleClass="sidebar-avatar" fitWidth="44" fitHeight="44" preserveRatio="true">
-                    <image>
-                        <Image url="@/images/default-avatar.png" />
-                    </image>
-                </ImageView>
-                <Label fx:id="sidebarEmail" styleClass="sidebar-email" text="Rany.Essalah@Esprit.Tn" />
-            </HBox>
-
-            <!-- Navigation items -->
-            <VBox styleClass="nav-list" spacing="4">
-
-                <!-- Dashboard (active) -->
-                <HBox styleClass="nav-item nav-item-active" alignment="CENTER_LEFT" spacing="12" onMouseClicked="#onDashboardClick">
-                    <HBox styleClass="nav-icon-box nav-icon-blue" alignment="CENTER" minWidth="32" minHeight="32">
-                        <Label text="⌂" styleClass="nav-icon" />
-                    </HBox>
-                    <Label text="Dashboard" styleClass="nav-label-active" />
-                </HBox>
-
-                <!-- Components -->
-                <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12" onMouseClicked="#onComponentsClick">
-                    <HBox styleClass="nav-icon-box nav-icon-red" alignment="CENTER" minWidth="32" minHeight="32">
-                        <Label text="⊞" styleClass="nav-icon" />
-                    </HBox>
-                    <Label text="Components" styleClass="nav-label" HBox.hgrow="ALWAYS" />
-                    <Label text="›" styleClass="nav-chevron" />
-                </HBox>
-
-                <!-- Form Components -->
-                <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12" onMouseClicked="#onFormComponentsClick">
-                    <HBox styleClass="nav-icon-box nav-icon-green" alignment="CENTER" minWidth="32" minHeight="32">
-                        <Label text="☑" styleClass="nav-icon" />
-                    </HBox>
-                    <Label text="Form Components" styleClass="nav-label" />
-                </HBox>
-
-                <!-- Coach Signup (bonus entry) -->
-                <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12" onMouseClicked="#onCoachSignupClick">
-                    <HBox styleClass="nav-icon-box nav-icon-purple" alignment="CENTER" minWidth="32" minHeight="32">
-                        <Label text="🏆" styleClass="nav-icon" />
-                    </HBox>
-                    <Label text="Rejoindre Coach" styleClass="nav-label" />
-                </HBox>
-=======
     <!-- ═══ SIDEBAR ═══ -->
     <left>
         <VBox fx:id="sidebar" styleClass="sidebar"
@@ -207,25 +111,15 @@
                            styleClass="nav-label" />
                 </HBox>
 
->>>>>>> fa93614ad86cdc72a85100622304ce9f69e3e54a
             </VBox>
 
             <Region VBox.vgrow="ALWAYS" />
         </VBox>
     </left>
 
-<<<<<<< HEAD
-    <!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
-    <center>
-        <StackPane fx:id="contentArea" styleClass="content-area">
-            <!-- Content is dynamically loaded here -->
-            <Label text="" styleClass="content-placeholder" />
-        </StackPane>
-=======
     <!-- ═══ CONTENT ═══ -->
     <center>
         <StackPane fx:id="contentArea" styleClass="content-area" />
->>>>>>> fa93614ad86cdc72a85100622304ce9f69e3e54a
     </center>
 
 </BorderPane>

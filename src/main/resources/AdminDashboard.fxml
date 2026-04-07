@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AdminDashboardController"
+            styleClass="admin-root">
+
+    <!-- ══════════════ SIDEBAR ══════════════ -->
+    <left>
+        <VBox styleClass="admin-sidebar" minWidth="180" maxWidth="180">
+            <padding><Insets top="0" bottom="0" left="0" right="0" /></padding>
+
+            <!-- Logo -->
+            <HBox styleClass="admin-logo-zone" alignment="CENTER_LEFT" spacing="6">
+                <padding><Insets top="16" bottom="16" left="16" right="16" /></padding>
+                <Label text="⚡" styleClass="admin-logo-icon" />
+                <Label text="ClutchX" styleClass="admin-logo-text" />
+            </HBox>
+
+            <!-- Nav items -->
+            <VBox styleClass="admin-nav" spacing="2">
+                <padding><Insets top="12" bottom="12" left="8" right="8" /></padding>
+
+                <Button text="🏠  Dashboard" styleClass="admin-nav-btn admin-nav-active"
+                        maxWidth="Infinity" onAction="#onDashboard" />
+                <Button text="👥  Users" styleClass="admin-nav-btn"
+                        maxWidth="Infinity" onAction="#onUsers" />
+                <Button text="🛡  Équipes" styleClass="admin-nav-btn"
+                        maxWidth="Infinity" />
+                <Button text="🎯  Matchs" styleClass="admin-nav-btn"
+                        maxWidth="Infinity" />
+                <Button text="🏆  League" styleClass="admin-nav-btn"
+                        maxWidth="Infinity" />
+                <Button text="📅  Fixture" styleClass="admin-nav-btn"
+                        maxWidth="Infinity" />
+                <Button text="📊  Statistiques" styleClass="admin-nav-btn"
+                        maxWidth="Infinity" />
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <!-- Footer -->
+            <Label text="© 2026 — Backoffice" styleClass="admin-sidebar-footer" />
+        </VBox>
+    </left>
+
+    <!-- ══════════════ TOP BAR ══════════════ -->
+    <top>
+        <HBox styleClass="admin-topbar" alignment="CENTER_LEFT" spacing="12">
+            <padding><Insets top="0" bottom="0" left="16" right="24" /></padding>
+
+            <!-- Sub-nav -->
+            <HBox spacing="16" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <Label text="Dashboard" styleClass="admin-topbar-link admin-topbar-link-active" />
+                <Label text="Users" styleClass="admin-topbar-link" />
+                <Label text="Pages" styleClass="admin-topbar-link" />
+                <Label text="Settings" styleClass="admin-topbar-link" />
+            </HBox>
+
+            <!-- Search -->
+            <TextField fx:id="globalSearch" styleClass="admin-search"
+                       promptText="Search..." prefWidth="280" />
+
+            <!-- Icons -->
+            <Button text="🔔" styleClass="admin-icon-btn" />
+            <Button text="⚙" styleClass="admin-icon-btn" />
+
+            <!-- User -->
+            <VBox alignment="CENTER_RIGHT" spacing="1">
+                <Label text="Connected" styleClass="admin-connected-label" />
+                <Label fx:id="adminEmailLabel" text="admin@email.com"
+                       styleClass="admin-email-label" />
+            </VBox>
+        </HBox>
+    </top>
+
+    <!-- ══════════════ MAIN CONTENT ══════════════ -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="admin-content-scroll">
+            <VBox spacing="24" styleClass="admin-content">
+                <padding><Insets top="28" bottom="28" left="28" right="28" /></padding>
+
+                <!-- ── STATS CARDS ── -->
+                <HBox spacing="18">
+                    <!-- Total Users -->
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <StackPane styleClass="stat-icon-box stat-icon-purple">
+                                <Label text="👥" styleClass="stat-icon" />
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label text="UTILISATEURS TOTAL" styleClass="stat-title" />
+                                <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Coaches -->
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <StackPane styleClass="stat-icon-box stat-icon-blue">
+                                <Label text="🎓" styleClass="stat-icon" />
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label text="COACHS" styleClass="stat-title" />
+                                <Label fx:id="totalCoachesLabel" text="0" styleClass="stat-value" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Players -->
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <StackPane styleClass="stat-icon-box stat-icon-green">
+                                <Label text="🎮" styleClass="stat-icon" />
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label text="JOUEURS" styleClass="stat-title" />
+                                <Label fx:id="totalPlayersLabel" text="0" styleClass="stat-value" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Admins -->
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <StackPane styleClass="stat-icon-box stat-icon-orange">
+                                <Label text="⭐" styleClass="stat-icon" />
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label text="ADMINISTRATEURS" styleClass="stat-title" />
+                                <Label fx:id="totalAdminsLabel" text="0" styleClass="stat-value" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <!-- ── FILTERS + TABLE ── -->
+                <VBox styleClass="admin-table-card" spacing="16">
+                    <padding><Insets top="20" bottom="20" left="20" right="20" /></padding>
+
+                    <!-- Filter row -->
+                    <HBox spacing="14" alignment="CENTER_LEFT">
+                        <VBox spacing="4">
+                            <Label text="RECHERCHER" styleClass="filter-label" />
+                            <TextField fx:id="searchField" styleClass="filter-input"
+                                       promptText="Rechercher par email, rôle..." prefWidth="200" />
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="RÔLE" styleClass="filter-label" />
+                            <ComboBox fx:id="roleFilter" styleClass="filter-combo" prefWidth="140"
+                                      promptText="Tous les rôles" />
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="STATUT" styleClass="filter-label" />
+                            <ComboBox fx:id="statusFilter" styleClass="filter-combo" prefWidth="140"
+                                      promptText="Tous les statuts" />
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="TRIER PAR" styleClass="filter-label" />
+                            <ComboBox fx:id="sortByFilter" styleClass="filter-combo" prefWidth="120"
+                                      promptText="ID" />
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="ORDRE" styleClass="filter-label" />
+                            <ComboBox fx:id="orderFilter" styleClass="filter-combo" prefWidth="130"
+                                      promptText="Décroissant" />
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text=" " styleClass="filter-label" />
+                            <HBox spacing="8">
+                                <Button text="⚡ Appliquer" styleClass="filter-apply-btn"
+                                        onAction="#onApplyFilters" />
+                                <Button text="↺ Réinitialiser" styleClass="filter-reset-btn"
+                                        onAction="#onResetFilters" />
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Count -->
+                    <Label fx:id="resultCountLabel" text="0 utilisateurs trouvés"
+                           styleClass="result-count" />
+
+                    <!-- Table -->
+                    <TableView fx:id="usersTable" styleClass="admin-table"
+                               VBox.vgrow="ALWAYS" minHeight="320">
+                        <columns>
+                            <TableColumn fx:id="colId" text="ID" prefWidth="60" />
+                            <TableColumn fx:id="colUser" text="UTILISATEUR" prefWidth="220" />
+                            <TableColumn fx:id="colRole" text="RÔLE" prefWidth="120" />
+                            <TableColumn fx:id="colEmail" text="EMAIL" prefWidth="230" />
+                            <TableColumn fx:id="colStatus" text="STATUT" prefWidth="100" />
+                            <TableColumn fx:id="colActions" text="ACTIONS" prefWidth="110" />
+                        </columns>
+                        <placeholder>
+                            <Label text="Aucun utilisateur trouvé" styleClass="table-placeholder" />
+                        </placeholder>
+                    </TableView>
+
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
