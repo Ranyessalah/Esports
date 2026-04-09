@@ -11,8 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService implements ICrud<User> {
+    private final PlayerService playerService;
+    private final CoachService coachService;
     private Connection cnx;
     public UserService() {
+        this.playerService = new PlayerService();
+        this.coachService = new CoachService();
         this.cnx = DBConnection.getInstance().getCnx();
     }
 
@@ -115,6 +119,15 @@ public class UserService implements ICrud<User> {
         try (PreparedStatement ps = cnx.prepareStatement(req)) {
             ps.setInt(1, user.getId());
             ps.executeUpdate();
+            if (user.getRole() == Roles.ROLE_COACH) {
+               coachService.supprimer(user.getId());
+            } else if (user.getRole()==Roles.ROLE_PLAYER) {
+                playerService.supprimer(user.getId());
+
+            }
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
