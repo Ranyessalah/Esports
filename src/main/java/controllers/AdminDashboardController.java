@@ -8,14 +8,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import services.UserService;
 
@@ -56,14 +61,21 @@ public class AdminDashboardController implements Initializable {
     @FXML private TableColumn<User, Boolean> colStatus;
     @FXML private TableColumn<User, Void>    colActions;
 
+    @FXML private StackPane userMenuPane;
+    @FXML private Label adminAvatarLabel;
+    private Popup userDropdown;
+    private boolean dropdownOpen = false;
+    private User currentAdmin;
     private final UserService userService = new UserService();
     private ObservableList<User> allUsers = FXCollections.observableArrayList();
 
     // ── Called from LoginController after login ──
     public void setAdminEmail(String email) {
         if (adminEmailLabel != null) adminEmailLabel.setText(email);
+        if (adminAvatarLabel != null && email != null && !email.isEmpty()) {
+            adminAvatarLabel.setText(email.substring(0, Math.min(2, email.length())).toUpperCase());
+        }
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupFilters();
@@ -240,14 +252,34 @@ public class AdminDashboardController implements Initializable {
     private void loadUsers() {
         try {
             List<User> users = userService.selectAll();
-            allUsers.setAll(users);
+
+            utils.PreferencesRepository prefs = new utils.PreferencesRepository();
+            int currentAdminId = prefs.getSessionUserId();
+
+            // ✅ récupérer admin connecté
+            currentAdmin = users.stream()
+                    .filter(u -> u.getId() == currentAdminId)
+                    .findFirst()
+                    .orElse(null);
+
+            if (currentAdmin != null) {
+                setAdminEmail(currentAdmin.getEmail());
+            }
+
+            // ✅ afficher uniquement Coach + Player
+            List<User> filteredUsers = users.stream()
+                    .filter(user -> user.getRole() != Roles.ROLE_ADMIN)
+                    .collect(Collectors.toList());
+
+            allUsers.setAll(filteredUsers);
+
             applyFilters();
-            updateStats(users);
+            updateStats(users); // garder stats globales
+
         } catch (SQLException e) {
             showError("Erreur", "Impossible de charger les utilisateurs : " + e.getMessage());
         }
     }
-
     private void updateStats(List<User> users) {
         totalUsersLabel.setText(String.valueOf(users.size()));
         totalCoachesLabel.setText(String.valueOf(
@@ -324,7 +356,15 @@ public class AdminDashboardController implements Initializable {
     // ════════════════════════════════════════
 
     private void onEditUser(User user) {
-        showInfo("Modifier", "Modification de : " + user.getEmail() + "\n(à implémenter)");
+        // Bloquer la modification de l'admin #1
+        if (user.getRole() == Roles.ROLE_ADMIN) {
+            showInfo("Non autorisé", "Impossible de modifier un administrateur depuis cette interface.");
+            return;
+        }
+        Stage owner = (Stage) usersTable.getScene().getWindow();
+        new ProfileDialog().show(owner, user, false, updatedUser -> {
+            loadUsers(); // rafraîchit la table après sauvegarde
+        });
     }
 
     private void onToggleBlock(User user) {
@@ -389,5 +429,130 @@ public class AdminDashboardController implements Initializable {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setTitle(title); a.setHeaderText(null); a.setContentText(msg);
         a.showAndWait();
+    }
+
+    @FXML
+    private void onToggleUserMenu() {
+        if (dropdownOpen) {
+            userDropdown.hide();
+            dropdownOpen = false;
+            return;
+        }
+        if (userDropdown == null) {
+            userDropdown = buildUserDropdown();
+        }
+        javafx.geometry.Bounds bounds = userMenuPane.localToScreen(userMenuPane.getBoundsInLocal());
+        userDropdown.show(userMenuPane,
+                bounds.getMaxX() - 200, // aligne à droite
+                bounds.getMaxY() + 6);
+        dropdownOpen = true;
+
+        // Ferme si on clique ailleurs
+        userDropdown.setAutoHide(true);
+        userDropdown.setOnHidden(e -> dropdownOpen = false);
+    }
+
+    private Popup buildUserDropdown() {
+        Popup popup = new Popup();
+        popup.setAutoFix(true);
+
+        VBox menu = new VBox(0);
+        menu.getStyleClass().add("admin-user-dropdown");
+        menu.setPrefWidth(200);
+
+        // Email en en-tête
+        Label emailLbl = new Label(adminEmailLabel.getText());
+        emailLbl.getStyleClass().add("dropdown-email-label");
+
+        Separator sep1 = new Separator();
+        sep1.getStyleClass().add("dropdown-separator");
+        sep1.setStyle("-fx-padding: 0; -fx-pref-height:1; -fx-background-color: rgba(255,255,255,0.07);");
+
+        // Items
+        Button profileBtn = new Button("👤  Mon profil");
+        profileBtn.getStyleClass().add("dropdown-item-btn");
+        profileBtn.setMaxWidth(Double.MAX_VALUE);
+        profileBtn.setOnAction(e -> {
+            popup.hide();
+            dropdownOpen = false;
+
+            utils.PreferencesRepository prefs = new utils.PreferencesRepository();
+            if (currentAdmin != null) {
+                try {
+                    Node currentCenter = ((BorderPane) userMenuPane.getScene().getRoot()).getCenter();
+
+                    FXMLLoader loader = new FXMLLoader(
+                            getClass().getResource("/AdminProfileView.fxml"));
+                    Node profileScreen = loader.load();
+
+                    AdminProfileViewController ctrl = loader.getController();
+                    ctrl.init(
+                            currentAdmin,
+                            (BorderPane) userMenuPane.getScene().getRoot(),
+                            currentCenter,
+                            () -> {
+                                prefs.updateEmail(currentAdmin.getEmail());
+                                setAdminEmail(currentAdmin.getEmail());
+                                loadUsers();
+                            }
+                    );
+
+                    ((BorderPane) userMenuPane.getScene().getRoot()).setCenter(profileScreen);
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        Button settingsBtn = new Button("⚙  Paramètres");
+        settingsBtn.getStyleClass().add("dropdown-item-btn");
+        settingsBtn.setMaxWidth(Double.MAX_VALUE);
+        settingsBtn.setOnAction(e -> { popup.hide(); dropdownOpen = false; showInfo("Paramètres", "Paramètres (à implémenter)"); });
+
+        Separator sep2 = new Separator();
+        sep2.setStyle("-fx-padding: 0; -fx-pref-height:1; -fx-background-color: rgba(255,255,255,0.07);");
+
+        Button logoutBtn = new Button("⏻  Se déconnecter");
+        logoutBtn.getStyleClass().add("dropdown-logout-btn");
+        logoutBtn.setMaxWidth(Double.MAX_VALUE);
+        logoutBtn.setOnAction(e -> { popup.hide(); dropdownOpen = false; onLogout(); });
+
+        menu.getChildren().addAll(emailLbl, sep1, profileBtn, settingsBtn, sep2, logoutBtn);
+
+        // Appliquer le stylesheet du projet
+        Scene currentScene = userMenuPane.getScene();
+        if (currentScene != null) {
+            menu.getStylesheets().addAll(currentScene.getStylesheets());
+        }
+
+        popup.getContent().add(menu);
+        return popup;
+    }
+
+    private void onLogout() {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Déconnexion");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Voulez-vous vous déconnecter ?");
+        confirm.showAndWait().ifPresent(btn -> {
+            if (btn == ButtonType.OK) {
+                new utils.PreferencesRepository().clearSession();
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+                    javafx.scene.Parent root = loader.load();
+                    javafx.stage.Stage stage = (javafx.stage.Stage) userMenuPane.getScene().getWindow();
+                    javafx.scene.Scene scene = new javafx.scene.Scene(
+                            root, stage.getWidth(), stage.getHeight()
+                    );
+                    scene.getStylesheets().add(
+                            getClass().getResource("/clutchx-theme.css").toExternalForm()
+                    );
+                    stage.setScene(scene);
+                    stage.setTitle("ClutchX — Connexion");
+                } catch (IOException e) {
+                    showError("Erreur", "Impossible de retourner au login : " + e.getMessage());
+                }
+            }
+        });
     }
 }

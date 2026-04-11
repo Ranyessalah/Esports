@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+
+<ScrollPane fitToWidth="true" styleClass="profile-scroll"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.CoachProfileController"
+            stylesheets="@/clutchx-theme.css">
+
+    <VBox spacing="24" styleClass="profile-root" maxWidth="680">
+        <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
+
+        <!-- Header -->
+        <VBox spacing="4">
+            <Label text="Mon Profil" styleClass="page-title" />
+            <Label text="Mettre à jour mes informations personnelles" styleClass="page-subtitle" />
+        </VBox>
+
+        <!-- Profile Card -->
+        <VBox styleClass="profile-card" spacing="0">
+
+            <!-- Avatar + name banner -->
+            <HBox styleClass="profile-banner" alignment="CENTER_LEFT" spacing="20">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                <StackPane styleClass="avatar-wrapper">
+                    <Circle fx:id="avatarCircleBg" radius="40" styleClass="avatar-circle-bg"/>
+                    <ImageView fx:id="profileAvatar" fitWidth="72" fitHeight="72"
+                               preserveRatio="true" styleClass="profile-avatar-img">
+                        <image><Image url="@/images/default-avatar.png"/></image>
+                    </ImageView>
+                </StackPane>
+                <VBox spacing="4">
+                    <Label fx:id="displayEmail" styleClass="profile-display-name" text="coach@clutchx.tn"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label styleClass="role-badge-coach" text="COACH"/>
+                        <Label fx:id="disponibiliteTag" styleClass="disponibilite-tag" text="● Disponible"/>
+                    </HBox>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="editBtn" styleClass="btn-edit-profile" text="✎  Modifier le profil"
+                        onAction="#onEditClick"/>
+            </HBox>
+
+            <Separator styleClass="card-divider"/>
+
+            <!-- Info grid -->
+            <GridPane styleClass="info-grid" hgap="32" vgap="20">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <!-- Email -->
+                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Email" styleClass="info-label"/>
+                    <Label fx:id="infoEmail" text="—" styleClass="info-value"/>
+                </VBox>
+
+                <!-- Pays -->
+                <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="Pays" styleClass="info-label"/>
+                    <Label fx:id="infoPays" text="—" styleClass="info-value"/>
+                </VBox>
+
+                <!-- Spécialité -->
+                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label text="Spécialité" styleClass="info-label"/>
+                    <Label fx:id="infoSpecialite" text="—" styleClass="info-value"/>
+                </VBox>
+
+                <!-- Disponibilité -->
+                <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Disponibilité" styleClass="info-label"/>
+                    <Label fx:id="infoDisponibilite" text="—" styleClass="info-value"/>
+                </VBox>
+
+<!--                &lt;!&ndash; 2FA Status &ndash;&gt;-->
+<!--                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">-->
+<!--                    <Label text="Authentification 2FA" styleClass="info-label"/>-->
+<!--                    <Label fx:id="info2fa" text="—" styleClass="info-value"/>-->
+<!--                </VBox>-->
+
+            </GridPane>
+        </VBox>
+        <VBox styleClass="profile-card danger-zone" spacing="16">
+            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+            <Label text="Zone dangereuse" styleClass="danger-title"/>
+
+            <Label text="La suppression de votre compte est irréversible."
+                   styleClass="danger-subtitle"/>
+
+            <Button fx:id="deleteAccountBtn"
+                    text="Supprimer mon compte"
+                    styleClass="btn-delete-account"
+                    onAction="#onDeleteAccount"/>
+        </VBox>
+
+<!--        &lt;!&ndash; 2FA Card &ndash;&gt;-->
+<!--        <VBox styleClass="profile-card twofa-card" spacing="16">-->
+<!--            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>-->
+<!--            <HBox alignment="CENTER_LEFT" spacing="12">-->
+<!--                <StackPane styleClass="twofa-icon-box">-->
+<!--                    <Label text="🔐" styleClass="twofa-icon"/>-->
+<!--                </StackPane>-->
+<!--                <VBox spacing="2">-->
+<!--                    <Label text="Authentification à deux facteurs (2FA)" styleClass="card-section-title"/>-->
+<!--                    <Label text="Protégez votre compte avec Google Authenticator" styleClass="card-section-sub"/>-->
+<!--                </VBox>-->
+<!--            </HBox>-->
+<!--            <Label fx:id="twoFaWarning" styleClass="twofa-warning"-->
+<!--                   text="2FA non activée — votre compte est moins sécurisé"/>-->
+<!--            <Button fx:id="twoFaBtn" styleClass="btn-activate-2fa"-->
+<!--                    text="Activer La 2FA" onAction="#onToggle2FA"-->
+<!--                    maxWidth="Infinity"/>-->
+<!--        </VBox>-->
+
+    </VBox>
+</ScrollPane>

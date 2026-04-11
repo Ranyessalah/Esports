@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.AdminProfileEditController"
+      styleClass="edit-root" spacing="0">
+
+    <!-- Header -->
+    <HBox styleClass="edit-header" alignment="CENTER_LEFT" spacing="14">
+        <padding><Insets top="20" bottom="20" left="24" right="24"/></padding>
+        <Label fx:id="avatarLabel" styleClass="edit-avatar-sm"/>
+        <VBox spacing="3">
+            <Label text="Modifier mon profil" styleClass="edit-header-title"/>
+            <Label fx:id="subtitleLabel"       styleClass="edit-header-sub"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="✕" styleClass="edit-close-btn" onAction="#onCancel"/>
+    </HBox>
+
+    <!-- Form -->
+    <VBox styleClass="edit-body" spacing="18">
+        <padding><Insets top="24" bottom="16" left="24" right="24"/></padding>
+
+        <VBox spacing="6">
+            <Label text="EMAIL" styleClass="form-group-label"/>
+            <TextField fx:id="emailField" styleClass="form-field"
+                       promptText="Adresse email"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="NOUVEAU MOT DE PASSE" styleClass="form-group-label"/>
+            <PasswordField fx:id="passwordField" styleClass="form-field"
+                           promptText="Laisser vide pour ne pas changer"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="CONFIRMER LE MOT DE PASSE" styleClass="form-group-label"/>
+            <PasswordField fx:id="confirmField" styleClass="form-field"
+                           promptText="Confirmer le mot de passe"/>
+        </VBox>
+
+    </VBox>
+
+    <!-- Feedback message (hidden by default) -->
+    <Label fx:id="messageLabel" wrapText="true"
+           visible="false" managed="false">
+        <padding><Insets top="0" bottom="4" left="24" right="24"/></padding>
+    </Label>
+
+    <!-- Footer -->
+    <HBox styleClass="edit-footer" alignment="CENTER_RIGHT" spacing="12">
+        <padding><Insets top="8" bottom="22" left="24" right="24"/></padding>
+        <Button text="Annuler"    styleClass="btn-ghost"   onAction="#onCancel"/>
+        <Button fx:id="saveButton" text="Enregistrer"
+                styleClass="btn-primary" onAction="#onSave"/>
+    </HBox>
+
+</VBox>

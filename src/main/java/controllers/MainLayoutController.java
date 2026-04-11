@@ -141,9 +141,7 @@ public class MainLayoutController implements Initializable {
         loadContent(null, "Form Components");
     }
 
-    @FXML public void onCoachSignupClick() {
-        loadContent("/CoachSignup.fxml", null);
-    }
+
 
     @FXML public void onCloseTab() {
         // Close current tab or navigate back
@@ -208,7 +206,10 @@ public class MainLayoutController implements Initializable {
             if (item[1].equals("Logout")) {
                 btn.getStyleClass().add("dropdown-item-danger");
                 btn.setOnAction(e -> { userDropdown.hide(); onLogout(); });
-            } else {
+            } else if(item[1].equals("Profile")){
+                System.out.println("edit profile for :"+ prefs.getSessionRole());
+                btn.setOnAction(e -> { userDropdown.hide(); onProfileClick(); });
+            }else {
                 btn.setOnAction(e -> userDropdown.hide());
             }
             menu.getChildren().add(btn);
@@ -216,7 +217,40 @@ public class MainLayoutController implements Initializable {
 
         userDropdown.getContent().add(menu);
     }
+    @FXML
+    public void onProfileClick() {
+        // Route to the correct profile FXML based on logged-in user's role
 
+        entities.User user = prefs.loadSession();
+        if (user == null) return;
+
+        String fxml;
+        switch (user.getRole()) {
+            case ROLE_COACH  -> fxml = "/CoachProfile.fxml";
+            case ROLE_PLAYER -> fxml = "/PlayerProfile.fxml";
+            default          -> { loadContent(null, "Profil non disponible"); return; }
+        }
+
+        contentArea.getChildren().clear();
+        try {
+            javafx.fxml.FXMLLoader loader =
+                    new javafx.fxml.FXMLLoader(getClass().getResource(fxml));
+            javafx.scene.Node node = loader.load();
+
+            // Pass user to the controller
+            if (user.getRole() == entities.Roles.ROLE_COACH) {
+                controllers.CoachProfileController ctrl = loader.getController();
+                ctrl.setUser(user);
+            } else {
+                controllers.PlayerProfileController ctrl = loader.getController();
+                ctrl.setUser(user);
+            }
+
+            contentArea.getChildren().add(node);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void showUserDropdown() {
         if (userDropdown != null && userProfileArea != null) {
             javafx.geometry.Bounds b =

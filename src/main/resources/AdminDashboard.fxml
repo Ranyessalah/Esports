@@ -68,12 +68,19 @@
             <Button text="🔔" styleClass="admin-icon-btn" />
             <Button text="⚙" styleClass="admin-icon-btn" />
 
-            <!-- User -->
-            <VBox alignment="CENTER_RIGHT" spacing="1">
-                <Label text="Connected" styleClass="admin-connected-label" />
-                <Label fx:id="adminEmailLabel" text="admin@email.com"
-                       styleClass="admin-email-label" />
-            </VBox>
+            <!-- Nouveau code -->
+            <StackPane fx:id="userMenuPane" styleClass="admin-user-menu-btn"
+                       onMouseClicked="#onToggleUserMenu">
+                <HBox spacing="8" alignment="CENTER">
+                    <Label fx:id="adminAvatarLabel" text="AD" styleClass="admin-avatar-circle" />
+                    <VBox alignment="CENTER_LEFT" spacing="1">
+                        <Label text="Connected" styleClass="admin-connected-label" />
+                        <Label fx:id="adminEmailLabel" text="admin@email.com"
+                               styleClass="admin-email-label" />
+                    </VBox>
+                    <Label text="▾" styleClass="admin-chevron" />
+                </HBox>
+            </StackPane>
         </HBox>
     </top>
 

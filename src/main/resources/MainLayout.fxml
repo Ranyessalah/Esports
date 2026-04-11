@@ -100,16 +100,6 @@
                            styleClass="nav-label" />
                 </HBox>
 
-                <HBox fx:id="navCoach" styleClass="nav-item"
-                      alignment="CENTER_LEFT" spacing="12"
-                      onMouseClicked="#onCoachSignupClick">
-                    <HBox styleClass="nav-icon-box nav-icon-purple"
-                          alignment="CENTER" minWidth="32" minHeight="32">
-                        <Label text="🏆" styleClass="nav-icon" />
-                    </HBox>
-                    <Label fx:id="labelCoach" text="Rejoindre Coach"
-                           styleClass="nav-label" />
-                </HBox>
 
             </VBox>
 

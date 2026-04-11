@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.EditPlayerProfileController"
+      stylesheets="@/clutchx-theme.css"
+      styleClass="dialog-root"
+      spacing="0" minWidth="480" maxWidth="520">
+
+    <!-- Header -->
+    <HBox styleClass="dialog-header" alignment="CENTER_LEFT" spacing="12">
+        <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+        <VBox spacing="2">
+            <Label text="Modifier le profil" styleClass="dialog-title"/>
+            <Label text="Mettre à jour vos informations" styleClass="dialog-subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button styleClass="dialog-close-btn" text="✕" onAction="#onCancel"/>
+    </HBox>
+
+    <Separator styleClass="card-divider"/>
+
+    <!-- Body -->
+    <VBox styleClass="dialog-body" spacing="20">
+        <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+        <VBox spacing="6">
+            <Label text="Email" styleClass="form-label"/>
+            <TextField fx:id="emailField" styleClass="form-input"
+                       promptText="votre@email.com"/>
+            <Label text="L'adresse email sera utilisée pour la connexion"
+                   styleClass="form-hint"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Nouveau mot de passe" styleClass="form-label"/>
+            <PasswordField fx:id="passwordField" styleClass="form-input"
+                           promptText="Laisser vide pour ne pas changer"/>
+            <Label text="Minimum 8 caractères recommandés" styleClass="form-hint"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Confirmer le mot de passe" styleClass="form-label"/>
+            <PasswordField fx:id="confirmPasswordField" styleClass="form-input"
+                           promptText="Confirmer le mot de passe"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Pays" styleClass="form-label"/>
+            <ComboBox fx:id="paysCombo" styleClass="form-combo"
+                      promptText="Sélectionnez un pays" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Niveau" styleClass="form-label"/>
+            <ComboBox fx:id="niveauCombo" styleClass="form-combo"
+                      promptText="Sélectionnez un niveau" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="8">
+            <Label text="Statut" styleClass="form-label"/>
+            <HBox spacing="24">
+                <RadioButton fx:id="actifRadio" text="Actif" styleClass="form-radio">
+                    <toggleGroup><ToggleGroup fx:id="statutGroup"/></toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="inactifRadio" text="Inactif" styleClass="form-radio"
+                             toggleGroup="$statutGroup"/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Photo de profil (pour Face ID)" styleClass="form-label"/>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Button styleClass="btn-choose-file" text="📂  Choisir un fichier"
+                        onAction="#onChooseFile"/>
+                <Label fx:id="fileNameLabel" styleClass="form-hint"
+                       text="Aucun fichier sélectionné"/>
+            </HBox>
+        </VBox>
+
+        <Label fx:id="errorLabel" styleClass="form-error" text=""
+               wrapText="true" managed="false" visible="false"/>
+
+    </VBox>
+
+    <Separator styleClass="card-divider"/>
+
+    <!-- Footer -->
+    <HBox styleClass="dialog-footer" alignment="CENTER_RIGHT" spacing="12">
+        <padding><Insets top="16" right="24" bottom="16" left="24"/></padding>
+        <Button styleClass="btn-secondary" text="← Retour" onAction="#onCancel"/>
+        <Button styleClass="btn-primary" text="✓  Enregistrer Les Modifications"
+                onAction="#onSave" defaultButton="true"/>
+    </HBox>
+
+</VBox>

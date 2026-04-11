@@ -191,4 +191,25 @@ public class UserService implements ICrud<User> {
         user.setTotpEnabled(rs.getBoolean("is_totp_enabled"));
         return user;
     }
+
+    public void updatePassword(User user, String newPassword) throws SQLException {
+        if (user == null || user.getId() <= 0)
+            throw new IllegalArgumentException("Utilisateur invalide.");
+        if (newPassword == null || newPassword.length() < 6)
+            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 6 caractères.");
+
+        String hashed = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+        String req = "UPDATE user SET password = ? WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(req)) {
+            ps.setString(1, hashed);
+            ps.setInt(2, user.getId());
+
+            int rows = ps.executeUpdate();
+            if (rows == 0)
+                throw new SQLException("Aucun utilisateur trouvé avec l'ID : " + user.getId());
+
+            System.out.println("✅ Mot de passe mis à jour pour : " + user.getEmail());
+        }
+    }
 }

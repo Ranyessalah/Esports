@@ -118,4 +118,21 @@ public class CoachService implements IService<Coach> {
 
         return coaches;
     }
+
+    public Coach getById(int id) throws SQLException {
+        String req = "SELECT * FROM coach WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(req)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Coach c = new Coach();
+                c.setId(rs.getInt("id"));
+                c.setSpecialite(rs.getString("specialite"));
+                c.setDisponibilite(rs.getBoolean("disponibilite"));
+                c.setPays(rs.getString("pays"));
+                return c;
+            }
+        }
+        return null;
+    }
 }
