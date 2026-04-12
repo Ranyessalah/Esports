@@ -95,11 +95,9 @@
                         VBox.vgrow="ALWAYS">
 
                 <content>
-                    <FlowPane fx:id="matchContainer"
-                              hgap="18"
-                              vgap="18"
-                              prefWrapLength="1100"
-                              styleClass="cards"/>
+                    <VBox fx:id="matchContainer"
+                          spacing="15"
+                          styleClass="cards"/>
                 </content>
 
             </ScrollPane>

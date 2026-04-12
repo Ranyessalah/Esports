@@ -42,13 +42,16 @@
             </VBox>
 
             <!-- TOPBAR -->
-            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="topbar-box">
-
-                <TextField fx:id="searchField"
-                           promptText="Rechercher une équipe..."
-                           onKeyReleased="#search"
-                           HBox.hgrow="ALWAYS"
-                           styleClass="search-field"/>
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="topbar-box">
+                <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="search-container">
+                    <Label text="🔍" style="-fx-text-fill: #7c3aed; -fx-padding: 0 0 0 10;"/>
+                    <TextField fx:id="searchField"
+                               promptText="Rechercher une équipe..."
+                               onKeyReleased="#search"
+                               HBox.hgrow="ALWAYS"
+                               styleClass="search-field"
+                               style="-fx-background-color: transparent;"/>
+                </HBox>
 
                 <Button text="Actualiser"
                         onAction="#refresh"

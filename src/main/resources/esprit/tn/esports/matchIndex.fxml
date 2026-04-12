@@ -101,11 +101,9 @@
             <!-- SCROLL CONTENT -->
             <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane-custom" VBox.vgrow="ALWAYS">
                 <content>
-                    <FlowPane fx:id="matchContainer"
-                              hgap="18"
-                              vgap="18"
-                              prefWrapLength="980"
-                              styleClass="cards"/>
+                    <VBox fx:id="matchContainer"
+                          spacing="14"
+                          styleClass="cards"/>
                 </content>
             </ScrollPane>
         </VBox>

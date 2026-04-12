@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class MatchClientController {
 
-    @FXML private FlowPane matchContainer;
+    @FXML private VBox matchContainer;
     @FXML private TextField searchField;
     @FXML private ComboBox<String> statusFilter;
     @FXML private Label countLabel;
@@ -40,7 +40,9 @@ public class MatchClientController {
         statusFilter.setItems(FXCollections.observableArrayList(
                 "Tous",
                 "À jouer",
-                "Terminé"
+                "En cours",
+                "Terminé",
+                "Annulé"
         ));
 
         statusFilter.setValue("Tous");
@@ -81,12 +83,22 @@ public class MatchClientController {
                         return true;
                     }
 
+                    String dbStatus = m.getStatut() != null ? m.getStatut().toLowerCase() : "";
+
                     if (statut.equals("Terminé")) {
-                        return isPlayed(m);
+                        return dbStatus.contains("termine") || dbStatus.contains("terminé");
                     }
 
                     if (statut.equals("À jouer")) {
-                        return !isPlayed(m);
+                        return dbStatus.contains("a jouer");
+                    }
+
+                    if (statut.equals("En cours")) {
+                        return dbStatus.contains("en_cours");
+                    }
+
+                    if (statut.equals("Annulé")) {
+                        return dbStatus.contains("annule") || dbStatus.contains("annulé");
                     }
 
                     return true;
@@ -130,117 +142,105 @@ public class MatchClientController {
 
 
     // ================= CARD =================
-    private VBox createCard(Matchs m) {
+    // ================= CARD (Horizontal Scoreboard Row) =================
+    private HBox createCard(Matchs m) {
 
-        VBox card = new VBox(16);
-        card.setPrefWidth(305);
-        card.getStyleClass().add("match-card");
+        HBox row = new HBox(0); 
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.getStyleClass().add("match-row-horizontal");
+        row.setPrefHeight(100);
 
-        // HEADER
-        HBox header = new HBox(12);
-        header.setAlignment(Pos.CENTER_LEFT);
+        // Sidebar Accent (Red for Home/Team 1)
+        Region leftAccent = new Region();
+        leftAccent.getStyleClass().add("accent-strip-left");
+        VBox.setVgrow(leftAccent, Priority.ALWAYS);
+        leftAccent.setPrefHeight(100);
 
-        StackPane logoWrap = new StackPane();
-        logoWrap.getStyleClass().add("mini-logo-wrap");
+        // --- TEAM 1 ---
+        HBox team1 = new HBox(15);
+        team1.setAlignment(Pos.CENTER_LEFT);
+        team1.setPadding(new Insets(0, 0, 0, 25));
+        team1.setPrefWidth(240);
 
-        ImageView icon = new ImageView();
-        icon.setFitWidth(34);
-        icon.setFitHeight(34);
+        ImageView img1 = new ImageView();
+        img1.setFitWidth(54);
+        img1.setFitHeight(54);
+        setTeamLogo(img1, m.getEquipe1());
+        javafx.scene.shape.Circle clip1 = new javafx.scene.shape.Circle(27, 27, 27);
+        img1.setClip(clip1);
 
-        setTeamLogo(icon, m.getEquipe1());
+        Label name1 = new Label(m.getEquipe1() != null ? m.getEquipe1().getNom() : "Equipe 1");
+        name1.getStyleClass().add("horizontal-team-name");
 
-        logoWrap.getChildren().add(icon);
+        team1.getChildren().addAll(img1, name1);
 
-        VBox titleBox = new VBox(4);
+        // --- CENTER: SCORE + STATUS ---
+        VBox center = new VBox(4);
+        center.setAlignment(Pos.CENTER);
+        HBox.setHgrow(center, Priority.ALWAYS);
 
-        Label title = new Label(
-                m.getNomMatch() == null || m.getNomMatch().isBlank()
-                        ? "Match"
-                        : m.getNomMatch()
-        );
+        String currentStatus = m.getStatut() != null ? m.getStatut().toUpperCase() : "À JOUER";
+        Label status = new Label(currentStatus);
+        status.getStyleClass().add("horizontal-status-pill");
 
-        title.getStyleClass().add("match-title");
+        // Dynamic styling based on status type
+        if (currentStatus.equals("TERMINÉ")) {
+            status.setStyle("-fx-text-fill: #10b981; -fx-border-color: #10b981;");
+        } else if (currentStatus.equals("ANNULÉ")) {
+            status.setStyle("-fx-text-fill: #f43f5e; -fx-border-color: #f43f5e;");
+        } else if (currentStatus.equals("EN_COURS")) {
+            status.setStyle("-fx-text-fill: #f59e0b; -fx-border-color: #f59e0b;");
+        } else { // À JOUER
+            status.setStyle("-fx-text-fill: #3b82f6; -fx-border-color: #3b82f6;");
+        }
 
-        Label sub = new Label("Match e-sport");
-        sub.getStyleClass().add("match-subtitle");
+        Label matchLabel = new Label(m.getNomMatch() != null ? m.getNomMatch().toUpperCase() : "MATCH");
+        matchLabel.getStyleClass().add("match-title");
+        matchLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #7c3aed;");
 
-        titleBox.getChildren().addAll(title, sub);
+        Label score = new Label(m.getScoreEquipe1() + " - " + m.getScoreEquipe2());
+        score.getStyleClass().add("horizontal-score-text");
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        center.getChildren().addAll(status, matchLabel, score);
 
-        Label badge = new Label(isPlayed(m) ? "TERMINÉ" : "À JOUER");
-        badge.getStyleClass().add(
-                isPlayed(m) ? "badge-played" : "badge-pending"
-        );
+        // --- TEAM 2 ---
+        HBox team2 = new HBox(15);
+        team2.setAlignment(Pos.CENTER_RIGHT);
+        team2.setPadding(new Insets(0, 25, 0, 0));
+        team2.setPrefWidth(240);
 
-        header.getChildren().addAll(logoWrap, titleBox, spacer, badge);
+        Label name2 = new Label(m.getEquipe2() != null ? m.getEquipe2().getNom() : "Equipe 2");
+        name2.getStyleClass().add("horizontal-team-name");
 
+        ImageView img2 = new ImageView();
+        img2.setFitWidth(54);
+        img2.setFitHeight(54);
+        setTeamLogo(img2, m.getEquipe2());
+        javafx.scene.shape.Circle clip2 = new javafx.scene.shape.Circle(27, 27, 27);
+        img2.setClip(clip2);
 
-        // TEAMS
-        HBox teams = new HBox(14);
-        teams.setAlignment(Pos.CENTER);
+        team2.getChildren().addAll(name2, img2);
 
-        VBox team1 = createTeamBox(m.getEquipe1());
-
-        Label vs = new Label("VS");
-        vs.getStyleClass().add("vs-label");
-
-        VBox team2 = createTeamBox(m.getEquipe2());
-
-        teams.getChildren().addAll(team1, vs, team2);
-
-
-        // SCORE
-        HBox scoreRow = new HBox(22);
-        scoreRow.setAlignment(Pos.CENTER);
-        scoreRow.getStyleClass().add("score-row");
-
-        VBox s1 = createScoreBox("Score", String.valueOf(m.getScoreEquipe1()));
-        VBox s2 = createScoreBox("Score", String.valueOf(m.getScoreEquipe2()));
-
-        scoreRow.getChildren().addAll(s1, s2);
-
-
-        // BUTTON
+        // --- ACTION: VOIR MATCH ---
         Button viewBtn = new Button("Voir Match");
         viewBtn.getStyleClass().add("btn-view");
+        viewBtn.setPrefWidth(120);
+        viewBtn.setPrefHeight(40);
         viewBtn.setOnAction(e -> openDetailsPage(m));
 
         HBox actions = new HBox(viewBtn);
         actions.setAlignment(Pos.CENTER);
+        actions.setPadding(new Insets(0, 20, 0, 10));
 
-        card.getChildren().addAll(header, teams, scoreRow, actions);
+        // Right Accent (Blue for Away/Team 2)
+        Region rightAccent = new Region();
+        rightAccent.getStyleClass().add("accent-strip-right");
+        VBox.setVgrow(rightAccent, Priority.ALWAYS);
+        rightAccent.setPrefHeight(100);
 
-        return card;
-    }
+        row.getChildren().addAll(leftAccent, team1, center, team2, actions, rightAccent);
 
-
-    // ================= TEAM BOX =================
-    private VBox createTeamBox(Equipe equipe) {
-
-        VBox box = new VBox(8);
-        box.setAlignment(Pos.CENTER);
-        box.setPrefWidth(110);
-
-        ImageView img = new ImageView();
-        img.setFitWidth(56);
-        img.setFitHeight(56);
-
-        setTeamLogo(img, equipe);
-
-        Label name = new Label(
-                equipe != null ? equipe.getNom() : "Equipe"
-        );
-
-        name.getStyleClass().add("team-name");
-        name.setWrapText(true);
-        name.setMaxWidth(100);
-        name.setAlignment(Pos.CENTER);
-
-        box.getChildren().addAll(img, name);
-
-        return box;
+        return row;
     }
 
 
@@ -357,15 +357,9 @@ public class MatchClientController {
 
             Parent root = loader.load();
 
-            // 🔥 nouvelle fenêtre
-            Stage stage = new Stage();
-
-            stage.setTitle("Classement des équipes");
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root, 1200, 760));
-            stage.centerOnScreen();
             stage.show();
-
-
 
         } catch (Exception e) {
             e.printStackTrace();

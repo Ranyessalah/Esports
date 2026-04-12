@@ -55,6 +55,17 @@ public class FormEquipeController {
     public void initialize() {
         initValidation();
         initSelectors();
+        makePreviewRound();
+    }
+
+    private void makePreviewRound() {
+        // Create a circular clip
+        javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(75, 75, 75);
+        preview.setClip(clip);
+        
+        // Ensure the preview is always square for the circle clip
+        preview.setFitWidth(150);
+        preview.setFitHeight(150);
     }
 
     private void initSelectors() {

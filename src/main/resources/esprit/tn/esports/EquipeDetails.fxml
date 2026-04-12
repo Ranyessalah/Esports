@@ -12,50 +12,63 @@
     <!-- HEADER -->
     <top>
         <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="20">
-            <Label text="🎮 Team Details" styleClass="page-title"/>
+            <Button text="⬅ Retour" onAction="#goBack" styleClass="btn-secondary"/>
+            <Label text="🎮 Equipes Details" styleClass="page-title"/>
         </HBox>
     </top>
 
     <!-- CONTENT -->
     <center>
-        <VBox spacing="30" styleClass="details-wrapper">
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane-custom">
+            <content>
+                <VBox spacing="35" styleClass="details-wrapper">
 
-            <!-- TEAM HEADER -->
-            <HBox spacing="30" alignment="CENTER_LEFT" styleClass="team-header">
+                    <!-- TEAM HEADER PREMIUM -->
+                    <HBox spacing="40" alignment="CENTER_LEFT" styleClass="team-header-premium">
+                        <ImageView fx:id="logo" fitWidth="160" fitHeight="160" preserveRatio="true"/>
+                        <VBox spacing="15" alignment="CENTER_LEFT">
+                            <Label fx:id="name" styleClass="big-title" style="-fx-font-size: 36px;"/>
+                            <HBox spacing="15">
+                                <Label fx:id="game" styleClass="badge" style="-fx-background-color: #7c3aed;"/>
+                                <Label fx:id="category" styleClass="badge" style="-fx-background-color: #3b82f6;"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
 
-                <ImageView fx:id="logo" fitWidth="140" fitHeight="140"/>
+                    <!-- STATS SECTION -->
+                    <HBox spacing="25">
+                        <VBox styleClass="stat-pill" HBox.hgrow="ALWAYS">
+                            <Label text="MEMBRES" styleClass="stat-title"/>
+                            <Label fx:id="nbPlayers" styleClass="stat-value"/>
+                        </VBox>
 
-                <VBox spacing="10">
-                    <Label fx:id="name" styleClass="big-title"/>
-                    <Label fx:id="game" styleClass="card-sub"/>
-                    <Label fx:id="category" styleClass="card-sub"/>
+                        <VBox styleClass="stat-pill" HBox.hgrow="ALWAYS">
+                            <Label text="DISCIPLINE" styleClass="stat-title"/>
+                            <Label fx:id="gameStat" styleClass="stat-value"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- STAFF SECTION -->
+                    <VBox fx:id="staffSection" spacing="20">
+                        <Label text="Staff Technique" styleClass="section-title"/>
+                        <FlowPane fx:id="staffContainer"
+                                  hgap="20"
+                                  vgap="20"
+                                  prefWrapLength="1000"/>
+                    </VBox>
+
+                    <!-- PLAYERS LIST -->
+                    <VBox spacing="20">
+                        <Label text="Liste des Joueurs" styleClass="section-title"/>
+                        <FlowPane fx:id="playersContainer"
+                                  hgap="20"
+                                  vgap="20"
+                                  prefWrapLength="1000"/>
+                    </VBox>
+
                 </VBox>
-
-            </HBox>
-
-            <!-- STATS -->
-            <HBox spacing="20">
-                <VBox styleClass="stat-card">
-                    <Label text="Players" styleClass="stat-title"/>
-                    <Label fx:id="nbPlayers" styleClass="stat-value"/>
-                </VBox>
-
-                <VBox styleClass="stat-card">
-                    <Label text="Game" styleClass="stat-title"/>
-                    <Label fx:id="gameStat" styleClass="stat-value"/>
-                </VBox>
-            </HBox>
-
-            <!-- PLAYERS LIST -->
-            <VBox spacing="15">
-                <Label text="Players" styleClass="section-title"/>
-
-                <FlowPane fx:id="playersContainer"
-                          hgap="15"
-                          vgap="15"/>
-            </VBox>
-
-        </VBox>
+            </content>
+        </ScrollPane>
     </center>
 
 </BorderPane>

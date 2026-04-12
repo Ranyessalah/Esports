@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +24,8 @@ public class FormMatchController {
     @FXML private TextField nomField;
     @FXML private ComboBox<Equipe> equipe1Box;
     @FXML private ComboBox<Equipe> equipe2Box;
+    @FXML private ImageView logo1;
+    @FXML private ImageView logo2;
     @FXML private TextField score1Field;
     @FXML private TextField score2Field;
     @FXML private DatePicker dateMatchPicker;
@@ -156,6 +160,23 @@ public class FormMatchController {
 
         hourStartBox.setValue("18:00");
         hourEndBox.setValue("20:00");
+        
+        initDatePickerRestrictions();
+    }
+
+    private void initDatePickerRestrictions() {
+        javafx.util.Callback<DatePicker, DateCell> dayCellFactory = d -> new DateCell() {
+            @Override
+            public void updateItem(java.time.LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.isBefore(java.time.LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #2c3448; -fx-text-fill: #555;");
+                }
+            }
+        };
+        dateMatchPicker.setDayCellFactory(dayCellFactory);
+        dateFinPicker.setDayCellFactory(dayCellFactory);
     }
 
     // ================= LOAD =================
@@ -208,6 +229,10 @@ public class FormMatchController {
 
         saveBtn.setText("Mettre à jour");
 
+        // 🔥 Afficher les logos
+        displayTeamLogo(m.getEquipe1(), logo1);
+        displayTeamLogo(m.getEquipe2(), logo2);
+
         // 🔥 enable score modification in edit mode
         incScore1Btn.setDisable(false);
         decScore1Btn.setDisable(false);
@@ -238,7 +263,7 @@ public class FormMatchController {
 
         equipe1Box.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-
+                displayTeamLogo(newVal, logo1);
                 equipe2Box.setItems(FXCollections.observableArrayList(
                         allEquipes.stream()
                                 .filter(e -> e.getId() != newVal.getId())
@@ -249,7 +274,7 @@ public class FormMatchController {
 
         equipe2Box.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-
+                displayTeamLogo(newVal, logo2);
                 equipe1Box.setItems(FXCollections.observableArrayList(
                         allEquipes.stream()
                                 .filter(e -> e.getId() != newVal.getId())
@@ -257,6 +282,19 @@ public class FormMatchController {
                 ));
             }
         });
+    }
+
+    private void displayTeamLogo(Equipe e, ImageView target) {
+        if (e == null || e.getLogo() == null || e.getLogo().isEmpty() || target == null) {
+            target.setImage(null);
+            return;
+        }
+        try {
+            Image img = new Image(getClass().getResourceAsStream("/esprit/tn/esports/images/" + e.getLogo()));
+            target.setImage(img);
+        } catch (Exception ex) {
+            target.setImage(null);
+        }
     }
 
     // ================= NUMERIC =================
@@ -283,8 +321,10 @@ public class FormMatchController {
         equipe2Box.valueProperty().addListener((obs, o, n) -> validateEquipe2());
         score1Field.textProperty().addListener((obs, o, n) -> validateScore1());
         score2Field.textProperty().addListener((obs, o, n) -> validateScore2());
-        dateMatchPicker.valueProperty().addListener((obs, o, n) -> validateDateMatch());
-        dateFinPicker.valueProperty().addListener((obs, o, n) -> validateDateFin());
+        dateMatchPicker.valueProperty().addListener((obs, o, n) -> validateAll());
+        dateFinPicker.valueProperty().addListener((obs, o, n) -> validateAll());
+        hourStartBox.valueProperty().addListener((obs, o, n) -> validateAll());
+        hourEndBox.valueProperty().addListener((obs, o, n) -> validateAll());
     }
 
     // ================= SAVE =================
@@ -311,30 +351,29 @@ public class FormMatchController {
             match.setScoreEquipe1(Integer.parseInt(score1Field.getText()));
             match.setScoreEquipe2(Integer.parseInt(score2Field.getText()));
 
-            LocalDateTime start = dateMatchPicker.getValue().atStartOfDay();
-            LocalDateTime end   = dateFinPicker.getValue().atStartOfDay();
+            String[] hs = hourStartBox.getValue().split(":");
+            String[] he = hourEndBox.getValue().split(":");
+
+            LocalDateTime start = dateMatchPicker.getValue().atTime(
+                    Integer.parseInt(hs[0]),
+                    Integer.parseInt(hs[1])
+            );
+
+            LocalDateTime end = dateFinPicker.getValue().atTime(
+                    Integer.parseInt(he[0]),
+                    Integer.parseInt(he[1])
+            );
 
             match.setDateMatch(start);
             match.setDateFinMatch(end);
 
             LocalDateTime now = LocalDateTime.now();
 
-            if (now.isBefore(start)) {
-                match.setStatut("a jouer");
-            } else if (now.isAfter(start) && now.isBefore(end)) {
-                match.setStatut("en_cours");
-            } else {
-                match.setStatut("termine");
-            }
             if (match.getId() != 0) {
-
-                // mode edit => valeur manuelle
+                // mode edit => valeur manuelle absolue depuis le ComboBox
                 match.setStatut(statusBoxField.getValue());
-
             } else {
-
-                // mode add => automatique
-
+                // mode add => calcul automatique
                 if (now.isBefore(start)) {
                     match.setStatut("a jouer");
                 } else if (now.isAfter(start) && now.isBefore(end)) {
@@ -407,24 +446,29 @@ public class FormMatchController {
 
         LocalDateTime now = LocalDateTime.now();
 
-        // Date/heure match doit être présente ou future (pour ADD et MODIFY)
-        if (!start.isAfter(now) && !start.isEqual(now)) { // technically isAfter is usually enough for "now", but let's be precise
-            if (start.toLocalDate().isBefore(now.toLocalDate())) {
-                showFieldError(dateMatchError, dateMatchPicker,
-                        "Date match doit être aujourd'hui ou plus tard");
-                return false;
-            }
+        // 🔥 FIX: allow past date ONLY in edit mode
+        boolean isEditMode = (match != null && match.getId() != 0);
+
+        // Date/heure match doit être présente ou future (Uniquement en mode AJOUT)
+        if (!isEditMode && start.isBefore(now)) {
+            showFieldError(dateMatchError, dateMatchPicker, "Le début doit être dans le futur (aujourd'hui ou après)");
+            return false;
+        } else {
+            hideFieldError(dateMatchError, dateMatchPicker);
         }
 
-        // FIN >= DEBUT
-        if (end.isBefore(start)) {
-            showFieldError(dateFinError, dateFinPicker,
-                    "Date fin doit être après ou égale au début");
+        // FIN > DEBUT (Strictement)
+        if (!end.isAfter(start)) {
+            showFieldError(dateFinError, dateFinPicker, "La date de fin doit être APRES la date de début");
             return false;
+        } else {
+            hideFieldError(dateFinError, dateFinPicker);
         }
 
         return true;
-    }    private boolean validateNom() {
+    }
+
+    private boolean validateNom() {
         if (nomField.getText().trim().isEmpty()) {
             showFieldError(nomError, nomField, "Champ obligatoire");
             return false;

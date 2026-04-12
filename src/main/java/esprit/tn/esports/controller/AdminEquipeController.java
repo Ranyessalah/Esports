@@ -60,8 +60,19 @@ public class AdminEquipeController {
         img.setFitHeight(80);
 
         try {
-            img.setImage(new Image("file:" + e.getLogo()));
-        } catch (Exception ex) {}
+            File file = new File(e.getLogo());
+            if (file.exists()) {
+                img.setImage(new Image(file.toURI().toString()));
+            } else {
+                // Fallback image or icon could be set here
+            }
+        } catch (Exception ex) {
+            System.err.println("Erreur chargement logo: " + ex.getMessage());
+        }
+
+        // 🔥 Make logo round
+        javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(40, 40, 40);
+        img.setClip(clip);
 
         Label name = new Label(e.getNom());
         name.getStyleClass().add("card-title");
@@ -80,7 +91,7 @@ public class AdminEquipeController {
         delete.getStyleClass().add("btn-delete");
 
         delete.setOnAction(ev -> {
-
+            // ... (rest of logic unchanged from previous viewed version)
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Confirmation");
             confirm.setHeaderText("Suppression d'équipe");
@@ -107,15 +118,17 @@ public class AdminEquipeController {
                     Alert error = new Alert(Alert.AlertType.ERROR);
                     error.setTitle("Échec de suppression");
                     error.setHeaderText(null);
-                    error.setContentText("Cette équipe existe déjà dans un match, vous ne pouvez pas la supprimer.");
+                    error.setContentText("Impossible de supprimer cette équipe. Elle est probablement liée à des matchs existants.");
                     error.show();
                 }
             }
         });
 
         HBox actions = new HBox(10, view, edit, delete);
+        actions.setAlignment(javafx.geometry.Pos.CENTER);
 
         card.getChildren().addAll(img, name, game, actions);
+        card.setAlignment(javafx.geometry.Pos.CENTER);
 
         return card;
     }
@@ -198,13 +211,14 @@ public class AdminEquipeController {
             EquipeDetailsController controller = loader.getController();
             controller.setEquipe(e);
 
-            Stage stage = new Stage();
-            stage.setTitle("Team Details");
+            // 🔥 Custom back handler to restore the list
+            controller.setOnBack(() -> {
+                mainBorderPane.setCenter(mainContent);
+                refresh();
+            });
 
-            Scene scene = new Scene(root, 800, 600); // 🔥 vraie page
-            stage.setScene(scene);
-
-            stage.show();
+            // ✅ Replace center instead of opening new window
+            mainBorderPane.setCenter(root);
 
         } catch (Exception ex) {
             ex.printStackTrace();

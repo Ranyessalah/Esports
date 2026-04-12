@@ -1,8 +1,3 @@
-// ==========================
-// StatsRow.java
-// package esprit.tn.esports.entite;
-// ==========================
-
 package esprit.tn.esports.entite;
 
 public class StatsRow {
@@ -20,6 +15,8 @@ public class StatsRow {
     private int bc;
     private int diff;
     private int points;
+    private String logo;
+    private int teamId;
 
     public StatsRow() {
     }
@@ -73,4 +70,10 @@ public class StatsRow {
 
     public int getPoints() { return points; }
     public void setPoints(int points) { this.points = points; }
+
+    public String getLogo() { return logo; }
+    public void setLogo(String logo) { this.logo = logo; }
+
+    public int getTeamId() { return teamId; }
+    public void setTeamId(int teamId) { this.teamId = teamId; }
 }

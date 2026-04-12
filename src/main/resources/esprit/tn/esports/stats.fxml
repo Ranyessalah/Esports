@@ -147,20 +147,20 @@
                     <!-- METRIC CARDS ROW -->
                     <HBox spacing="20" alignment="CENTER">
 
-                        <VBox styleClass="stat-card-premium" alignment="CENTER">
-                            <Label text="🏆" styleClass="stat-card-icon"/>
+                        <VBox styleClass="stat-card-premium, card-team-glow" alignment="CENTER">
+                            <Label text="🏆" styleClass="stat-card-icon" style="-fx-text-fill: #6366f1;"/>
                             <Label fx:id="bestTeamLabel" text="-" styleClass="stat-card-value"/>
                             <Label text="MEILLEURE ÉQUIPE" styleClass="stat-card-label"/>
                         </VBox>
 
-                        <VBox styleClass="stat-card-premium" alignment="CENTER">
-                            <Label text="🔥" styleClass="stat-card-icon"/>
+                        <VBox styleClass="stat-card-premium, card-attack-glow" alignment="CENTER">
+                            <Label text="🔥" styleClass="stat-card-icon" style="-fx-text-fill: #10b981;"/>
                             <Label fx:id="bestBpLabel" text="-" styleClass="stat-card-value"/>
                             <Label text="MEILLEURE ATTAQUE (BP)" styleClass="stat-card-label"/>
                         </VBox>
 
-                        <VBox styleClass="stat-card-premium" alignment="CENTER">
-                            <Label text="🛡️" styleClass="stat-card-icon"/>
+                        <VBox styleClass="stat-card-premium, card-defense-glow" alignment="CENTER">
+                            <Label text="🛡️" styleClass="stat-card-icon" style="-fx-text-fill: #f43f5e;"/>
                             <Label fx:id="bestBcLabel" text="-" styleClass="stat-card-value"/>
                             <Label text="MEILLEURE DÉFENSE (BC)" styleClass="stat-card-label"/>
                         </VBox>

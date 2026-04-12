@@ -28,8 +28,10 @@ public class StatsService {
             StatsRow row = new StatsRow();
 
             row.setRank(0);
+            row.setTeamId(e.getId());
             row.setTeam(e.getNom());
             row.setGame(e.getGame());
+            row.setLogo(e.getLogo());
 
             row.setPlayed(0);
             row.setWins(0);

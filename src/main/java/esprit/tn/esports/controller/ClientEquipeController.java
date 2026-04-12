@@ -70,6 +70,10 @@ public class ClientEquipeController {
             }
         } catch (Exception ex) {}
 
+        // 🔥 Make logo round
+        javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(40, 40, 40);
+        img.setClip(clip);
+
         Label name = new Label(e.getNom());
         name.getStyleClass().add("card-title");
 
@@ -108,17 +112,9 @@ public class ClientEquipeController {
             EquipeDetailsController controller = loader.getController();
             controller.setEquipe(e);
 
-            // ✅ NEW WINDOW (NOT replacing current)
-            Stage stage = new Stage();
-            stage.setTitle("Team Details");
-
-            Scene scene = new Scene(root, 1200, 760);
-            stage.setScene(scene);
-
-            // 🔥 optional (recommended)
-            stage.initModality(Modality.APPLICATION_MODAL); // block background
-            stage.centerOnScreen();
-
+            // ✅ REPLACE CURRENT SCENE (Instead of new window)
+            Stage stage = (Stage) cardContainer.getScene().getWindow();
+            stage.setScene(new Scene(root, 1200, 760));
             stage.show();
 
         } catch (Exception ex) {
@@ -127,13 +123,45 @@ public class ClientEquipeController {
     }
     // ================= NAVIGATION =================
     @FXML
-    private void goMatchs() {
+    private void goMatchs(javafx.event.ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/matchIndex_client.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) cardContainer.getScene().getWindow();
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root, 1200, 760));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goStats(javafx.event.ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/stats_client.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root, 1200, 760));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void logout(javafx.event.ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/Login.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root, 1200, 760));
+            stage.setTitle("ClutchX - Connexion");
+            stage.centerOnScreen();
             stage.show();
 
         } catch (Exception e) {

@@ -133,6 +133,43 @@ public class EquipeService {
         return list;
     }
 
+    // GET BY ID
+    public Equipe getById(int id) {
+        String sql = "SELECT e.*, u.email as coach_email FROM equipe e " +
+                     "JOIN coach c ON e.coach_id = c.id " +
+                     "JOIN user u ON c.id = u.id " +
+                     "WHERE e.id = ?";
+
+        try {
+            PreparedStatement ps = cnx.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Equipe e = new Equipe();
+                e.setId(rs.getInt("id"));
+                e.setNom(rs.getString("nom"));
+                e.setLogo(rs.getString("logo"));
+                e.setGame(rs.getString("game"));
+                e.setCategorie(rs.getString("categorie"));
+
+                Coach coach = new Coach();
+                coach.setId(rs.getInt("coach_id"));
+                User u = new User();
+                u.setId(coach.getId());
+                u.setEmail(rs.getString("coach_email"));
+                coach.setUser(u);
+                e.setCoach(coach);
+
+                return e;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
+
     // UPDATE
     public void updateEquipe(Equipe e) {
         String sql = "UPDATE equipe SET nom=?, logo=?, game=?, categorie=?, coach_id=? WHERE id=?";
@@ -161,7 +198,7 @@ public class EquipeService {
 
     // DELETE
     public boolean deleteEquipe(int id) {
-        // Check if team is used in any match
+        // 1. Check if team is used in any match (Match history priority)
         String checkMatchSql = "SELECT COUNT(*) FROM matchs WHERE equipe1_id = ? OR equipe2_id = ?";
         try {
             PreparedStatement psCheck = cnx.prepareStatement(checkMatchSql);
@@ -169,18 +206,27 @@ public class EquipeService {
             psCheck.setInt(2, id);
             ResultSet rs = psCheck.executeQuery();
             if (rs.next() && rs.getInt(1) > 0) {
-                return false; // Cannot delete, matches exist
+                System.out.println("Suppression bloquée : l'équipe participe à des matchs.");
+                return false; 
             }
 
+            // 2. Unassign players (Set equipe_id = NULL)
+            String unassignPlayersSql = "UPDATE player SET equipe_id = NULL WHERE equipe_id = ?";
+            PreparedStatement psUnassign = cnx.prepareStatement(unassignPlayersSql);
+            psUnassign.setInt(1, id);
+            psUnassign.executeUpdate();
+
+            // 3. Delete the team
             String sql = "DELETE FROM equipe WHERE id=?";
             PreparedStatement ps = cnx.prepareStatement(sql);
             ps.setInt(1, id);
             ps.executeUpdate();
-            System.out.println("Equipe supprimée");
+            
+            System.out.println("Equipe supprimée (joueurs libérés)");
             return true;
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Erreur suppression equipe: " + ex.getMessage());
             return false;
         }
     }

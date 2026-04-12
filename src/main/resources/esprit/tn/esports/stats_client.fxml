@@ -19,27 +19,30 @@
                 <Insets top="22" right="22" bottom="22" left="22"/>
             </padding>
 
-            <!-- HEADER -->
-            <HBox alignment="CENTER_LEFT"
-                  spacing="16">
+            <!-- HEADER WITH NAVBAR -->
+            <VBox spacing="12">
+                <HBox alignment="CENTER_LEFT" spacing="16">
 
-                <VBox spacing="4"
-                      HBox.hgrow="ALWAYS">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="🏆 Classement des équipes" styleClass="page-title"/>
+                        <Label fx:id="totalLabel" text="Total équipes : 0" styleClass="page-subtitle"/>
+                    </VBox>
 
-                    <Label text="🏆 Classement des équipes"
-                           styleClass="page-title"/>
+                    <!-- NAVBAR BUTTONS -->
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Matchs" styleClass="nav-btn" onAction="#goMatchs" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>
+                        <Button text="Équipes" styleClass="nav-btn" onAction="#goEquipes" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>
+                        <Button text="Statistiques" styleClass="nav-btn active" onAction="#goStats" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 10; -fx-text-fill: white;"/>
+                        <Button text="🚪 Déconnexion" styleClass="nav-btn nav-logout" onAction="#logout" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;"/>
+                    </HBox>
 
-                    <Label fx:id="totalLabel"
-                           text="Total équipes : 0"
-                           styleClass="page-subtitle"/>
-
-                </VBox>
-
-                <Button text="↻ Actualiser"
-                        onAction="#refresh"
-                        styleClass="btn-success-lg"/>
-
-            </HBox>
+                    <Button text="↻ Actualiser" onAction="#refresh" styleClass="btn-success-lg"/>
+                </HBox>
+            </VBox>
 
             <!-- FILTER BAR -->
             <HBox spacing="12"
@@ -94,7 +97,7 @@
                            VBox.vgrow="ALWAYS"
                            style="
                                 -fx-background-color: transparent;
-                                -fx-control-inner-background:#111827;
+                                -fx-control-inner-background: transparent;
                                 -fx-table-cell-border-color: rgba(255,255,255,0.04);
                                 -fx-padding:8;
                            ">
