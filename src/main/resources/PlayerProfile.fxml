@@ -14,11 +14,14 @@
     <VBox spacing="24" styleClass="profile-root" maxWidth="680">
         <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
 
-        <!-- Header -->
-        <VBox spacing="4">
-            <Label text="Mon Profil" styleClass="page-title"/>
-            <Label text="Mettre à jour mes informations personnelles" styleClass="page-subtitle"/>
-        </VBox>
+        <!-- Header row: back button + title -->
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <Button styleClass="btn-back" text="← Retour" onAction="#onBack"/>
+            <VBox spacing="4">
+                <Label text="Mon Profil" styleClass="page-title"/>
+                <Label text="Mettre à jour mes informations personnelles" styleClass="page-subtitle"/>
+            </VBox>
+        </HBox>
 
         <!-- Profile Card -->
         <VBox styleClass="profile-card" spacing="0">
@@ -30,7 +33,7 @@
                     <Circle fx:id="avatarCircleBg" radius="40" styleClass="avatar-circle-bg"/>
                     <ImageView fx:id="profileAvatar" fitWidth="72" fitHeight="72"
                                preserveRatio="true" styleClass="profile-avatar-img">
-                        <image><Image url="@/images/default-avatar.png"/></image>
+                        <image><Image url="@/images/avatar.png"/></image>
                     </ImageView>
                 </StackPane>
                 <VBox spacing="4">
@@ -80,43 +83,39 @@
                     <Label fx:id="infoEquipe" text="—" styleClass="info-value"/>
                 </VBox>
 
-<!--                <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="2">-->
-<!--                    <Label text="Authentification 2FA" styleClass="info-label"/>-->
-<!--                    <Label fx:id="info2fa" text="—" styleClass="info-value"/>-->
-<!--                </VBox>-->
-
             </GridPane>
         </VBox>
-        <VBox styleClass="profile-card danger-zone" spacing="16">
-            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
 
-            <Label text="Zone dangereuse" styleClass="danger-title"/>
+        <!-- Danger Zone Card -->
+        <VBox styleClass="profile-card danger-zone-card" spacing="0">
 
-            <Label text="La suppression de votre compte est irréversible."
-                   styleClass="danger-subtitle"/>
+            <!-- Card header -->
+            <HBox styleClass="danger-zone-header" alignment="CENTER_LEFT" spacing="12">
+                <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+                <Label text="⚠" styleClass="danger-zone-icon"/>
+                <VBox spacing="2">
+                    <Label text="Zone dangereuse" styleClass="danger-title"/>
+                    <Label text="Actions irréversibles sur votre compte" styleClass="danger-subtitle"/>
+                </VBox>
+            </HBox>
 
-            <Button fx:id="deleteAccountBtn"
-                    text="Supprimer mon compte"
-                    styleClass="btn-delete-account"
-                    onAction="#onDeleteAccount"/>
+            <Separator styleClass="danger-divider"/>
+
+            <!-- Card body -->
+            <HBox styleClass="danger-zone-body" alignment="CENTER_LEFT" spacing="16">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Supprimer mon compte" styleClass="danger-action-title"/>
+                    <Label text="Une fois supprimé, toutes vos données seront définitivement effacées."
+                           styleClass="danger-action-desc" wrapText="true"/>
+                </VBox>
+                <Button fx:id="deleteAccountBtn"
+                        text="Supprimer"
+                        styleClass="btn-delete-account"
+                        onAction="#onDeleteAccount"/>
+            </HBox>
+
         </VBox>
-<!--        &lt;!&ndash; 2FA Card &ndash;&gt;-->
-<!--        <VBox styleClass="profile-card twofa-card" spacing="16">-->
-<!--            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>-->
-<!--            <HBox alignment="CENTER_LEFT" spacing="12">-->
-<!--                <StackPane styleClass="twofa-icon-box">-->
-<!--                    <Label text="🔐" styleClass="twofa-icon"/>-->
-<!--                </StackPane>-->
-<!--                <VBox spacing="2">-->
-<!--                    <Label text="Authentification à deux facteurs (2FA)" styleClass="card-section-title"/>-->
-<!--                    <Label text="Protégez votre compte avec Google Authenticator" styleClass="card-section-sub"/>-->
-<!--                </VBox>-->
-<!--            </HBox>-->
-<!--            <Label fx:id="twoFaWarning" styleClass="twofa-warning"-->
-<!--                   text="2FA non activée — votre compte est moins sécurisé"/>-->
-<!--            <Button fx:id="twoFaBtn" styleClass="btn-activate-2fa"-->
-<!--                    text="Activer La 2FA" onAction="#onToggle2FA" maxWidth="Infinity"/>-->
-<!--        </VBox>-->
 
     </VBox>
 </ScrollPane>

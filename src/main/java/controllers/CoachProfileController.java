@@ -6,14 +6,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.Scene;
 import services.CoachService;
 import services.UserService;
@@ -22,7 +22,6 @@ import utils.PreferencesRepository;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CoachProfileController implements Initializable {
@@ -34,18 +33,17 @@ public class CoachProfileController implements Initializable {
     @FXML private Label infoPays;
     @FXML private Label infoSpecialite;
     @FXML private Label infoDisponibilite;
-//    @FXML private Label info2fa;
-//    @FXML private Label twoFaWarning;
-//    @FXML private Button twoFaBtn;
 
     private User currentUser;
     private Coach currentCoach;
     private final CoachService coachService = new CoachService();
     private final PreferencesRepository prefs = new PreferencesRepository();
-    private final UserService userService=new UserService();
+    private final UserService userService = new UserService();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentUser = prefs.loadSession();
+        applyCircularClip();
         if (currentUser != null) {
             loadCoachData();
         }
@@ -58,7 +56,6 @@ public class CoachProfileController implements Initializable {
 
     private void loadCoachData() {
         try {
-            // Load coach-specific data
             currentCoach = coachService.getById(currentUser.getId());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,19 +69,11 @@ public class CoachProfileController implements Initializable {
         infoEmail.setText(currentUser.getEmail());
         displayEmail.setText(currentUser.getEmail());
 
-        // Profile image
         if (currentUser.getProfileImage() != null && !currentUser.getProfileImage().equals("default.png")) {
             try {
                 profileAvatar.setImage(new Image("file:" + currentUser.getProfileImage()));
             } catch (Exception ignored) {}
         }
-
-        // 2FA
-        boolean totpOn = currentUser.isTotpEnabled();
-//        info2fa.setText(totpOn ? "✅ Activée" : "❌ Non activée");
-//        twoFaWarning.setVisible(!totpOn);
-//        twoFaWarning.setManaged(!totpOn);
-//        twoFaBtn.setText(totpOn ? "Désactiver La 2FA" : "Activer La 2FA");
 
         if (currentCoach != null) {
             infoPays.setText(currentCoach.getPays() != null ? currentCoach.getPays() : "—");
@@ -99,6 +88,24 @@ public class CoachProfileController implements Initializable {
     }
 
     @FXML
+    private void onBack() {
+        try {
+            // Navigate back to the dashboard or previous screen.
+            // Adjust the FXML path to match your actual dashboard view.
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainLayout.fxml"));
+            javafx.scene.Parent root = loader.load();
+            Stage stage = (Stage) infoEmail.getScene().getWindow();
+            Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
+            scene.getStylesheets().add(
+                    getClass().getResource("/clutchx-theme.css").toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("ClutchX — Dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void onEditClick() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/EditCoachProfile.fxml"));
@@ -106,7 +113,7 @@ public class CoachProfileController implements Initializable {
 
             EditCoachProfileController ctrl = loader.getController();
             ctrl.setData(currentUser, currentCoach);
-            ctrl.setOnSaved(this::loadCoachData); // refresh after save
+            ctrl.setOnSaved(this::loadCoachData);
 
             Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
@@ -121,53 +128,64 @@ public class CoachProfileController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void onDeleteAccount() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
-        alert.setHeaderText("Supprimer votre compte ?");
-        alert.setContentText("Cette action est irréversible. Voulez-vous continuer ?");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DeleteConfirmDialog.fxml"));
+            VBox dialogRoot = loader.load();
 
-        Optional<ButtonType> result = alert.showAndWait();
+            DeleteConfirmDialogController ctrl = loader.getController();
+            ctrl.setEmail(currentUser.getEmail());
 
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initStyle(StageStyle.UNDECORATED);
+            dialog.setTitle("Supprimer le compte");
 
+            Scene scene = new Scene(dialogRoot);
+            scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
+            dialog.setScene(scene);
+            dialog.setResizable(false);
+            dialog.showAndWait();
+
+            if (ctrl.isConfirmed()) {
                 userService.deleteOne(currentUser);
                 onLogout();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                Alert error = new Alert(Alert.AlertType.ERROR);
-                error.setTitle("Erreur");
-                error.setHeaderText(null);
-                error.setContentText("Erreur lors de la suppression du compte.");
-                error.showAndWait();
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert();
         }
     }
+
+    private void showErrorAlert() {
+        Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setTitle("Erreur");
+        error.setHeaderText(null);
+        error.setContentText("Erreur lors de la suppression du compte.");
+        error.showAndWait();
+    }
+
     private void onLogout() {
         try {
             this.prefs.clearSession();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             javafx.scene.Parent root = loader.load();
-            javafx.stage.Stage stage = (javafx.stage.Stage) infoEmail.getScene().getWindow();
-            javafx.scene.Scene scene = new javafx.scene.Scene(
-                    root, stage.getWidth(), stage.getHeight()
-            );
+            Stage stage = (Stage) infoEmail.getScene().getWindow();
+            Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
             scene.getStylesheets().add(
-                    getClass().getResource("/clutchx-theme.css").toExternalForm()
-            );
+                    getClass().getResource("/clutchx-theme.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle("ClutchX — Connexion");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-//    @FXML
-//    private void onToggle2FA() {
-//        // Navigate to 2FA setup screen or toggle
-//        // Implementation depends on existing 2FA controller
-//    }
+    private void applyCircularClip() {
+        double radius = 36; // fitWidth / 2 = 72 / 2
+        Circle clip = new Circle(radius, radius, radius);
+        profileAvatar.setClip(clip);
+    }
 }

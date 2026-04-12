@@ -4,6 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <ScrollPane xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.PlayerSignupController"
             fitToWidth="true"
@@ -15,7 +17,7 @@
           minHeight="700" spacing="0">
         <padding><Insets top="30" bottom="30" left="20" right="20" /></padding>
 
-        <VBox styleClass="signup-card" spacing="0"
+        <VBox styleClass="signup-card" spacing="0" alignment="CENTER"
               maxWidth="460" minWidth="280">
             <padding><Insets top="36" bottom="36" left="32" right="32" /></padding>
 
@@ -33,44 +35,67 @@
             <VBox spacing="14" styleClass="form-fields">
                 <VBox.margin><Insets top="24" /></VBox.margin>
 
-                <VBox spacing="5">
+                <!-- EMAIL -->
+                <VBox spacing="4">
                     <Label text="EMAIL" styleClass="field-label" />
                     <TextField fx:id="emailField" styleClass="dark-input"
                                promptText="exemple@email.com" maxWidth="Infinity" />
+                    <Label fx:id="emailError" styleClass="field-error"
+                           visible="false" managed="false" />
                 </VBox>
 
-                <VBox spacing="5">
+                <!-- MOT DE PASSE -->
+                <VBox spacing="4">
                     <Label text="MOT DE PASSE" styleClass="field-label" />
                     <PasswordField fx:id="passwordField" styleClass="dark-input"
-                                   promptText="Min. 8 caractères, 1 majuscule, 1 spécial"
+                                   promptText="Min. 8 car., 1 majuscule, 1 spécial"
                                    maxWidth="Infinity" />
+                    <!-- Strength bar: 4 segments -->
+                    <HBox fx:id="strengthBar" spacing="4">
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS" />
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS" />
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS" />
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                    <Label fx:id="strengthLabel" styleClass="strength-text" text="" />
+                    <Label fx:id="passwordError" styleClass="field-error"
+                           visible="false" managed="false" />
                 </VBox>
 
-                <VBox spacing="5">
+                <!-- CONFIRM PASSWORD -->
+                <VBox spacing="4">
                     <Label text="CONFIRMER LE MOT DE PASSE" styleClass="field-label" />
                     <PasswordField fx:id="confirmPasswordField" styleClass="dark-input"
                                    promptText="Retapez votre mot de passe" maxWidth="Infinity" />
+                    <Label fx:id="confirmError" styleClass="field-error"
+                           visible="false" managed="false" />
                 </VBox>
 
-                <VBox spacing="5">
+                <!-- PAYS -->
+                <VBox spacing="4">
                     <Label text="PAYS" styleClass="field-label" />
                     <ComboBox fx:id="countryCombo" styleClass="dark-combo"
-                              maxWidth="Infinity"
-                              promptText="Sélectionnez un pays" />
+                              maxWidth="Infinity" promptText="Sélectionnez un pays" />
+                    <Label fx:id="countryError" styleClass="field-error"
+                           visible="false" managed="false" />
                 </VBox>
 
-                <VBox spacing="5">
+                <!-- NIVEAU -->
+                <VBox spacing="4">
                     <Label text="NIVEAU" styleClass="field-label" />
                     <ComboBox fx:id="levelCombo" styleClass="dark-combo"
-                              maxWidth="Infinity"
-                              promptText="Sélectionnez un niveau" />
+                              maxWidth="Infinity" promptText="Sélectionnez un niveau" />
+                    <Label fx:id="levelError" styleClass="field-error"
+                           visible="false" managed="false" />
                 </VBox>
 
+                <!-- ACTIVE -->
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <CheckBox fx:id="activeCheck" styleClass="dark-checkbox"
                               text="Compte actif" selected="true" />
                 </HBox>
 
+                <!-- PHOTO -->
                 <VBox spacing="5">
                     <Label text="PHOTO DE PROFIL (POUR FACE ID)" styleClass="field-label" />
                     <HBox alignment="CENTER_LEFT" spacing="10">
@@ -80,10 +105,11 @@
                                styleClass="file-name-label"
                                HBox.hgrow="ALWAYS" wrapText="true" />
                     </HBox>
-                    <Label text="ℹ Optionnel — Permet la connexion par reconnaissance faciale (Face ID)"
+                    <Label text="ℹ Optionnel — Permet la connexion par reconnaissance faciale"
                            styleClass="hint-text" wrapText="true" />
                 </VBox>
 
+                <!-- CAPTCHA -->
                 <HBox styleClass="captcha-box" alignment="CENTER_LEFT" spacing="12">
                     <CheckBox fx:id="captchaCheck" styleClass="captcha-check" />
                     <Label text="Je ne suis pas un robot" styleClass="captcha-label" />
@@ -93,6 +119,13 @@
                         <Label text="Confidentialité - Conditions" styleClass="recaptcha-sub" />
                     </VBox>
                 </HBox>
+                <Label fx:id="captchaError" styleClass="field-error"
+                       visible="false" managed="false" />
+
+                <!-- GLOBAL ERROR -->
+                <Label fx:id="globalError" styleClass="global-error"
+                       maxWidth="Infinity" wrapText="true"
+                       visible="false" managed="false" />
 
                 <Button text="✈  Créer mon compte" styleClass="submit-btn"
                         maxWidth="Infinity" onAction="#onCreateAccount" />
@@ -103,9 +136,22 @@
                     <Separator HBox.hgrow="ALWAYS" />
                 </HBox>
 
-                <Button text="🅖  S'inscrire avec Google (Joueur)"
-                        styleClass="social-btn social-btn-google"
-                        maxWidth="Infinity" onAction="#onGoogleSignup" />
+
+                <Button styleClass="social-btn" maxWidth="Infinity" onAction="#onGoogleSignup">
+                    <graphic>
+                        <HBox alignment="CENTER" spacing="10">
+                            <StackPane styleClass="social-icon-circle">
+                                <!-- Replace with your Google SVG ImageView -->
+                                <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
+                                    <image>
+                                        <Image url="@/images/google.png" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+                            <Label text="S'inscrire avec Google (Joueur)" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;" />
+                        </HBox>
+                    </graphic>
+                </Button>
 
                 <Button text="← Déjà un compte ? Se connecter"
                         styleClass="link-btn" maxWidth="Infinity"

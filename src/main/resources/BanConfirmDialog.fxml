@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.BanConfirmDialogController"
+      stylesheets="@/clutchx-theme.css"
+      styleClass="dialog-root, ban-dialog-root"
+      spacing="0" minWidth="400" maxWidth="440">
+
+    <!-- Icon + title header -->
+    <VBox styleClass="ban-dialog-header" alignment="CENTER" spacing="14">
+        <padding><Insets top="32" right="32" bottom="24" left="32"/></padding>
+
+        <!-- Icon circle — swapped dynamically by controller via fx:id -->
+        <StackPane fx:id="iconCircle" styleClass="ban-icon-circle"
+                   minWidth="64" minHeight="64" maxWidth="64" maxHeight="64">
+            <Label fx:id="iconLabel" styleClass="ban-icon-label" text="🔒"/>
+        </StackPane>
+
+        <VBox spacing="6" alignment="CENTER">
+            <Label fx:id="dialogTitle" styleClass="ban-dialog-title" text="Bloquer l'utilisateur ?"/>
+            <Label fx:id="targetEmail" styleClass="ban-dialog-email"
+                   text="utilisateur@clutchx.tn" wrapText="true"/>
+        </VBox>
+    </VBox>
+
+    <!-- Body -->
+    <VBox styleClass="ban-dialog-body" spacing="12">
+        <padding><Insets top="0" right="32" bottom="24" left="32"/></padding>
+
+        <Label fx:id="consequenceBox" styleClass="ban-consequence-box"
+               maxWidth="Infinity" wrapText="true"
+               text="Cet utilisateur ne pourra plus se connecter à la plateforme ClutchX."/>
+
+        <Label fx:id="reversibleNote" styleClass="ban-reversible-note"
+               text="✓  Cette action est réversible à tout moment depuis le tableau de bord."
+               wrapText="true"/>
+    </VBox>
+
+    <Separator styleClass="card-divider"/>
+
+    <!-- Footer -->
+    <HBox styleClass="ban-dialog-footer" alignment="CENTER" spacing="12">
+        <padding><Insets top="18" right="32" bottom="22" left="32"/></padding>
+        <Button styleClass="btn-secondary" text="Annuler" onAction="#onCancel"
+                maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Button fx:id="confirmBtn" styleClass="btn-ban-confirm" text="Bloquer"
+                onAction="#onConfirm" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+</VBox>

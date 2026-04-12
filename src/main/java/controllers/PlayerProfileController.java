@@ -11,8 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.Scene;
 import services.PlayerService;
 import services.UserService;
@@ -34,9 +36,6 @@ public class PlayerProfileController implements Initializable {
     @FXML private Label infoNiveau;
     @FXML private Label infoStatut;
     @FXML private Label infoEquipe;
-//    @FXML private Label info2fa;
-//    @FXML private Label twoFaWarning;
-//    @FXML private Button twoFaBtn;
 
     private User currentUser;
     private Player currentPlayer;
@@ -44,12 +43,10 @@ public class PlayerProfileController implements Initializable {
     private final PreferencesRepository prefs = new PreferencesRepository();
     private final UserService userService = new UserService();
 
-
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentUser = prefs.loadSession();
+        applyCircularClip();
         if (currentUser != null) loadPlayerData();
     }
 
@@ -79,12 +76,6 @@ public class PlayerProfileController implements Initializable {
             } catch (Exception ignored) {}
         }
 
-        //boolean totpOn = currentUser.isTotpEnabled();
-//        info2fa.setText(totpOn ? "✅ Activée" : "❌ Non activée");
-//        twoFaWarning.setVisible(!totpOn);
-//        twoFaWarning.setManaged(!totpOn);
-//        twoFaBtn.setText(totpOn ? "Désactiver La 2FA" : "Activer La 2FA");
-
         if (currentPlayer != null) {
             infoPays.setText(currentPlayer.getPays() != null ? currentPlayer.getPays() : "—");
             infoNiveau.setText(currentPlayer.getNiveau() != null ? currentPlayer.getNiveau() : "—");
@@ -94,6 +85,24 @@ public class PlayerProfileController implements Initializable {
             statutTag.setStyle(actif ? "-fx-text-fill: #48bb78;" : "-fx-text-fill: #fc8181;");
             infoEquipe.setText(currentPlayer.getEquipe_id() > 0
                     ? "Équipe #" + currentPlayer.getEquipe_id() : "Sans équipe");
+        }
+    }
+
+    @FXML
+    private void onBack() {
+        try {
+            // Navigate back to the dashboard or previous screen.
+            // Adjust the FXML path to match your actual dashboard view.
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainLayout.fxml"));
+            javafx.scene.Parent root = loader.load();
+            Stage stage = (Stage) infoEmail.getScene().getWindow();
+            Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
+            scene.getStylesheets().add(
+                    getClass().getResource("/clutchx-theme.css").toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("ClutchX — Dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -122,6 +131,45 @@ public class PlayerProfileController implements Initializable {
     }
 
     @FXML
+    private void onDeleteAccount() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DeleteConfirmDialog.fxml"));
+            VBox dialogRoot = loader.load();
+
+            DeleteConfirmDialogController ctrl = loader.getController();
+            ctrl.setEmail(currentUser.getEmail());
+
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initStyle(StageStyle.UNDECORATED);
+            dialog.setTitle("Supprimer le compte");
+
+            Scene scene = new Scene(dialogRoot);
+            scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
+            dialog.setScene(scene);
+            dialog.setResizable(false);
+            dialog.showAndWait();
+
+            if (ctrl.isConfirmed()) {
+                userService.deleteOne(currentUser);
+                onLogout();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert();
+        }
+    }
+
+    private void showErrorAlert() {
+        Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setTitle("Erreur");
+        error.setHeaderText(null);
+        error.setContentText("Erreur lors de la suppression du compte.");
+        error.showAndWait();
+    }
+
+    @FXML
     private void onToggle2FA() {
         // Navigate to 2FA setup
     }
@@ -131,43 +179,19 @@ public class PlayerProfileController implements Initializable {
             this.prefs.clearSession();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             javafx.scene.Parent root = loader.load();
-            javafx.stage.Stage stage = (javafx.stage.Stage) infoEmail.getScene().getWindow();
-            javafx.scene.Scene scene = new javafx.scene.Scene(
-                    root, stage.getWidth(), stage.getHeight()
-            );
+            Stage stage = (Stage) infoEmail.getScene().getWindow();
+            Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
             scene.getStylesheets().add(
-                    getClass().getResource("/clutchx-theme.css").toExternalForm()
-            );
+                    getClass().getResource("/clutchx-theme.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle("ClutchX — Connexion");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    @FXML
-    private void onDeleteAccount() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
-        alert.setHeaderText("Supprimer votre compte ?");
-        alert.setContentText("Cette action est irréversible. Voulez-vous continuer ?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-
-                userService.deleteOne(currentUser);
-                onLogout();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                Alert error = new Alert(Alert.AlertType.ERROR);
-                error.setTitle("Erreur");
-                error.setHeaderText(null);
-                error.setContentText("Erreur lors de la suppression du compte.");
-                error.showAndWait();
-            }
-        }
+    private void applyCircularClip() {
+        double radius = 36; // fitWidth / 2 = 72 / 2
+        Circle clip = new Circle(radius, radius, radius);
+        profileAvatar.setClip(clip);
     }
 }

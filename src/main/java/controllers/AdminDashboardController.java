@@ -368,23 +368,35 @@ public class AdminDashboardController implements Initializable {
     }
 
     private void onToggleBlock(User user) {
-        String action = user.isBlocked() ? "débloquer" : "bloquer";
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirmation");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Voulez-vous " + action + " l'utilisateur " + user.getEmail() + " ?");
-        confirm.showAndWait().ifPresent(btn -> {
-            if (btn == ButtonType.OK) {
-                try {
-                    user.setBlocked(!user.isBlocked());
-                    userService.updateOne(user);
-                    loadUsers(); // refresh
-                } catch (SQLException e) {
-                    showError("Erreur", "Impossible de modifier le statut : " + e.getMessage());
-                }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BanConfirmDialog.fxml"));
+            VBox dialogRoot = loader.load();
+
+            BanConfirmDialogController ctrl = loader.getController();
+            ctrl.init(user.getEmail(), !user.isBlocked()); // banning=true when user is currently active
+
+            Stage dialog = new Stage();
+            dialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            dialog.initStyle(javafx.stage.StageStyle.UNDECORATED);
+
+            Scene scene = new Scene(dialogRoot);
+            scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
+            dialog.setScene(scene);
+            dialog.setResizable(false);
+            dialog.showAndWait();
+
+            if (ctrl.isConfirmed()) {
+                user.setBlocked(!user.isBlocked());
+                userService.updateOne(user);
+                loadUsers();
             }
-        });
+
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            showError("Erreur", "Impossible de modifier le statut : " + e.getMessage());
+        }
     }
+
 
     @FXML private void onDashboard() { /* already here */ }
 

@@ -5,7 +5,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.AdminProfileEditController"
-      styleClass="edit-root" spacing="0">
+      styleClass="edit-root" spacing="0" stylesheets="admin-theme.css">
 
     <!-- Header -->
     <HBox styleClass="edit-header" alignment="CENTER_LEFT" spacing="14">
@@ -25,20 +25,22 @@
 
         <VBox spacing="6">
             <Label text="EMAIL" styleClass="form-group-label"/>
-            <TextField fx:id="emailField" styleClass="form-field"
-                       promptText="Adresse email"/>
+            <TextField fx:id="emailField" styleClass="form-field" promptText="Adresse email"/>
+            <Label fx:id="emailError" styleClass="field-error" visible="false" managed="false"/>
         </VBox>
 
         <VBox spacing="6">
             <Label text="NOUVEAU MOT DE PASSE" styleClass="form-group-label"/>
             <PasswordField fx:id="passwordField" styleClass="form-field"
                            promptText="Laisser vide pour ne pas changer"/>
+            <Label fx:id="passwordError" styleClass="field-error" visible="false" managed="false"/>
         </VBox>
 
         <VBox spacing="6">
             <Label text="CONFIRMER LE MOT DE PASSE" styleClass="form-group-label"/>
             <PasswordField fx:id="confirmField" styleClass="form-field"
                            promptText="Confirmer le mot de passe"/>
+            <Label fx:id="confirmError" styleClass="field-error" visible="false" managed="false"/>
         </VBox>
 
     </VBox>
