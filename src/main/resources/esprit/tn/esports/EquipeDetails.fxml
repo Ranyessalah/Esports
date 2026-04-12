@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.EquipeDetailsController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <!-- HEADER -->
+    <top>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="20">
+            <Label text="🎮 Team Details" styleClass="page-title"/>
+        </HBox>
+    </top>
+
+    <!-- CONTENT -->
+    <center>
+        <VBox spacing="30" styleClass="details-wrapper">
+
+            <!-- TEAM HEADER -->
+            <HBox spacing="30" alignment="CENTER_LEFT" styleClass="team-header">
+
+                <ImageView fx:id="logo" fitWidth="140" fitHeight="140"/>
+
+                <VBox spacing="10">
+                    <Label fx:id="name" styleClass="big-title"/>
+                    <Label fx:id="game" styleClass="card-sub"/>
+                    <Label fx:id="category" styleClass="card-sub"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- STATS -->
+            <HBox spacing="20">
+                <VBox styleClass="stat-card">
+                    <Label text="Players" styleClass="stat-title"/>
+                    <Label fx:id="nbPlayers" styleClass="stat-value"/>
+                </VBox>
+
+                <VBox styleClass="stat-card">
+                    <Label text="Game" styleClass="stat-title"/>
+                    <Label fx:id="gameStat" styleClass="stat-value"/>
+                </VBox>
+            </HBox>
+
+            <!-- PLAYERS LIST -->
+            <VBox spacing="15">
+                <Label text="Players" styleClass="section-title"/>
+
+                <FlowPane fx:id="playersContainer"
+                          hgap="15"
+                          vgap="15"/>
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

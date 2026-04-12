@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.Statsclientcontroller"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+
+    <center>
+
+        <VBox spacing="18"
+              styleClass="main-content">
+
+            <padding>
+                <Insets top="22" right="22" bottom="22" left="22"/>
+            </padding>
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT"
+                  spacing="16">
+
+                <VBox spacing="4"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="🏆 Classement des équipes"
+                           styleClass="page-title"/>
+
+                    <Label fx:id="totalLabel"
+                           text="Total équipes : 0"
+                           styleClass="page-subtitle"/>
+
+                </VBox>
+
+                <Button text="↻ Actualiser"
+                        onAction="#refresh"
+                        styleClass="btn-success-lg"/>
+
+            </HBox>
+
+            <!-- FILTER BAR -->
+            <HBox spacing="12"
+                  alignment="CENTER_LEFT"
+                  styleClass="topbar-box">
+
+                <TextField fx:id="searchField"
+                           promptText="🔎 Rechercher une équipe..."
+                           onKeyReleased="#filterData"
+                           HBox.hgrow="ALWAYS"
+                           styleClass="search-field"/>
+
+                <ComboBox fx:id="gameFilter"
+                          onAction="#filterData"
+                          prefWidth="200"
+                          promptText="Jeux"
+                          styleClass="form-combo"/>
+
+                <ComboBox fx:id="sortFilter"
+                          onAction="#filterData"
+                          prefWidth="220"
+                          promptText="Trier"
+                          styleClass="form-combo"/>
+
+                <Button text="Reset"
+                        onAction="#resetFilters"
+                        styleClass="btn-secondary"/>
+
+            </HBox>
+
+            <!-- TABLE CARD -->
+            <VBox spacing="10"
+                  VBox.vgrow="ALWAYS"
+                  styleClass="topbar-box">
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <Label text="📊 Tableau officiel"
+                           style="-fx-text-fill:white;
+                                  -fx-font-size:16px;
+                                  -fx-font-weight:bold;"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label text="Mis à jour en temps réel"
+                           style="-fx-text-fill:#94a3b8;
+                                  -fx-font-size:12px;"/>
+                </HBox>
+
+                <!-- TABLE -->
+                <TableView fx:id="tableView"
+                           VBox.vgrow="ALWAYS"
+                           style="
+                                -fx-background-color: transparent;
+                                -fx-control-inner-background:#111827;
+                                -fx-table-cell-border-color: rgba(255,255,255,0.04);
+                                -fx-padding:8;
+                           ">
+
+                    <columns>
+
+                        <TableColumn fx:id="rankCol"
+                                     text="Position"
+                                     prefWidth="95"/>
+
+                        <TableColumn fx:id="teamCol"
+                                     text="Nom Équipe"
+                                     prefWidth="220"/>
+
+                        <TableColumn fx:id="gameCol"
+                                     text="Jeu"
+                                     prefWidth="170"/>
+
+                        <TableColumn fx:id="playedCol"
+                                     text="Matchs Joués"
+                                     prefWidth="130"/>
+
+                        <TableColumn fx:id="winCol"
+                                     text="Victoires"
+                                     prefWidth="110"/>
+
+                        <TableColumn fx:id="drawCol"
+                                     text="Matchs Nuls"
+                                     prefWidth="120"/>
+
+                        <TableColumn fx:id="lossCol"
+                                     text="Défaites"
+                                     prefWidth="110"/>
+
+                        <TableColumn fx:id="bpCol"
+                                     text="Buts Pour"
+                                     prefWidth="110"/>
+
+                        <TableColumn fx:id="bcCol"
+                                     text="Buts Contre"
+                                     prefWidth="120"/>
+
+                        <TableColumn fx:id="diffCol"
+                                     text="Différence"
+                                     prefWidth="120"/>
+
+                        <TableColumn fx:id="ptsCol"
+                                     text="Points"
+                                     prefWidth="100"/>
+
+                    </columns>
+
+                </TableView>
+
+            </VBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>

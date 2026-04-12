@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.MatchDetailsController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <center>
+        <VBox spacing="25" alignment="TOP_CENTER">
+
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <!-- TITLE -->
+            <Label fx:id="matchTitle" styleClass="page-title"/>
+
+            <!-- STATUS -->
+            <Label fx:id="statusLabel" styleClass="badge"/>
+
+            <!-- TEAMS -->
+            <HBox spacing="50" alignment="CENTER">
+
+                <VBox alignment="CENTER" spacing="10">
+                    <ImageView fx:id="team1Logo" fitWidth="100" fitHeight="100"/>
+                    <Label fx:id="team1Name" styleClass="team-name"/>
+                </VBox>
+
+                <Label text="VS" styleClass="vs-label"/>
+
+                <VBox alignment="CENTER" spacing="10">
+                    <ImageView fx:id="team2Logo" fitWidth="100" fitHeight="100"/>
+                    <Label fx:id="team2Name" styleClass="team-name"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- SCORE -->
+            <Label fx:id="scoreLabel" styleClass="score-value"/>
+
+            <!-- DATES -->
+            <VBox spacing="8" alignment="CENTER">
+                <Label fx:id="dateMatchLabel"/>
+                <Label fx:id="dateFinLabel"/>
+            </VBox>
+
+            <!-- BACK -->
+            <Button text="← Retour"
+                    onAction="#goBack"
+                    styleClass="btn-secondary"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>

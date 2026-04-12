@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.FormMatchController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <!-- MAIN -->
+    <center>
+
+        <VBox spacing="18" styleClass="main-content">
+
+            <padding>
+                <Insets top="22" right="22" bottom="22" left="22"/>
+            </padding>
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="16">
+
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                    <Label fx:id="formTitleLabel"
+                           text="Ajouter un Match"
+                           styleClass="page-title"/>
+
+                    <Label text="Tous les champs sont obligatoires"
+                           styleClass="page-subtitle"/>
+
+                </VBox>
+
+                <Button text="Fermer"
+                        onAction="#closeWindow"
+                        styleClass="btn-secondary"/>
+
+            </HBox>
+
+            <!-- FORM -->
+            <ScrollPane fitToWidth="true"
+                        VBox.vgrow="ALWAYS"
+                        styleClass="scroll-pane-custom">
+
+                <content>
+
+                    <VBox spacing="18"
+                          styleClass="topbar-box">
+
+                        <!-- NOM -->
+                        <VBox spacing="4">
+                            <Label text="Nom du match *"
+                                   styleClass="form-label"/>
+
+                            <TextField fx:id="nomField"
+                                       promptText="Ex : Finale Valorant 2026"
+                                       styleClass="form-input"/>
+
+                            <Label fx:id="nomError"
+                                   textFill="#ef4444"
+                                   visible="false"
+                                   managed="false"/>
+                        </VBox>
+
+                        <!-- EQUIPES -->
+                        <HBox spacing="15">
+
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                <Label text="Equipe 1 *"
+                                       styleClass="form-label"/>
+
+                                <ComboBox fx:id="equipe1Box"
+                                          prefHeight="42"
+                                          maxWidth="1.7976931348623157E308"
+                                          styleClass="form-combo"/>
+
+                                <Label fx:id="equipe1Error"
+                                       textFill="#ef4444"
+                                       visible="false"
+                                       managed="false"/>
+                            </VBox>
+
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                <Label text="Equipe 2 *"
+                                       styleClass="form-label"/>
+
+                                <ComboBox fx:id="equipe2Box"
+                                          prefHeight="42"
+                                          maxWidth="1.7976931348623157E308"
+                                          styleClass="form-combo"/>
+
+                                <Label fx:id="equipe2Error"
+                                       textFill="#ef4444"
+                                       visible="false"
+                                       managed="false"/>
+                            </VBox>
+
+                        </HBox>
+
+                        <!-- SCORES -->
+                        <!-- REMPLACER SEULEMENT LA PARTIE SCORES PAR CELLE-CI -->
+
+                        <HBox spacing="18">
+
+                            <!-- SCORE 1 -->
+                            <VBox spacing="6" alignment="CENTER" HBox.hgrow="ALWAYS">
+
+                                <Label text="Score Equipe 1 *"
+                                       styleClass="form-label"/>
+
+                                <Button fx:id="incScore1Btn"
+                                        text="▲"
+                                        onAction="#increaseScore1"
+                                        styleClass="btn-secondary"
+                                        prefWidth="70"/>
+
+                                <Label fx:id="score1Display"
+                                       text="0"
+                                       style="
+                    -fx-font-size:34px;
+                    -fx-font-weight:bold;
+                    -fx-text-fill:#22c55e;
+                    -fx-padding:8;
+               "/>
+
+                                <Button fx:id="decScore1Btn"
+                                        text="▼"
+                                        onAction="#decreaseScore1"
+                                        styleClass="btn-secondary"
+                                        prefWidth="70"/>
+
+                                <TextField fx:id="score1Field"
+                                           visible="false"
+                                           managed="false"
+                                           text="0"/>
+
+                                <Label fx:id="score1Error"
+                                       textFill="#ef4444"
+                                       visible="false"
+                                       managed="false"/>
+
+                            </VBox>
+
+
+                            <!-- SCORE 2 -->
+                            <VBox spacing="6" alignment="CENTER" HBox.hgrow="ALWAYS">
+
+                                <Label text="Score Equipe 2 *"
+                                       styleClass="form-label"/>
+
+                                <Button fx:id="incScore2Btn"
+                                        text="▲"
+                                        onAction="#increaseScore2"
+                                        styleClass="btn-secondary"
+                                        prefWidth="70"/>
+
+                                <Label fx:id="score2Display"
+                                       text="0"
+                                       style="
+                    -fx-font-size:34px;
+                    -fx-font-weight:bold;
+                    -fx-text-fill:#3b82f6;
+                    -fx-padding:8;
+               "/>
+
+                                <Button fx:id="decScore2Btn"
+                                        text="▼"
+                                        onAction="#decreaseScore2"
+                                        styleClass="btn-secondary"
+                                        prefWidth="70"/>
+
+                                <TextField fx:id="score2Field"
+                                           visible="false"
+                                           managed="false"
+                                           text="0"/>
+
+                                <Label fx:id="score2Error"
+                                       textFill="#ef4444"
+                                       visible="false"
+                                       managed="false"/>
+
+                            </VBox>
+
+                        </HBox>
+                        <!-- DATES -->
+                        <!-- REMPLACER LA PARTIE DATES + STATUS PAR CELLE-CI -->
+
+                        <VBox spacing="18">
+
+                            <!-- DATE MATCH -->
+                            <HBox spacing="15">
+
+                                <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                    <Label text="Date match *"
+                                           styleClass="form-label"/>
+
+                                    <DatePicker fx:id="dateMatchPicker"
+                                                prefHeight="42"
+                                                maxWidth="1.7976931348623157E308"
+                                                styleClass="form-input"/>
+
+                                    <Label fx:id="dateMatchError"
+                                           textFill="#ef4444"
+                                           visible="false"
+                                           managed="false"/>
+                                </VBox>
+
+                                <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                    <Label text="Heure début *"
+                                           styleClass="form-label"/>
+
+                                    <ComboBox fx:id="hourStartBox"
+                                              prefHeight="42"
+                                              maxWidth="1.7976931348623157E308"
+                                              styleClass="form-combo"/>
+
+                                </VBox>
+
+                            </HBox>
+
+
+                            <!-- DATE FIN -->
+                            <HBox spacing="15">
+
+                                <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                    <Label text="Date fin *"
+                                           styleClass="form-label"/>
+
+                                    <DatePicker fx:id="dateFinPicker"
+                                                prefHeight="42"
+                                                maxWidth="1.7976931348623157E308"
+                                                styleClass="form-input"/>
+
+                                    <Label fx:id="dateFinError"
+                                           textFill="#ef4444"
+                                           visible="false"
+                                           managed="false"/>
+                                </VBox>
+
+                                <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                    <Label text="Heure fin *"
+                                           styleClass="form-label"/>
+
+                                    <ComboBox fx:id="hourEndBox"
+                                              prefHeight="42"
+                                              maxWidth="1.7976931348623157E308"
+                                              styleClass="form-combo"/>
+
+                                </VBox>
+
+                            </HBox>
+
+
+                            <!-- STATUS EDIT -->
+                            <VBox spacing="6"
+                                  fx:id="statusBox"
+                                  visible="false"
+                                  managed="false">
+
+                                <Label text="Statut du match"
+                                       styleClass="form-label"/>
+
+                                <ComboBox fx:id="statusBoxField"
+                                          prefHeight="42"
+                                          maxWidth="1.7976931348623157E308"
+                                          styleClass="form-combo"/>
+
+                            </VBox>
+
+                        </VBox>
+
+                        <!-- GLOBAL ERROR -->
+                        <Label fx:id="errorLabel"
+                               visible="false"
+                               managed="false"
+                               wrapText="true"
+                               textFill="#ef4444"/>
+
+                        <!-- ACTIONS -->
+                        <HBox spacing="12"
+                              alignment="CENTER_RIGHT">
+
+                            <Button text="Annuler"
+                                    onAction="#closeWindow"
+                                    styleClass="btn-cancel"/>
+
+                            <Button fx:id="saveBtn"
+                                    text="Enregistrer"
+                                    onAction="#saveMatch"
+                                    styleClass="btn-success-lg"/>
+
+                        </HBox>
+
+                    </VBox>
+
+                </content>
+
+            </ScrollPane>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>

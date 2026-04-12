@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.StatsController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox spacing="18"
+              styleClass="sidebar"
+              prefWidth="220">
+
+            <padding>
+                <Insets top="24" right="18" bottom="24" left="18"/>
+            </padding>
+
+            <Label text="E-Sports Admin"
+                   styleClass="logo"/>
+
+            <!-- MENU -->
+            <VBox spacing="10">
+
+                <Button text="🏠 Dashboard"
+                        styleClass="menu-btn"
+                        onAction="#goDashboard"
+                        maxWidth="1.7976931348623157E308"/>
+
+                <Button text="👥 Equipes"
+                        styleClass="menu-btn"
+                        onAction="#goEquipes"
+                        maxWidth="1.7976931348623157E308"/>
+
+                <Button text="🎮 Matchs"
+                        styleClass="menu-btn"
+                        onAction="#goMatchs"
+                        maxWidth="1.7976931348623157E308"/>
+
+                <Button text="🏆 Statistiques"
+                        styleClass="menu-btn active"
+                        maxWidth="1.7976931348623157E308"
+                        style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 12; -fx-text-fill: white;"
+                />
+
+                <Region prefHeight="10.0" />
+                <Button text="🚪 Déconnexion" 
+                        styleClass="menu-btn" 
+                        onAction="#logout"
+                        maxWidth="1.7976931348623157E308"
+                        style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;"/>
+
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- TIP -->
+            <VBox spacing="8"
+                  styleClass="sidebar-footer-card">
+
+                <Label text="Tip"
+                       styleClass="tip-title"/>
+
+                <Label text="Consultez le classement, performances et points des équipes."
+                       wrapText="true"
+                       styleClass="tip-text"/>
+            </VBox>
+
+        </VBox>
+    </left>
+
+    <!-- MAIN -->
+    <center>
+
+        <VBox spacing="18"
+              styleClass="main-content">
+
+            <padding>
+                <Insets top="22" right="22" bottom="22" left="22"/>
+            </padding>
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT"
+                  spacing="16">
+
+                <VBox spacing="4"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="🏆 Classement des équipes"
+                           styleClass="page-title"/>
+
+                    <Label fx:id="totalLabel"
+                           text="Total équipes : 0"
+                           styleClass="page-subtitle"/>
+
+                </VBox>
+
+                <Button text="↻ Actualiser"
+                        onAction="#refresh"
+                        styleClass="btn-success-lg"/>
+
+            </HBox>
+
+            <!-- FILTER BAR -->
+            <HBox spacing="12"
+                  alignment="CENTER_LEFT"
+                  styleClass="topbar-box">
+
+                <TextField fx:id="searchField"
+                           promptText="🔎 Rechercher une équipe..."
+                           onKeyReleased="#filterData"
+                           HBox.hgrow="ALWAYS"
+                           styleClass="search-field"/>
+
+                <ComboBox fx:id="gameFilter"
+                          onAction="#filterData"
+                          prefWidth="200"
+                          promptText="Jeux"
+                          styleClass="form-combo"/>
+
+                <ComboBox fx:id="sortFilter"
+                          onAction="#filterData"
+                          prefWidth="220"
+                          promptText="Trier"
+                          styleClass="form-combo"/>
+
+                <Button text="Reset"
+                        onAction="#resetFilters"
+                        styleClass="btn-secondary"/>
+
+            </HBox>
+
+            <!-- DASHBOARD SCROLL -->
+            <ScrollPane VBox.vgrow="ALWAYS"
+                        fitToWidth="true"
+                        styleClass="scroll-pane-custom">
+
+                <VBox spacing="30">
+                    <padding>
+                        <Insets bottom="30" top="10"/>
+                    </padding>
+
+                    <!-- METRIC CARDS ROW -->
+                    <HBox spacing="20" alignment="CENTER">
+
+                        <VBox styleClass="stat-card-premium" alignment="CENTER">
+                            <Label text="🏆" styleClass="stat-card-icon"/>
+                            <Label fx:id="bestTeamLabel" text="-" styleClass="stat-card-value"/>
+                            <Label text="MEILLEURE ÉQUIPE" styleClass="stat-card-label"/>
+                        </VBox>
+
+                        <VBox styleClass="stat-card-premium" alignment="CENTER">
+                            <Label text="🔥" styleClass="stat-card-icon"/>
+                            <Label fx:id="bestBpLabel" text="-" styleClass="stat-card-value"/>
+                            <Label text="MEILLEURE ATTAQUE (BP)" styleClass="stat-card-label"/>
+                        </VBox>
+
+                        <VBox styleClass="stat-card-premium" alignment="CENTER">
+                            <Label text="🛡️" styleClass="stat-card-icon"/>
+                            <Label fx:id="bestBcLabel" text="-" styleClass="stat-card-value"/>
+                            <Label text="MEILLEURE DÉFENSE (BC)" styleClass="stat-card-label"/>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- CHARTS GRID -->
+                    <GridPane hgap="25" vgap="25">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <!-- BarChart: Points Comparison -->
+                        <VBox styleClass="topbar-box" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <BarChart fx:id="pointsChart" title="Points par Équipe (Top 10)" legendVisible="false" prefHeight="350">
+                                <xAxis><CategoryAxis side="BOTTOM"/></xAxis>
+                                <yAxis><NumberAxis side="LEFT"/></yAxis>
+                            </BarChart>
+                        </VBox>
+
+                        <!-- PieChart: Global Performance -->
+                        <VBox styleClass="topbar-box" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <PieChart fx:id="performancePie" title="Répartition des Résultats Globaux" prefHeight="350"/>
+                        </VBox>
+
+                        <!-- PieChart: Game Distribution -->
+                        <VBox styleClass="topbar-box" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <PieChart fx:id="gamePie" title="Répartition des Équipes par Jeu" prefHeight="350"/>
+                        </VBox>
+
+                        <!-- BarChart: BP/BC Comparison -->
+                        <VBox styleClass="topbar-box" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <BarChart fx:id="goalsChart" title="Offensive (BP) vs Défensive (BC)" prefHeight="350">
+                                <xAxis><CategoryAxis side="BOTTOM"/></xAxis>
+                                <yAxis><NumberAxis side="LEFT"/></yAxis>
+                            </BarChart>
+                        </VBox>
+
+                    </GridPane>
+
+                </VBox>
+
+            </ScrollPane>
+
+
+        </VBox>
+
+    </center>
+
+</BorderPane>

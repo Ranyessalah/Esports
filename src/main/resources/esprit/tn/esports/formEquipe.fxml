@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<VBox spacing="18"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="esprit.tn.esports.controller.FormEquipeController"
+      stylesheets="@admin.css"
+      styleClass="modal-container">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label fx:id="formTitleLabel" text="Ajouter une Équipe" styleClass="page-title"/>
+            <Label text="Tous les champs sont obligatoires" styleClass="page-subtitle"/>
+        </VBox>
+        <Button text="Fermer" onAction="#closeWindow" styleClass="btn-secondary"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane-custom">
+        <content>
+            <VBox spacing="18" styleClass="topbar-box">
+                <!-- NAME -->
+                <VBox spacing="5">
+                    <Label text="Nom de l'équipe *" styleClass="form-label"/>
+                    <TextField fx:id="nameField" promptText="Ex: Team Vitality" styleClass="form-input"/>
+                    <Label fx:id="nameError" styleClass="error-label" visible="false" managed="false"/>
+                </VBox>
+
+                <!-- GAME -->
+                <VBox spacing="5">
+                    <Label text="Jeu *" styleClass="form-label"/>
+                    <TextField fx:id="gameField" promptText="Ex: Valorant" styleClass="form-input"/>
+                    <Label fx:id="gameError" styleClass="error-label" visible="false" managed="false"/>
+                </VBox>
+
+                <!-- CATEGORY -->
+                <VBox spacing="5">
+                    <Label text="Catégorie *" styleClass="form-label"/>
+                    <TextField fx:id="catField" promptText="Ex: Pro" styleClass="form-input"/>
+                    <Label fx:id="catError" styleClass="error-label" visible="false" managed="false"/>
+                </VBox>
+                
+                <!-- COACH -->
+                <VBox spacing="5">
+                    <Label text="Coach *" styleClass="form-label"/>
+                    <ComboBox fx:id="coachBox" promptText="Sélectionner un coach" maxWidth="Infinity" styleClass="form-combo"/>
+                    <Label fx:id="coachError" styleClass="error-label" visible="false" managed="false"/>
+                </VBox>
+                
+                <!-- PLAYERS -->
+                <VBox spacing="5">
+                    <Label text="Membres de l'équipe (maintenez Ctrl pour plusieurs) *" styleClass="form-label"/>
+                    <ListView fx:id="playersListView" prefHeight="150" styleClass="form-list-view"/>
+                    <Label fx:id="playersError" styleClass="error-label" visible="false" managed="false"/>
+                </VBox>
+
+                <!-- IMAGE -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="Logo de l'équipe *" styleClass="form-label"/>
+                    <ImageView fx:id="preview" fitHeight="150" fitWidth="150" preserveRatio="true"/>
+                    <Label fx:id="imageError" styleClass="error-label" visible="false" managed="false"/>
+                    <Button text="Choisir un logo" onAction="#uploadImage" styleClass="btn-secondary"/>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <!-- ACTION -->
+                <HBox spacing="12" alignment="CENTER_RIGHT">
+                    <Button text="Annuler" onAction="#closeWindow" styleClass="btn-cancel"/>
+                    <Button fx:id="saveBtn" text="Enregistrer" onAction="#save" styleClass="btn-success-lg"/>
+                </HBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+
+
+</VBox>

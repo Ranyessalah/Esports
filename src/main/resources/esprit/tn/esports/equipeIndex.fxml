@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.AdminEquipeController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox spacing="18" styleClass="sidebar" prefWidth="220">
+            <padding>
+                <Insets top="24" right="18" bottom="24" left="18"/>
+            </padding>
+
+            <Label text="E-Sports Admin" styleClass="logo"/>
+
+            <VBox spacing="10">
+                <Button text="Dashboard" styleClass="menu-btn" maxWidth="1.7976931348623157E308"/>
+                <Button text="Equipes" styleClass="menu-btn active" maxWidth="1.7976931348623157E308"
+                        style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 12; -fx-text-fill: white;"/>
+                <Button text="Matchs" styleClass="menu-btn" onAction="#goMatchs" maxWidth="1.7976931348623157E308"/>
+
+                <Button text="🏆 Statistiques"
+                        styleClass="menu-btn"
+                        onAction="#goStats"
+                        maxWidth="1.7976931348623157E308"
+                />
+
+                <Region prefHeight="10.0" />
+                <Button text="🚪 Déconnexion" 
+                        styleClass="menu-btn" 
+                        onAction="#logout"
+                        maxWidth="1.7976931348623157E308"
+                        style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <VBox spacing="8" styleClass="sidebar-footer-card">
+                <Label text="Tip" styleClass="tip-title"/>
+                <Label text="Gérez vos équipes, logos et informations facilement."
+                       wrapText="true" styleClass="tip-text"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- MAIN -->
+    <center>
+        <VBox fx:id="mainContent" spacing="18" styleClass="main-content">
+            <padding>
+                <Insets top="22" right="22" bottom="22" left="22"/>
+            </padding>
+
+            <!-- HEADER -->
+            <VBox spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Nos Équipes" styleClass="page-title"/>
+                        <Label text="Consultez et gérez toutes vos équipes e-sport."
+                               styleClass="page-subtitle"/>
+                    </VBox>
+
+                    <Button text="+ Ajouter Équipe"
+                            onAction="#openAddModal"
+                            styleClass="btn-success-lg"/>
+                </HBox>
+            </VBox>
+
+            <!-- TOPBAR -->
+            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="topbar-box">
+                <TextField fx:id="searchField"
+                           promptText="Rechercher une équipe..."
+                           onKeyReleased="#search"
+                           HBox.hgrow="ALWAYS"
+                           styleClass="search-field"/>
+
+                <Button text="Actualiser"
+                        onAction="#refresh"
+                        styleClass="btn-secondary"/>
+
+                <Label fx:id="countLabel"
+                       text="0 équipes"
+                       styleClass="count-badge"/>
+            </HBox>
+
+            <!-- CONTENT -->
+            <ScrollPane fitToWidth="true"
+                        fitToHeight="true"
+                        styleClass="scroll-pane-custom"
+                        VBox.vgrow="ALWAYS">
+
+                <content>
+                    <FlowPane fx:id="cardContainer"
+                              hgap="18"
+                              vgap="18"
+                              prefWrapLength="980"
+                              styleClass="cards"/>
+                </content>
+
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>
