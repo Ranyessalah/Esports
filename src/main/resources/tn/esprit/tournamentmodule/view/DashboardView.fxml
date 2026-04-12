@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.tournamentmodule.gui.DashboardController"
+      styleClass="view-root" spacing="20">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT">
+        <Label text="Dashboard" styleClass="page-title"/>
+    </HBox>
+
+    <!-- Metric cards -->
+    <HBox spacing="12">
+        <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Total Leagues" styleClass="metric-label"/>
+            <Label fx:id="totalLeaguesLabel" text="—" styleClass="metric-value"/>
+        </VBox>
+        <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Active Leagues" styleClass="metric-label"/>
+            <Label fx:id="activeLeaguesLabel" text="—" styleClass="metric-value"/>
+        </VBox>
+        <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Total Fixtures" styleClass="metric-label"/>
+            <Label fx:id="totalFixturesLabel" text="—" styleClass="metric-value"/>
+        </VBox>
+        <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Teams Registered" styleClass="metric-label"/>
+            <Label fx:id="teamsCountLabel" text="—" styleClass="metric-value"/>
+        </VBox>
+    </HBox>
+
+    <!-- Two columns: leagues + fixtures -->
+    <HBox spacing="12" VBox.vgrow="ALWAYS">
+
+        <!-- Leagues card -->
+        <VBox styleClass="dash-card" HBox.hgrow="ALWAYS" spacing="0">
+            <Label text="Leagues" styleClass="dash-card-title"/>
+            <VBox fx:id="leagueListBox" spacing="0"/>
+        </VBox>
+
+        <!-- Recent fixtures card -->
+        <VBox styleClass="dash-card" HBox.hgrow="ALWAYS" spacing="0">
+            <Label text="Recent Fixtures" styleClass="dash-card-title"/>
+            <VBox fx:id="fixtureListBox" spacing="0"/>
+        </VBox>
+
+    </HBox>
+</VBox>

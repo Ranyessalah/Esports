@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.tournamentmodule.gui.FixtureDialogController"
+      spacing="14" prefWidth="460">
+    <padding><Insets top="20" right="24" bottom="8" left="24"/></padding>
+
+    <VBox spacing="4">
+        <Label text="League *" styleClass="field-label"/>
+        <ComboBox fx:id="leagueCombo" prefWidth="Infinity" styleClass="field-input"/>
+    </VBox>
+    <HBox spacing="12">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Home Team *" styleClass="field-label"/>
+            <TextField fx:id="homeTeamField" promptText="Home team" styleClass="field-input"/>
+        </VBox>
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Away Team *" styleClass="field-label"/>
+            <TextField fx:id="awayTeamField" promptText="Away team" styleClass="field-input"/>
+        </VBox>
+    </HBox>
+    <HBox spacing="12">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Match Date *" styleClass="field-label"/>
+            <DatePicker fx:id="datePicker" prefWidth="Infinity" styleClass="field-input"/>
+        </VBox>
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Match Time (HH:mm)" styleClass="field-label"/>
+            <TextField fx:id="timeField" promptText="18:00" styleClass="field-input"/>
+        </VBox>
+    </HBox>
+    <HBox spacing="12">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Home Score" styleClass="field-label"/>
+            <TextField fx:id="homeScoreField" promptText="—" styleClass="field-input"/>
+        </VBox>
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Away Score" styleClass="field-label"/>
+            <TextField fx:id="awayScoreField" promptText="—" styleClass="field-input"/>
+        </VBox>
+    </HBox>
+    <VBox spacing="4">
+        <Label text="Status *" styleClass="field-label"/>
+        <ComboBox fx:id="statusCombo" prefWidth="Infinity" styleClass="field-input"/>
+    </VBox>
+</VBox>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.tournamentmodule.gui.LeagueDialogController"
+      spacing="14" prefWidth="440">
+    <padding><Insets top="20" right="24" bottom="8" left="24"/></padding>
+
+    <VBox spacing="4">
+        <Label text="League Name *" styleClass="field-label"/>
+        <TextField fx:id="nameField" promptText="e.g. ClutchX Spring Championship" styleClass="field-input"/>
+    </VBox>
+    <VBox spacing="4">
+        <Label text="Game *" styleClass="field-label"/>
+        <TextField fx:id="gameField" promptText="e.g. Valorant, League of Legends" styleClass="field-input"/>
+    </VBox>
+    <VBox spacing="4">
+        <Label text="Season *" styleClass="field-label"/>
+        <TextField fx:id="seasonField" promptText="e.g. 2025 Season 1" styleClass="field-input"/>
+    </VBox>
+    <VBox spacing="4">
+        <Label text="Status *" styleClass="field-label"/>
+        <ComboBox fx:id="statusCombo" prefWidth="Infinity" styleClass="field-input"/>
+    </VBox>
+    <VBox spacing="4">
+        <Label text="Teams (comma-separated)" styleClass="field-label"/>
+        <TextArea fx:id="teamsArea" promptText="Team Alpha, Team Beta, Team Gamma…"
+                  prefHeight="80" wrapText="true" styleClass="field-input"/>
+    </VBox>
+</VBox>

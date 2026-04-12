@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.tournamentmodule.gui.MainController"
+            styleClass="main-root">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="210">
+
+            <VBox styleClass="sidebar-logo">
+                <Label text="ClutchX" styleClass="sidebar-brand"/>
+                <Label text="Tournament Module" styleClass="sidebar-sub"/>
+            </VBox>
+
+            <VBox styleClass="sidebar-nav" VBox.vgrow="ALWAYS">
+                <Label text="MAIN" styleClass="nav-section"/>
+                <Label fx:id="navHome"      text="Home"      styleClass="nav-item" onMouseClicked="#onHome"/>
+                <Label fx:id="navDashboard" text="Dashboard" styleClass="nav-item" onMouseClicked="#onDashboard"/>
+
+                <Label text="MANAGEMENT" styleClass="nav-section"/>
+                <Label fx:id="navLeagues"  text="Leagues"  styleClass="nav-item" onMouseClicked="#onLeagues"/>
+                <Label fx:id="navFixtures" text="Fixtures" styleClass="nav-item" onMouseClicked="#onFixtures"/>
+            </VBox>
+
+            <VBox styleClass="sidebar-footer">
+                <Label text="Season 2025 S1" styleClass="sidebar-footer-text"/>
+            </VBox>
+
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area"/>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.tournamentmodule.gui.FixtureController"
+      styleClass="view-root" spacing="16">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="Fixtures" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ New Fixture" styleClass="btn,btn-primary" onAction="#onAddFixture"/>
+    </HBox>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search fixtures, teams, leagues…"
+                   styleClass="search-field" onAction="#onSearch" prefWidth="280"/>
+        <Button text="Search" styleClass="btn,btn-secondary" onAction="#onSearch"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Status:"/>
+        <ComboBox fx:id="statusFilter" onAction="#onFilter" prefWidth="150"/>
+    </HBox>
+
+    <TableView fx:id="fixtureTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <columns>
+            <TableColumn fx:id="leagueCol"   text="League"    prefWidth="150"/>
+            <TableColumn fx:id="homeTeamCol" text="Home Team" prefWidth="140"/>
+            <TableColumn fx:id="awayTeamCol" text="Away Team" prefWidth="140"/>
+            <TableColumn fx:id="dateCol"     text="Date"      prefWidth="110"/>
+            <TableColumn fx:id="timeCol"     text="Time"      prefWidth="80"/>
+            <TableColumn fx:id="resultCol"   text="Result"    prefWidth="90"/>
+            <TableColumn fx:id="statusCol"   text="Status"    prefWidth="110"/>
+            <TableColumn fx:id="actionsCol"  text="Actions"   prefWidth="150"/>
+        </columns>
+        <placeholder>
+            <Label text="No fixtures scheduled. Click '+ New Fixture' to add one."
+                   styleClass="table-placeholder"/>
+        </placeholder>
+    </TableView>
+</VBox>

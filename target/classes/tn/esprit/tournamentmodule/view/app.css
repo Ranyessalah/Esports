@@ -1,0 +1,590 @@
+/* ═══════════════════════════════════════════════════════════════
+   ClutchX – Neon Dusk Theme  (Purple · Pink · Red)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Root & base ─────────────────────────────────────────────── */
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #0d0a12;
+    -fx-text-fill: #f0e8ff;
+}
+.view-root {
+    -fx-background-color: #0d0a12;
+}
+.main-root {
+    -fx-background-color: #0d0a12;
+}
+.content-area {
+    -fx-background-color: #0d0a12;
+}
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0e8ff;
+}
+
+/* ── Input fields ────────────────────────────────────────────── */
+.search-field,
+.field-input {
+    -fx-background-color: #1c1228;
+    -fx-border-color: #3d2655;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #f0e8ff;
+    -fx-prompt-text-fill: #5a3d78;
+    -fx-padding: 8 12 8 12;
+}
+.search-field:focused,
+.field-input:focused {
+    -fx-border-color: #c84bff;
+}
+.field-label {
+    -fx-text-fill: #9a7fbf;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+    -fx-cursor: hand;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 18 8 18;
+    -fx-font-weight: bold;
+}
+.btn-primary {
+    -fx-background-color: #c84bff;
+    -fx-text-fill: #0d0a12;
+    -fx-border-color: transparent;
+}
+.btn-primary:hover {
+    -fx-background-color: #a030d8;
+}
+.btn-secondary {
+    -fx-background-color: #1c1228;
+    -fx-text-fill: #f0e8ff;
+    -fx-border-color: #3d2655;
+}
+.btn-secondary:hover {
+    -fx-background-color: #2e1d40;
+}
+.btn-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ff3b3b;
+    -fx-border-color: #ff3b3b;
+}
+.btn-danger:hover {
+    -fx-background-color: #ff3b3b;
+    -fx-text-fill: #f0e8ff;
+}
+.btn-sm {
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 11px;
+}
+
+/* ── TableView ───────────────────────────────────────────────── */
+.data-table {
+    -fx-background-color: #150f1e;
+    -fx-border-color: #2e1d40;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-table-cell-border-color: transparent;
+}
+.data-table .column-header-background {
+    -fx-background-color: #1c1228;
+}
+.data-table .filler {
+    -fx-background-color: #1c1228;
+}
+.data-table .column-header .label {
+    -fx-text-fill: #9a7fbf;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.data-table .table-row-cell {
+    -fx-background-color: #150f1e;
+    -fx-border-color: transparent transparent #2e1d40 transparent;
+}
+.data-table .table-row-cell:odd {
+    -fx-background-color: #1c1228;
+}
+.data-table .table-row-cell:selected {
+    -fx-background-color: #2a0d2e;
+}
+.data-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #f0e8ff;
+}
+.data-table .table-cell {
+    -fx-text-fill: #f0e8ff;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 12 10 12;
+}
+.table-placeholder {
+    -fx-text-fill: #9a7fbf;
+    -fx-font-style: italic;
+}
+
+/* ── Status badges ───────────────────────────────────────────── */
+.status-badge {
+    -fx-padding: 3 10 3 10;
+    -fx-background-radius: 20px;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.status-active,
+.status-live {
+    -fx-background-color: #2a0d2a;
+    -fx-text-fill: #d45cff;
+}
+.status-upcoming,
+.status-scheduled {
+    -fx-background-color: #1a0d2e;
+    -fx-text-fill: #c84bff;
+}
+.status-completed {
+    -fx-background-color: #1c1228;
+    -fx-text-fill: #9a7fbf;
+}
+.status-cancelled {
+    -fx-background-color: #2a0d0d;
+    -fx-text-fill: #ff3b3b;
+}
+
+/* ── ComboBox ────────────────────────────────────────────────── */
+.combo-box {
+    -fx-background-color: #1c1228;
+    -fx-border-color: #3d2655;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+.combo-box .list-cell {
+    -fx-text-fill: #f0e8ff;
+    -fx-background-color: transparent;
+}
+.combo-box-popup .list-view {
+    -fx-background-color: #1c1228;
+    -fx-border-color: #3d2655;
+}
+.combo-box-popup .list-cell {
+    -fx-text-fill: #f0e8ff;
+    -fx-background-color: transparent;
+}
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #2e1d40;
+}
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+.combo-box .arrow {
+    -fx-background-color: #9a7fbf;
+}
+
+/* ── DatePicker ──────────────────────────────────────────────── */
+.date-picker {
+    -fx-background-color: #1c1228;
+    -fx-border-color: #3d2655;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f0e8ff;
+}
+.date-picker-popup {
+    -fx-background-color: #1c1228;
+    -fx-border-color: #3d2655;
+}
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #1c1228;
+}
+.date-picker-popup .day-cell .text {
+    -fx-fill: #f0e8ff;
+}
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #2e1d40;
+}
+.date-picker-popup .selected .text {
+    -fx-fill: #0d0a12;
+}
+.date-picker-popup .selected {
+    -fx-background-color: #c84bff;
+}
+
+/* ── Dialog ──────────────────────────────────────────────────── */
+.dialog-pane {
+    -fx-background-color: #150f1e;
+    -fx-border-color: #2e1d40;
+}
+.dialog-pane .header-panel {
+    -fx-background-color: #1c1228;
+}
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #f0e8ff;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+.dialog-pane .button-bar .button {
+    -fx-background-color: #c84bff;
+    -fx-text-fill: #0d0a12;
+    -fx-font-weight: bold;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 20 8 20;
+    -fx-cursor: hand;
+}
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: #a030d8;
+}
+
+/* ── TextArea ────────────────────────────────────────────────── */
+.text-area {
+    -fx-background-color: #1c1228;
+    -fx-border-color: #3d2655;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+.text-area .content {
+    -fx-background-color: #1c1228;
+    -fx-text-fill: #f0e8ff;
+}
+
+/* ── Scrollbars ──────────────────────────────────────────────── */
+.scroll-bar {
+    -fx-background-color: #0d0a12;
+}
+.scroll-bar .thumb {
+    -fx-background-color: #3d2655;
+    -fx-background-radius: 4px;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: #c84bff;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane > .corner {
+    -fx-background-color: #0d0a12;
+}
+
+/* ── Dashboard ───────────────────────────────────────────────── */
+.metric-card {
+    -fx-background-color: #1c1228;
+    -fx-background-radius: 8px;
+    -fx-padding: 16 18 16 18;
+    -fx-spacing: 6;
+}
+.metric-label {
+    -fx-text-fill: #9a7fbf;
+    -fx-font-size: 12px;
+}
+.metric-value {
+    -fx-text-fill: #f0e8ff;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+.dash-card {
+    -fx-background-color: #150f1e;
+    -fx-border-color: #2e1d40;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 16 18 16 18;
+}
+.dash-card-title {
+    -fx-text-fill: #9a7fbf;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+.dash-row {
+    -fx-padding: 10 0 10 0;
+    -fx-border-color: transparent transparent #2e1d40 transparent;
+}
+.dash-row-title {
+    -fx-text-fill: #f0e8ff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.dash-row-sub {
+    -fx-text-fill: #9a7fbf;
+    -fx-font-size: 11px;
+}
+.dash-team {
+    -fx-text-fill: #f0e8ff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.dash-score {
+    -fx-text-fill: #c84bff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-color: #1c1228;
+    -fx-background-radius: 4px;
+    -fx-padding: 2 8 2 8;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: #0f0b18;
+    -fx-border-color: transparent #2e1d40 transparent transparent;
+    -fx-border-width: 0 1 0 0;
+    -fx-min-height: 500px;
+}
+.sidebar-logo {
+    -fx-padding: 20 16 16 16;
+    -fx-border-color: transparent transparent #2e1d40 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-spacing: 3;
+}
+.sidebar-brand {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #c84bff;
+}
+.sidebar-sub {
+    -fx-font-size: 10px;
+    -fx-text-fill: #3d2655;
+}
+.sidebar-nav {
+    -fx-padding: 8 0 8 0;
+    -fx-spacing: 0;
+}
+.nav-section {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3d2655;
+    -fx-padding: 14 16 4 16;
+}
+.nav-item {
+    -fx-font-size: 13px;
+    -fx-text-fill: #9a7fbf;
+    -fx-padding: 9 16 9 16;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-max-width: Infinity;
+    -fx-border-width: 0 0 0 2;
+    -fx-border-color: transparent;
+}
+.nav-item:hover {
+    -fx-background-color: #1c1228;
+    -fx-text-fill: #f0e8ff;
+}
+.nav-item-active {
+    -fx-background-color: #1c1228;
+    -fx-text-fill: #c84bff;
+    -fx-border-color: transparent transparent transparent #c84bff;
+    -fx-border-width: 0 0 0 2;
+}
+.sidebar-footer {
+    -fx-padding: 12 16 12 16;
+    -fx-border-color: #2e1d40 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-spacing: 4;
+}
+.sidebar-footer-text {
+    -fx-font-size: 11px;
+    -fx-text-fill: #3d2655;
+}
+
+/* ── Home view (cover cards) ─────────────────────────────────── */
+.home-root {
+    -fx-background-color: #0d0a12;
+}
+.topbar {
+    -fx-background-color: #0f0b18;
+    -fx-border-color: transparent transparent #2e1d40 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.live-label {
+    -fx-text-fill: #ff4d8f;
+    -fx-font-size: 11px;
+}
+
+/* Filter buttons */
+.filter-btn {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9a7fbf;
+    -fx-background-color: transparent;
+    -fx-border-color: #2e1d40;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-padding: 5 16 5 16;
+    -fx-cursor: hand;
+}
+.filter-btn:hover {
+    -fx-border-color: #3d2655;
+    -fx-text-fill: #f0e8ff;
+}
+.filter-active {
+    -fx-background-color: #c84bff;
+    -fx-border-color: #c84bff;
+    -fx-text-fill: #0d0a12;
+    -fx-font-weight: bold;
+}
+
+/* Card scroll area */
+.home-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+.home-scroll .viewport {
+    -fx-background-color: #0d0a12;
+}
+.covers-pane {
+    -fx-background-color: #0d0a12;
+}
+
+/* Cover cards */
+.cover-card {
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #2e1d40;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+    -fx-padding: 20 16 0 16;
+}
+.cover-card:hover {
+    -fx-border-color: #c84bff;
+}
+
+/* Accent backgrounds per game */
+.accent-red    { -fx-background-color: #1a060a; }
+.accent-teal   { -fx-background-color: #16062a; }
+.accent-blue   { -fx-background-color: #16062a; }
+.accent-purple { -fx-background-color: #16062a; }
+
+.cover-icon {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9a7fbf;
+    -fx-padding: 10 14 10 14;
+    -fx-background-color: #0f0b18;
+    -fx-background-radius: 8px;
+    -fx-border-color: #2e1d40;
+    -fx-border-radius: 8px;
+}
+.cover-game {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5a3d78;
+    -fx-padding: 4 0 0 0;
+}
+.cover-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0e8ff;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+.cover-footer {
+    -fx-background-color: #0d0a12;
+    -fx-padding: 10 12 10 12;
+    -fx-background-radius: 0 0 10 10;
+}
+.cover-teams {
+    -fx-font-size: 10px;
+    -fx-text-fill: #9a7fbf;
+}
+
+/* ── Legacy cards scroll (Leagues view) ──────────────────────── */
+.cards-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+.cards-scroll .viewport {
+    -fx-background-color: transparent;
+}
+.cards-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 4 0 0 0;
+}
+.tournament-card {
+    -fx-background-color: #150f1e;
+    -fx-border-color: #2e1d40;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 16;
+    -fx-cursor: hand;
+}
+.tournament-card:hover {
+    -fx-border-color: #c84bff;
+}
+.card-game-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9a7fbf;
+}
+.card-name-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0e8ff;
+}
+.card-season-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9a7fbf;
+}
+.team-dot {
+    -fx-min-width: 7px;
+    -fx-min-height: 7px;
+    -fx-max-width: 7px;
+    -fx-max-height: 7px;
+    -fx-background-color: #c84bff;
+    -fx-background-radius: 10px;
+}
+
+/* ── Hero banner (if used) ───────────────────────────────────── */
+.hero-banner {
+    -fx-background-color: #0f0b18;
+    -fx-border-color: transparent transparent #2e1d40 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.hero-tag {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #d45cff;
+    -fx-background-color: #2a0d2a;
+    -fx-background-radius: 20px;
+    -fx-padding: 3 10 3 10;
+}
+.hero-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0e8ff;
+}
+.hero-sub {
+    -fx-font-size: 13px;
+    -fx-text-fill: #9a7fbf;
+}
+.hero-stat-val {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0e8ff;
+}
+.hero-stat-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9a7fbf;
+}
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0e8ff;
+}

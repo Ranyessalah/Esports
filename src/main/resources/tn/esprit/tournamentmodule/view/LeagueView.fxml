@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.tournamentmodule.gui.LeagueController"
+      styleClass="view-root" spacing="16">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="Leagues" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ New League" styleClass="btn,btn-primary" onAction="#onAddLeague"/>
+    </HBox>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search leagues…"
+                   styleClass="search-field" onAction="#onSearch" prefWidth="260"/>
+        <Button text="Search" styleClass="btn,btn-secondary" onAction="#onSearch"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Status:"/>
+        <ComboBox fx:id="statusFilter" onAction="#onFilter" prefWidth="150"/>
+    </HBox>
+
+    <TableView fx:id="leagueTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <columns>
+            <TableColumn fx:id="nameCol"    text="League Name" prefWidth="200"/>
+            <TableColumn fx:id="gameCol"    text="Game"        prefWidth="150"/>
+            <TableColumn fx:id="seasonCol"  text="Season"      prefWidth="120"/>
+            <TableColumn fx:id="teamsCol"   text="Teams"       prefWidth="100"/>
+            <TableColumn fx:id="statusCol"  text="Status"      prefWidth="120"/>
+            <TableColumn fx:id="actionsCol" text="Actions"     prefWidth="160"/>
+        </columns>
+        <placeholder>
+            <Label text="No leagues found. Click '+ New League' to get started."
+                   styleClass="table-placeholder"/>
+        </placeholder>
+    </TableView>
+</VBox>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.tournamentmodule.gui.HomeController"
+      styleClass="home-root">
+
+    <!-- Top filter bar -->
+    <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="10">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Label fx:id="filterAll"       text="All"       styleClass="filter-btn,filter-active" onMouseClicked="#onFilterAll"/>
+        <Label fx:id="filterActive"    text="Active"    styleClass="filter-btn" onMouseClicked="#onFilterActive"/>
+        <Label fx:id="filterUpcoming"  text="Upcoming"  styleClass="filter-btn" onMouseClicked="#onFilterUpcoming"/>
+        <Label fx:id="filterCompleted" text="Completed" styleClass="filter-btn" onMouseClicked="#onFilterCompleted"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="liveLabel" text="— Active now" styleClass="live-label"/>
+    </HBox>
+
+    <!-- Card grid -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="home-scroll">
+        <FlowPane fx:id="cardsPane" hgap="14" vgap="14" styleClass="covers-pane">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+        </FlowPane>
+    </ScrollPane>
+
+</VBox>
