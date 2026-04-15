@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import services.UserService;
 import utils.PreferencesRepository;
@@ -15,6 +16,9 @@ import utils.PreferencesRepository;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.scene.web.WebView;
+import javafx.scene.web.WebEngine;
 
 public class LoginController implements Initializable {
 
@@ -26,9 +30,79 @@ public class LoginController implements Initializable {
     @FXML private Label passwordError;
     @FXML private Label captchaError;
     @FXML private Label globalError;
+    @FXML private StackPane captchaContainer;
 
+    private WebView webView;
     private final PreferencesRepository prefs = new PreferencesRepository();
+    private com.sun.net.httpserver.HttpServer captchaServer;
 
+    private void startCaptchaServer() throws Exception {
+        captchaServer = com.sun.net.httpserver.HttpServer.create(
+                new java.net.InetSocketAddress("localhost", 8765), 0);
+
+
+        String html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <script src="https://www.google.com/recaptcha/api.js"></script>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            html, body {
+                background: transparent !important;
+                overflow: hidden;
+            }
+            .g-recaptcha {
+                transform: scale(0.92);
+                transform-origin: 0 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="g-recaptcha"
+             data-sitekey="6LeqfbksAAAAAEKK6Ylor5-KLnUNrLa1rfg2DWDJ"
+             data-theme="dark">
+        </div>
+        <script>
+            function getCaptchaToken() {
+                return grecaptcha.getResponse();
+            }
+        </script>
+    </body>
+    </html>
+""";
+
+        captchaServer.createContext("/captcha", exchange -> {
+            byte[] bytes = html.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+            exchange.sendResponseHeaders(200, bytes.length);
+            exchange.getResponseBody().write(bytes);
+            exchange.getResponseBody().close();
+        });
+
+        captchaServer.start();
+    }
+
+    private void loadCaptcha() {
+        try { startCaptchaServer(); } catch (Exception e) { e.printStackTrace(); }
+
+        webView = new WebView();
+        webView.setPrefHeight(78);   // hauteur ajustée au reCAPTCHA
+        webView.setMaxHeight(78);
+        webView.setStyle("-fx-background-color: transparent;");
+
+        // Rendre le fond transparent
+        webView.getEngine().documentProperty().addListener((obs, old, doc) -> {
+            if (doc != null) {
+                ((com.sun.webkit.dom.HTMLDocumentImpl) doc)
+                        .getDocumentElement()
+                        .setAttribute("style", "background:transparent");
+            }
+        });
+
+        webView.getEngine().load("http://localhost:8765/captcha");
+        captchaContainer.getChildren().add(webView);
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         passwordField.setOnAction(e -> onLogin());
@@ -36,10 +110,9 @@ public class LoginController implements Initializable {
         // Clear field errors on typing
         emailField.textProperty().addListener((obs, o, n) -> clearError(emailField, emailError));
         passwordField.textProperty().addListener((obs, o, n) -> clearError(passwordField, passwordError));
-        captchaCheck.selectedProperty().addListener((obs, o, n) -> {
-            if (n) clearError(null, captchaError);
-        });
+        loadCaptcha();
     }
+
 
     @FXML
     private void onLogin() {
@@ -65,11 +138,20 @@ public class LoginController implements Initializable {
             valid = false;
         }
 
-        if (!captchaCheck.isSelected()) {
-            captchaError.setText("Veuillez cocher la case reCAPTCHA.");
+        String token = getCaptchaToken();
+
+        if (token == null || token.isEmpty()) {
+            captchaError.setText("Veuillez valider le CAPTCHA.");
             captchaError.setVisible(true);
             captchaError.setManaged(true);
-            valid = false;
+            return;
+        }
+
+        if (!verifyCaptcha(token)) {
+            captchaError.setText("CAPTCHA invalide.");
+            captchaError.setVisible(true);
+            captchaError.setManaged(true);
+            return;
         }
 
         if (!valid) return;
@@ -193,5 +275,48 @@ public class LoginController implements Initializable {
     private void showInfo(String title, String msg) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setTitle(title); a.setHeaderText(null); a.setContentText(msg); a.showAndWait();
+    }
+
+    private String getCaptchaToken() {
+        try {
+            return (String) webView.getEngine()
+                    .executeScript("getCaptchaToken()");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private boolean verifyCaptcha(String token) {
+        try {
+            String secret = "6LeqfbksAAAAADW7yWqD_CxKKSuStm4KFm7uhtJV";
+
+            URL url = new URL("https://www.google.com/recaptcha/api/siteverify");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            String params = "secret=" + secret + "&response=" + token;
+
+            java.io.OutputStream os = conn.getOutputStream();
+            os.write(params.getBytes());
+            os.flush();
+
+            java.io.BufferedReader reader = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(conn.getInputStream()));
+
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+
+            return response.toString().contains("\"success\": true");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

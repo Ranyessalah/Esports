@@ -98,18 +98,18 @@
                             styleClass="link-btn" onAction="#onForgotPassword" />
                 </HBox>
 
-                <!-- CAPTCHA -->
-                <HBox styleClass="captcha-box" alignment="CENTER_LEFT" spacing="12">
-                    <CheckBox fx:id="captchaCheck" styleClass="captcha-check" />
-                    <Label text="Je ne suis pas un robot" styleClass="captcha-label" />
-                    <Region HBox.hgrow="ALWAYS" />
-                    <VBox alignment="CENTER">
-                        <Label text="reCAPTCHA" styleClass="recaptcha-brand" />
-                        <Label text="Confidentialité - Conditions" styleClass="recaptcha-sub" />
-                    </VBox>
-                </HBox>
-                <Label fx:id="captchaError" styleClass="field-error"
-                       visible="false" managed="false" />
+                <VBox spacing="6">
+                    <Label text="Vérification" styleClass="field-label"/>
+
+                    <StackPane fx:id="captchaContainer"
+                               prefHeight="78"
+                               maxHeight="78"
+                               style="-fx-background-color: transparent;" />
+
+                    <Label fx:id="captchaError"
+                           styleClass="field-error"
+                           visible="false" managed="false"/>
+                </VBox>
 
 
                 <!-- GLOBAL ERROR (wrong credentials) -->
