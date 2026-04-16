@@ -15,10 +15,6 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 /**
@@ -29,37 +25,17 @@ public class QRCodeDialog {
     private final EquipeService equipeService = new EquipeService();
     private final PlayerService playerService = new PlayerService();
 
-    // #region agent log
-    private void agentLog(String hypothesisId, String location, String message, long teamId, int playerCount, String phase) {
-        try {
-            String safeMsg = message == null ? "" : message.replace("\"", "'").replace("\n", " ");
-            String json = String.format(
-                    "{\"sessionId\":\"19f38b\",\"hypothesisId\":\"%s\",\"location\":\"%s\",\"message\":\"%s\",\"data\":{\"teamId\":%d,\"playerCount\":%d,\"phase\":\"%s\"},\"timestamp\":%d}%n",
-                    hypothesisId, location, safeMsg, teamId, playerCount, phase == null ? "" : phase.replace("\"", "'"), System.currentTimeMillis());
-            Files.writeString(Path.of("debug-19f38b.log"), json, StandardCharsets.UTF_8,
-                    StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-        } catch (Exception ignored) {
-        }
-    }
-    // #endregion
-
     /**
      * PC : uniquement le QR. La fiche détaillée n’apparaît pas ici : elle est dans le texte encodé,
      * lisible après scan (téléphone ou site « scanner QR en ligne »).
      */
     public void showShareableTeamQr(Equipe equipeRef) {
-        // #region agent log
-        agentLog("H1", "QRCodeDialog.showShareableTeamQr", "enter", equipeRef != null ? equipeRef.getId() : -1, -1, "enter");
-        // #endregion
         try {
             Equipe equipe = equipeService.getById(equipeRef.getId());
             if (equipe == null) {
                 equipe = equipeRef;
             }
             List<Player> players = playerService.getPlayersByEquipe(equipe.getId());
-            // #region agent log
-            agentLog("H2", "QRCodeDialog.showShareableTeamQr", "after_load_players", equipe.getId(), players != null ? players.size() : -1, "loaded");
-            // #endregion
 
             String qrText = QRCodeUtil.createRichTeamQRString(equipe, players);
             Image qrImage = QRCodeUtil.generateQRCodeImage(qrText, 280, 280);
@@ -97,14 +73,8 @@ public class QRCodeDialog {
             scene.setFill(javafx.scene.paint.Color.web("#0f111a"));
             qrStage.setScene(scene);
             closeBtn.setOnAction(ev -> qrStage.close());
-            // #region agent log
-            agentLog("H3", "QRCodeDialog.showShareableTeamQr", "before_stage_show", equipe.getId(), players != null ? players.size() : 0, "show");
-            // #endregion
             qrStage.show();
         } catch (Exception e) {
-            // #region agent log
-            agentLog("H4", "QRCodeDialog.showShareableTeamQr", "exception:" + e.getClass().getSimpleName(), equipeRef != null ? equipeRef.getId() : -1, -1, "error");
-            // #endregion
             e.printStackTrace();
             showError("Erreur lors de la génération du code QR.");
         }

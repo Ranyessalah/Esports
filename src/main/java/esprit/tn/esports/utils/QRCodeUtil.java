@@ -1,0 +1,145 @@
+package esprit.tn.esports.utils;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import esprit.tn.esports.entite.Equipe;
+import esprit.tn.esports.entite.Player;
+import javafx.scene.image.Image;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Utility class for QR Code generation and handling
+ */
+public class QRCodeUtil {
+
+    /**
+     * Generate a QR Code image from the given text
+     * @param text The text to encode
+     * @param width Width of the QR code
+     * @param height Height of the QR code
+     * @return JavaFX Image of the QR code
+     * @throws Exception if QR code generation fails
+     */
+    public static Image generateQRCodeImage(String text, int width, int height) throws Exception {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", baos);
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+
+        return new Image(bais);
+    }
+
+    /**
+     * Create a QR code string from team ID and team name
+     * Format: TEAM_ID|TEAM_NAME
+     * @param teamId The team ID
+     * @param teamName The team name
+     * @return The encoded QR string
+     */
+    public static String createTeamQRString(int teamId, String teamName) {
+        return teamId + "|" + teamName;
+    }
+
+    /**
+     * Texte encodé dans le QR : même contenu que la fiche détail affichée dans l’app
+     * (visible sur téléphone / scanner en ligne après lecture du QR — pas sur la fenêtre PC).
+     */
+    public static String createRichTeamQRString(Equipe equipe, List<Player> players) {
+        String nom = equipe.getNom() != null ? equipe.getNom() : "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(createTeamQRString(equipe.getId(), nom)).append("\n\n");
+
+        sb.append("🏆 ").append(nom).append("\n");
+        sb.append("Jeu : ").append(nullSafe(equipe.getGame())).append("\n");
+        sb.append("Catégorie : ").append(nullSafe(equipe.getCategorie())).append("\n\n");
+
+        int n = players != null ? players.size() : 0;
+        sb.append("👥 Joueurs (").append(n).append(")\n");
+        if (players == null || players.isEmpty()) {
+            sb.append("Aucun joueur inscrit\n");
+        } else {
+            for (Player p : players) {
+                String display = (p.getUser() != null && p.getUser().getEmail() != null)
+                        ? p.getUser().getEmail()
+                        : ("Joueur #" + p.getId());
+                String niveau = p.getNiveau() != null ? p.getNiveau() : "Membre";
+                String pays = p.getPays() != null ? p.getPays() : "";
+                sb.append("  • ").append(display).append("  |  ").append(niveau).append("  |  ").append(pays).append("\n");
+            }
+        }
+
+        sb.append("\n");
+        String coachEmail = (equipe.getCoach() != null && equipe.getCoach().getUser() != null)
+                ? equipe.getCoach().getUser().getEmail() : "Aucun";
+        sb.append("👨‍🏫 Coach : ").append(coachEmail).append("\n\n");
+        sb.append("[ID APP: ").append(equipe.getId()).append("]");
+        return sb.toString();
+    }
+
+    private static String nullSafe(String s) {
+        return s != null ? s : "";
+    }
+
+    /**
+     * Parse a QR code string to extract team ID
+     * @param qrText The QR code text
+     * @return The team ID, or -1 if invalid format
+     */
+    private static final Pattern ID_APP_PATTERN = Pattern.compile("\\[ID APP:\\s*(\\d+)\\]", Pattern.CASE_INSENSITIVE);
+
+    public static int extractTeamIdFromQR(String qrText) {
+        if (qrText == null || qrText.isBlank()) {
+            return -1;
+        }
+        String trimmed = qrText.trim();
+        // 1) Première ligne au format id|nom
+        String firstLine = trimmed.split("\\R", 2)[0].trim();
+        try {
+            int pipe = firstLine.indexOf('|');
+            if (pipe > 0) {
+                return Integer.parseInt(firstLine.substring(0, pipe).trim());
+            }
+            if (!firstLine.isEmpty() && !firstLine.contains("|")) {
+                return Integer.parseInt(firstLine);
+            }
+        } catch (NumberFormatException ignored) {
+            // fall through
+        }
+        // 2) Ancien format : [ID APP: n] dans le texte enrichi
+        Matcher m = ID_APP_PATTERN.matcher(trimmed);
+        if (m.find()) {
+            try {
+                return Integer.parseInt(m.group(1));
+            } catch (NumberFormatException ignored) {
+                return -1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Parse a QR code string to extract team name
+     * @param qrText The QR code text
+     * @return The team name, or empty string if invalid format
+     */
+    public static String extractTeamNameFromQR(String qrText) {
+        if (qrText == null || qrText.isBlank()) {
+            return "";
+        }
+        String firstLine = qrText.trim().split("\\R", 2)[0];
+        String[] parts = firstLine.split("\\|", 2);
+        if (parts.length >= 2) {
+            return parts[1].trim();
+        }
+        return "";
+    }
+}
