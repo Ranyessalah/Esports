@@ -15,8 +15,11 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * A dialog for displaying QR codes and team details
@@ -26,19 +29,40 @@ public class QRCodeDialog {
     private final EquipeService equipeService = new EquipeService();
     private final PlayerService playerService = new PlayerService();
 
+    // #region agent log
+    private void agentLog(String hypothesisId, String location, String message, long teamId, int playerCount, String phase) {
+        try {
+            String safeMsg = message == null ? "" : message.replace("\"", "'").replace("\n", " ");
+            String json = String.format(
+                    "{\"sessionId\":\"19f38b\",\"hypothesisId\":\"%s\",\"location\":\"%s\",\"message\":\"%s\",\"data\":{\"teamId\":%d,\"playerCount\":%d,\"phase\":\"%s\"},\"timestamp\":%d}%n",
+                    hypothesisId, location, safeMsg, teamId, playerCount, phase == null ? "" : phase.replace("\"", "'"), System.currentTimeMillis());
+            Files.writeString(Path.of("debug-19f38b.log"), json, StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        } catch (Exception ignored) {
+        }
+    }
+    // #endregion
+
     /**
-     * Affiche le QR d'une équipe (écran partagé, second appareil ou impression).
-     * L’accès à la fiche détaillée depuis la liste exige de scanner ce même QR.
+     * PC : uniquement le QR. La fiche détaillée n’apparaît pas ici : elle est dans le texte encodé,
+     * lisible après scan (téléphone ou site « scanner QR en ligne »).
      */
     public void showShareableTeamQr(Equipe equipeRef) {
+        // #region agent log
+        agentLog("H1", "QRCodeDialog.showShareableTeamQr", "enter", equipeRef != null ? equipeRef.getId() : -1, -1, "enter");
+        // #endregion
         try {
             Equipe equipe = equipeService.getById(equipeRef.getId());
             if (equipe == null) {
                 equipe = equipeRef;
             }
             List<Player> players = playerService.getPlayersByEquipe(equipe.getId());
+            // #region agent log
+            agentLog("H2", "QRCodeDialog.showShareableTeamQr", "after_load_players", equipe.getId(), players != null ? players.size() : -1, "loaded");
+            // #endregion
+
             String qrText = QRCodeUtil.createRichTeamQRString(equipe, players);
-            Image qrImage = QRCodeUtil.generateQRCodeImage(qrText, 320, 320);
+            Image qrImage = QRCodeUtil.generateQRCodeImage(qrText, 280, 280);
 
             ImageView qrImageView = new ImageView(qrImage);
             qrImageView.setStyle("-fx-border-color: #3b82f6; -fx-border-width: 2; -fx-border-radius: 10;");
@@ -46,128 +70,43 @@ public class QRCodeDialog {
             Label title = new Label("Code QR — " + equipe.getNom());
             title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
 
-            Label hint = new Label("Scannez ce QR avec le téléphone ou un site « scanner QR en ligne », copiez le texte affiché, puis dans l’app : « Voir détails » → collez le texte. La webcam PC est optionnelle.");
+            Label hint = new Label(
+                    "Ne pas chercher la fiche sur cet écran : scannez ce QR avec la caméra du téléphone "
+                            + "ou un site de scan QR en ligne. Le résultat du scan est le texte de la fiche équipe "
+                            "(nom, jeu, catégorie, joueurs, coach), identique à l’affichage détail dans l’application."
+            );
             hint.setWrapText(true);
             hint.setStyle("-fx-text-fill: #9ca3af; -fx-font-size: 13px;");
-            hint.setMaxWidth(360);
-
-            VBox box = new VBox(16);
-            box.setAlignment(Pos.CENTER);
-            box.setStyle("-fx-background-color: #191c24; -fx-padding: 24px; -fx-border-color: #2e3b4e; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-            box.getChildren().addAll(title, qrImageView, hint);
+            hint.setMaxWidth(480);
 
             Button closeBtn = new Button("Fermer");
             closeBtn.setStyle("-fx-background-color: #64748b; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-            box.getChildren().add(closeBtn);
 
-            // Fenêtre non modale : vous pouvez garder le QR affiché et cliquer « Voir détails » sur la liste
+            VBox box = new VBox(14);
+            box.setAlignment(Pos.TOP_CENTER);
+            box.setStyle("-fx-background-color: #191c24; -fx-padding: 20px; -fx-border-color: #2e3b4e; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+            box.getChildren().addAll(title, hint, qrImageView, closeBtn);
+
+            ScrollPane scroll = new ScrollPane(box);
+            scroll.setFitToWidth(true);
+            scroll.setStyle("-fx-background: #0f111a;");
+
             Stage qrStage = new Stage();
-            qrStage.setTitle("QR — " + equipe.getNom());
-            Scene scene = new Scene(box);
+            qrStage.setTitle("Code QR — " + equipe.getNom());
+            Scene scene = new Scene(scroll, 420, 520);
             scene.setFill(javafx.scene.paint.Color.web("#0f111a"));
             qrStage.setScene(scene);
             closeBtn.setOnAction(ev -> qrStage.close());
+            // #region agent log
+            agentLog("H3", "QRCodeDialog.showShareableTeamQr", "before_stage_show", equipe.getId(), players != null ? players.size() : 0, "show");
+            // #endregion
             qrStage.show();
         } catch (Exception e) {
+            // #region agent log
+            agentLog("H4", "QRCodeDialog.showShareableTeamQr", "exception:" + e.getClass().getSimpleName(), equipeRef != null ? equipeRef.getId() : -1, -1, "error");
+            // #endregion
             e.printStackTrace();
             showError("Erreur lors de la génération du code QR.");
-        }
-    }
-
-    /**
-     * Show a QR code dialog for a team
-     * @param teamId The team ID
-     * @param teamName The team name
-     * @param onSuccess Callback when QR code is scanned
-     */
-    public void showQRCodeDialog(int teamId, String teamName, Consumer<Equipe> onSuccess) {
-        try {
-            Equipe fullEquipe = equipeService.getById(teamId);
-            if (fullEquipe == null) {
-                showError("Équipe non trouvée");
-                return;
-            }
-
-            List<Player> players = playerService.getPlayersByEquipe(teamId);
-
-            // Generate QR Code with a rich text summary for mobile scanners
-            String qrText = QRCodeUtil.createRichTeamQRString(fullEquipe, players);
-            Image qrImage = QRCodeUtil.generateQRCodeImage(qrText, 350, 350);
-
-            ImageView qrImageView = new ImageView(qrImage);
-            qrImageView.setCursor(javafx.scene.Cursor.HAND);
-            qrImageView.setStyle("-fx-border-color: #3b82f6; -fx-border-width: 2; -fx-border-radius: 10;");
-
-            VBox mainVBox = new VBox(20);
-            mainVBox.setAlignment(Pos.CENTER);
-            mainVBox.setStyle("-fx-background-color: #191c24; -fx-padding: 30px; -fx-border-color: #2e3b4e; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-
-            Label qrTitleLabel = new Label("📱 Scannez le code QR de l'équipe");
-            qrTitleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
-
-            Label instructionLabel = new Label("Utilisez la webcam ou CLIQUEZ sur le code pour voir les détails");
-            instructionLabel.setStyle("-fx-text-fill: #9ca3af; -fx-font-size: 14px; -fx-padding: 10px 0;");
-            instructionLabel.setWrapText(true);
-
-            mainVBox.getChildren().addAll(qrTitleLabel, qrImageView, instructionLabel);
-
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setTitle("QR Code - " + teamName);
-            dialog.getDialogPane().setContent(mainVBox);
-            dialog.getDialogPane().setStyle("-fx-background-color: #0f111a;");
-
-            ButtonType scanButtonType = new ButtonType("✓ Confirmer", ButtonBar.ButtonData.OK_DONE);
-            ButtonType webcamButtonType = new ButtonType("🎥 Webcam", ButtonBar.ButtonData.OTHER);
-            ButtonType closeButtonType = new ButtonType("✕ Fermer", ButtonBar.ButtonData.CANCEL_CLOSE);
-            dialog.getDialogPane().getButtonTypes().addAll(scanButtonType, webcamButtonType, closeButtonType);
-
-            // Style buttons
-            javafx.scene.Node scanButton = dialog.getDialogPane().lookupButton(scanButtonType);
-            javafx.scene.Node webcamButton = dialog.getDialogPane().lookupButton(webcamButtonType);
-            javafx.scene.Node closeButton = dialog.getDialogPane().lookupButton(closeButtonType);
-
-            if (scanButton != null) {
-                scanButton.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-                scanButton.setOnMouseClicked(event -> {
-                    dialog.close();
-                    if (onSuccess != null) {
-                        onSuccess.accept(fullEquipe);
-                    }
-                });
-            }
-
-            if (webcamButton != null) {
-                webcamButton.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-                webcamButton.setOnMouseClicked(event -> {
-                    dialog.close();
-                    // Open the scanner directly
-                    new QRScannerDialog().startScanner(code -> {
-                        // After scan, manually trigger success logic
-                        if (onSuccess != null) {
-                            onSuccess.accept(fullEquipe);
-                        }
-                    });
-                });
-            }
-
-            if (closeButton != null) {
-                closeButton.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-            }
-
-            // Support click on the QR image to immediately see details (Backup/Simulated Scan)
-            qrImageView.setStyle("-fx-cursor: hand;");
-            qrImageView.setOnMouseClicked(event -> {
-                dialog.close();
-                if (onSuccess != null) {
-                    onSuccess.accept(fullEquipe);
-                }
-            });
-
-            dialog.showAndWait();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Erreur lors de la génération du QR code");
         }
     }
 
@@ -227,17 +166,11 @@ public class QRCodeDialog {
         stage.show();
     }
 
-    /**
-     * Show team details dialog
-     * @param equipe The team
-     * @param players List of players
-     */
-    public void showTeamDetailsDialog(Equipe equipe, List<Player> players) {
+    private VBox buildTeamDetailsVBox(Equipe equipe, List<Player> players) {
         VBox detailsBox = new VBox(15);
         detailsBox.setAlignment(Pos.TOP_CENTER);
         detailsBox.setStyle("-fx-background-color: #191c24; -fx-padding: 30px; -fx-border-color: #2e3b4e; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-min-width: 450px;");
 
-        // Team Information
         Label titleLabel = new Label("🏆 " + equipe.getNom());
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #3b82f6;");
 
@@ -254,12 +187,10 @@ public class QRCodeDialog {
 
         detailsBox.getChildren().addAll(titleLabel, gameLabel, categoryLabel, coachLabel);
 
-        // Separator
         Separator separator = new Separator();
         separator.setStyle("-fx-padding: 10px 0;");
         detailsBox.getChildren().add(separator);
 
-        // Players Section
         Label playersTitleLabel = new Label("👥 Joueurs (" + (players != null ? players.size() : 0) + ")");
         playersTitleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 10px 0 5px 0;");
         detailsBox.getChildren().add(playersTitleLabel);
@@ -269,7 +200,6 @@ public class QRCodeDialog {
             noPlayerLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: #ef4444; -fx-padding: 10px;");
             detailsBox.getChildren().add(noPlayerLabel);
         } else {
-            // Create scrollable player list
             VBox playersList = new VBox(8);
             playersList.setStyle("-fx-padding: 10px; -fx-background-color: #0f111a; -fx-border-radius: 8; -fx-border-color: #2e3b4e;");
 
@@ -286,6 +216,16 @@ public class QRCodeDialog {
 
             detailsBox.getChildren().add(scrollPane);
         }
+        return detailsBox;
+    }
+
+    /**
+     * Show team details dialog
+     * @param equipe The team
+     * @param players List of players
+     */
+    public void showTeamDetailsDialog(Equipe equipe, List<Player> players) {
+        VBox detailsBox = buildTeamDetailsVBox(equipe, players);
 
         // Dialog
         Dialog<Void> dialog = new Dialog<>();
