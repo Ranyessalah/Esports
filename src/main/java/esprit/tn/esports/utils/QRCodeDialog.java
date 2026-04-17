@@ -15,6 +15,11 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 /**
@@ -25,11 +30,46 @@ public class QRCodeDialog {
     private final EquipeService equipeService = new EquipeService();
     private final PlayerService playerService = new PlayerService();
 
+    // #region agent log
+    private static void dbg(String hypothesisId, String message, long teamId, String extra) {
+        try {
+            String m = message == null ? "" : message.replace("\"", "'");
+            String x = extra == null ? "" : extra.replace("\"", "'");
+            String line = String.format(
+                    "{\"sessionId\":\"19f38b\",\"hypothesisId\":\"%s\",\"location\":\"QRCodeDialog\",\"message\":\"%s\",\"data\":{\"teamId\":%d,\"extra\":\"%s\",\"cwd\":\"%s\"},\"timestamp\":%d}%n",
+                    hypothesisId, m, teamId, x,
+                    String.valueOf(System.getProperty("user.dir", "")).replace("\"", "'"),
+                    System.currentTimeMillis());
+            Path[] targets = new Path[] {
+                    Paths.get(System.getProperty("java.io.tmpdir", ".")).resolve("esports-debug-19f38b.log"),
+                    Paths.get(System.getProperty("user.home", ".")).resolve("debug-19f38b.log"),
+                    Paths.get(System.getProperty("user.dir", ".")).resolve("debug-19f38b.log").toAbsolutePath()
+            };
+            for (Path p : targets) {
+                try {
+                    Files.writeString(p, line, StandardCharsets.UTF_8,
+                            StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                } catch (Exception ignored) {
+                    // try next path
+                }
+            }
+        } catch (Exception ignored) {
+        }
+    }
+    // #endregion
+
     /**
      * PC : uniquement le QR. La fiche détaillée n’apparaît pas ici : elle est dans le texte encodé,
      * lisible après scan (téléphone ou site « scanner QR en ligne »).
+     *
+     * @param ownerStage fenêtre principale (pour {@link Stage#initOwner(Window)}) afin que le QR reste au premier plan sous Windows
      */
-    public void showShareableTeamQr(Equipe equipeRef) {
+    public void showShareableTeamQr(Equipe equipeRef, Stage ownerStage) {
+        // #region agent log
+        dbg("H0", "showShareableTeamQr_entry", equipeRef != null ? equipeRef.getId() : -1,
+                "ownerNull=" + (ownerStage == null) + ",tmpLog="
+                        + Paths.get(System.getProperty("java.io.tmpdir", ".")).resolve("esports-debug-19f38b.log"));
+        // #endregion
         try {
             Equipe equipe = equipeService.getById(equipeRef.getId());
             if (equipe == null) {
@@ -38,7 +78,7 @@ public class QRCodeDialog {
             List<Player> players = playerService.getPlayersByEquipe(equipe.getId());
 
             String qrText = QRCodeUtil.createRichTeamQRString(equipe, players);
-            Image qrImage = QRCodeUtil.generateQRCodeImage(qrText, 280, 280);
+            Image qrImage = QRCodeUtil.generateQRCodeImage(qrText, 320, 320);
 
             ImageView qrImageView = new ImageView(qrImage);
             qrImageView.setStyle("-fx-border-color: #3b82f6; -fx-border-width: 2; -fx-border-radius: 10;");
@@ -68,15 +108,35 @@ public class QRCodeDialog {
             scroll.setStyle("-fx-background: #0f111a;");
 
             Stage qrStage = new Stage();
+            if (ownerStage != null) {
+                qrStage.initOwner(ownerStage);
+                qrStage.initModality(Modality.WINDOW_MODAL);
+            } else {
+                qrStage.initModality(Modality.APPLICATION_MODAL);
+            }
             qrStage.setTitle("Code QR — " + equipe.getNom());
             Scene scene = new Scene(scroll, 420, 520);
             scene.setFill(javafx.scene.paint.Color.web("#0f111a"));
             qrStage.setScene(scene);
             closeBtn.setOnAction(ev -> qrStage.close());
             qrStage.show();
+            qrStage.toFront();
+            // #region agent log
+            dbg("H_ok", "showShareableTeamQr_shown", equipe.getId(), "w=" + qrImage.getWidth() + ",h=" + qrImage.getHeight());
+            // #endregion
         } catch (Exception e) {
+            // #region agent log
+            dbg("H_err", "showShareableTeamQr_fail", equipeRef != null ? equipeRef.getId() : -1,
+                    e.getClass().getSimpleName() + ":" + e.getMessage());
+            // #endregion
             e.printStackTrace();
-            showError("Erreur lors de la génération du code QR.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Code QR");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible d’afficher le QR. Détail technique : " + e.getMessage()
+                    + "\n\nSi le message indique que les données sont trop grandes, réduisez le nombre de joueurs affichés ou contactez l’administrateur.");
+            alert.getDialogPane().setStyle("-fx-background-color: #0f111a;");
+            alert.showAndWait();
         }
     }
 

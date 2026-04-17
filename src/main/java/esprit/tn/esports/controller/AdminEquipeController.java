@@ -204,6 +204,10 @@ public class AdminEquipeController {
     }
 
     private void openDetailsPage(Equipe e) {
+        navigateToDetailsView(e);
+    }
+
+    private void navigateToDetailsView(Equipe e) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/EquipeDetails.fxml"));
             Parent root = loader.load();

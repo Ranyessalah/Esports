@@ -1,10 +1,12 @@
 package esprit.tn.esports.controller;
 
 
-import esprit.tn.esports.entite.StatsRow;
 import esprit.tn.esports.entite.Equipe;
-import esprit.tn.esports.service.StatsService;
+import esprit.tn.esports.entite.StatsRow;
 import esprit.tn.esports.service.EquipeService;
+import esprit.tn.esports.service.StatsService;
+
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -135,30 +137,12 @@ public class Statsclientcontroller {
             Equipe fullEquipe = equipeService.getById(selected.getTeamId());
             if (fullEquipe == null) return;
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/EquipeDetails.fxml"));
-            Parent root = loader.load();
-
-            EquipeDetailsController controller = loader.getController();
-            controller.setEquipe(fullEquipe);
-            
-            Stage stage = (Stage) tableView.getScene().getWindow();
-
-            // Set back navigation to this stats page
-            controller.setOnBack(() -> {
-                try {
-                    FXMLLoader sLoader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/stats_client.fxml"));
-                    Parent sRoot = sLoader.load();
-                    stage.setScene(new Scene(sRoot, 1200, 760));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-
-            stage.setScene(new Scene(root, 1200, 760));
+            // Direct navigation to details page as requested
+            navigateToTeamDetails(fullEquipe);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Impossible d'ouvrir les détails de l'équipe");
+            showError("Erreur lors de l'affichage des détails de l'équipe.");
         }
     }
 
@@ -245,6 +229,23 @@ public class Statsclientcontroller {
         sortFilter.setValue("Classement officiel");
 
         filterData();
+    }
+
+    private void navigateToTeamDetails(Equipe equipe) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/EquipeDetails.fxml"));
+            Parent root = loader.load();
+
+            EquipeDetailsController controller = loader.getController();
+            controller.setEquipe(equipe);
+
+            Stage stage = (Stage) tableView.getScene().getWindow();
+            stage.setScene(new Scene(root, 1200, 760));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Impossible d'ouvrir les détails de l'équipe.");
+        }
     }
 
 

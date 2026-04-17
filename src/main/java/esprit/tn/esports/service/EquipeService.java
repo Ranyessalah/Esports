@@ -100,8 +100,8 @@ public class EquipeService {
     public List<Equipe> getAll() {
         List<Equipe> list = new ArrayList<>();
         String sql = "SELECT e.*, u.email as coach_email FROM equipe e " +
-                     "JOIN coach c ON e.coach_id = c.id " +
-                     "JOIN user u ON c.id = u.id";
+                     "LEFT JOIN coach c ON e.coach_id = c.id " +
+                     "LEFT JOIN user u ON c.id = u.id";
 
         try {
             Statement st = cnx.createStatement();
@@ -136,8 +136,8 @@ public class EquipeService {
     // GET BY ID
     public Equipe getById(int id) {
         String sql = "SELECT e.*, u.email as coach_email FROM equipe e " +
-                     "JOIN coach c ON e.coach_id = c.id " +
-                     "JOIN user u ON c.id = u.id " +
+                     "LEFT JOIN coach c ON e.coach_id = c.id " +
+                     "LEFT JOIN user u ON c.id = u.id " +
                      "WHERE e.id = ?";
 
         try {

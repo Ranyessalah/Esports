@@ -1,16 +1,21 @@
 package esprit.tn.esports.utils;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import esprit.tn.esports.entite.Equipe;
 import esprit.tn.esports.entite.Player;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,14 +33,44 @@ public class QRCodeUtil {
      * @throws Exception if QR code generation fails
      */
     public static Image generateQRCodeImage(String text, int width, int height) throws Exception {
+        Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.name());
+        hints.put(EncodeHintType.MARGIN, 1);
+
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+        BitMatrix bitMatrix;
+        try {
+            bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height, hints);
+        } catch (WriterException e) {
+            String ascii = toAsciiQrPayload(text);
+            try {
+                bitMatrix = qrCodeWriter.encode(ascii, BarcodeFormat.QR_CODE, width, height, hints);
+            } catch (WriterException e2) {
+                String clipped = ascii.length() > 1200 ? ascii.substring(0, 1197) + "..." : ascii;
+                try {
+                    bitMatrix = qrCodeWriter.encode(clipped, BarcodeFormat.QR_CODE, width, height, hints);
+                } catch (WriterException e3) {
+                    String minimal = clipped.length() > 500 ? clipped.substring(0, 497) + "..." : clipped;
+                    bitMatrix = qrCodeWriter.encode(minimal, BarcodeFormat.QR_CODE, width, height, hints);
+                }
+            }
+        }
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", baos);
-        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        java.awt.image.BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+        return SwingFXUtils.toFXImage(bufferedImage, null);
+    }
 
-        return new Image(bais);
+    /** Remplace les émojis par des libellés courts pour réduire la taille encodée. */
+    private static String toAsciiQrPayload(String s) {
+        if (s == null) {
+            return "";
+        }
+        return s
+                .replace("🏆", "[EQ] ")
+                .replace("👥", "[JO] ")
+                .replace("👨‍🏫", "[CO] ")
+                .replaceAll("\\R", "\n");
     }
 
     /**
