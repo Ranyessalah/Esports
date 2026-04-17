@@ -2,7 +2,6 @@ package esprit.tn.esports.controller;
 
 import esprit.tn.esports.entite.Equipe;
 import esprit.tn.esports.service.EquipeService;
-import esprit.tn.esports.utils.QRCodeDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -80,14 +79,7 @@ public class ClientEquipeController {
         Label game = new Label(e.getGame());
         game.getStyleClass().add("card-sub");
 
-        Button qrBtn = new Button("Scanner QR");
-        qrBtn.getStyleClass().add("btn-view");
-        qrBtn.setOnAction(ev -> {
-            Stage owner = (Stage) cardContainer.getScene().getWindow();
-            new QRCodeDialog().showShareableTeamQr(e, owner);
-        });
-
-        card.getChildren().addAll(img, name, game, qrBtn);
+        card.getChildren().addAll(img, name, game);
 
         return card;
     }
