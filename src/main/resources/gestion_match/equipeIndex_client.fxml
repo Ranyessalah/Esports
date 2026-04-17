@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.gestion_match.ClientEquipeController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <center>
+        <VBox spacing="20" styleClass="main-content">
+
+            <padding>
+                <Insets top="30" right="40" bottom="30" left="40"/>
+            </padding>
+
+            <!-- HEADER WITH NAVBAR -->
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="16">
+
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Équipes E-Sports" styleClass="page-title"/>
+                        <Label text="Découvrez les équipes participantes."
+                               styleClass="page-subtitle"/>
+                    </VBox>
+
+                    <!-- NAVBAR -->
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Matchs" styleClass="nav-btn" onAction="#goMatchs" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>
+                        <Button text="Équipes" styleClass="nav-btn active" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 10; -fx-text-fill: white;"/>
+                        <Button text="Statistiques" styleClass="nav-btn" onAction="#goStats" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>
+                        <Button text="🚪 Déconnexion" styleClass="nav-btn nav-logout" onAction="#logout" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;"/>
+                    </HBox>
+
+                </HBox>
+            </VBox>
+
+            <!-- TOPBAR -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="topbar-box">
+                <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="search-container">
+                    <Label text="🔍" style="-fx-text-fill: #7c3aed; -fx-padding: 0 0 0 10;"/>
+                    <TextField fx:id="searchField"
+                               promptText="Rechercher une équipe..."
+                               onKeyReleased="#search"
+                               HBox.hgrow="ALWAYS"
+                               styleClass="search-field"
+                               style="-fx-background-color: transparent;"/>
+                </HBox>
+
+                <Button text="Actualiser"
+                        onAction="#refresh"
+                        styleClass="btn-secondary"/>
+
+                <Label fx:id="countLabel"
+                       text="0 équipes"
+                       styleClass="count-badge"/>
+            </HBox>
+
+            <!-- CARDS -->
+            <ScrollPane fitToWidth="true"
+                        fitToHeight="true"
+                        styleClass="scroll-pane-custom"
+                        VBox.vgrow="ALWAYS">
+
+                <content>
+                    <FlowPane fx:id="cardContainer"
+                              hgap="18"
+                              vgap="18"
+                              prefWrapLength="1100"
+                              styleClass="cards"/>
+                </content>
+
+            </ScrollPane>
+
+        </VBox>
+    </center>
+
+</BorderPane>
