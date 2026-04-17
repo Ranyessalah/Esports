@@ -1,5 +1,6 @@
 package esprit.tn.esports.utils;
 
+import esprit.tn.esports.controller.EquipeDetailsController;
 import esprit.tn.esports.entite.Equipe;
 import esprit.tn.esports.entite.Player;
 import esprit.tn.esports.service.EquipeService;
@@ -8,18 +9,14 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -30,127 +27,242 @@ public class QRCodeDialog {
     private final EquipeService equipeService = new EquipeService();
     private final PlayerService playerService = new PlayerService();
 
-    // #region agent log
-    private static void dbg(String hypothesisId, String message, long teamId, String extra) {
-        try {
-            String m = message == null ? "" : message.replace("\"", "'");
-            String x = extra == null ? "" : extra.replace("\"", "'");
-            String line = String.format(
-                    "{\"sessionId\":\"19f38b\",\"hypothesisId\":\"%s\",\"location\":\"QRCodeDialog\",\"message\":\"%s\",\"data\":{\"teamId\":%d,\"extra\":\"%s\",\"cwd\":\"%s\"},\"timestamp\":%d}%n",
-                    hypothesisId, m, teamId, x,
-                    String.valueOf(System.getProperty("user.dir", "")).replace("\"", "'"),
-                    System.currentTimeMillis());
-            Path[] targets = new Path[] {
-                    Paths.get(System.getProperty("java.io.tmpdir", ".")).resolve("esports-debug-19f38b.log"),
-                    Paths.get(System.getProperty("user.home", ".")).resolve("debug-19f38b.log"),
-                    Paths.get(System.getProperty("user.dir", ".")).resolve("debug-19f38b.log").toAbsolutePath()
-            };
-            for (Path p : targets) {
-                try {
-                    Files.writeString(p, line, StandardCharsets.UTF_8,
-                            StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-                } catch (Exception ignored) {
-                    // try next path
-                }
-            }
-        } catch (Exception ignored) {
-        }
-    }
-    // #endregion
-
     /**
-     * PC : uniquement le QR. La fiche détaillée n’apparaît pas ici : elle est dans le texte encodé,
-     * lisible après scan (téléphone ou site « scanner QR en ligne »).
-     *
-     * @param ownerStage fenêtre principale (pour {@link Stage#initOwner(Window)}) afin que le QR reste au premier plan sous Windows
+     * Affiche un rapport professionnel de l'équipe au format A4 avec le QR code.
      */
     public void showShareableTeamQr(Equipe equipeRef, Stage ownerStage) {
-        // #region agent log
-        dbg("H0", "showShareableTeamQr_entry", equipeRef != null ? equipeRef.getId() : -1,
-                "ownerNull=" + (ownerStage == null) + ",tmpLog="
-                        + Paths.get(System.getProperty("java.io.tmpdir", ".")).resolve("esports-debug-19f38b.log"));
-        // #endregion
+        showShareableTeamQrWithCustomIp(equipeRef, ownerStage, null);
+    }
+
+    public void showShareableTeamQrWithCustomIp(Equipe equipeRef, Stage ownerStage, String customIp) {
         try {
             Equipe equipe = equipeService.getById(equipeRef.getId());
-            if (equipe == null) {
-                equipe = equipeRef;
-            }
+            if (equipe == null) equipe = equipeRef;
             List<Player> players = playerService.getPlayersByEquipe(equipe.getId());
 
-            String qrText = QRCodeUtil.createRichTeamQRString(equipe, players);
-            Image qrImage = QRCodeUtil.generateQRCodeImage(qrText, 320, 320);
+            String localIpAddress = (customIp != null) ? customIp : esprit.tn.esports.utils.TeamWebServer.getLocalIp();
+            
+            // Generate QR text using the custom/detected IP
+            String qrUrl = "http://" + localIpAddress + ":4567/equipe/" + equipe.getId();
+            Image qrImage = QRCodeUtil.generateQRCodeImage(qrUrl, 220, 220);
 
-            ImageView qrImageView = new ImageView(qrImage);
-            qrImageView.setStyle("-fx-border-color: #3b82f6; -fx-border-width: 2; -fx-border-radius: 10;");
+            // --- THE "A4 PAPER" SHEET ---
+            VBox paper = new VBox(0);
+            paper.setAlignment(Pos.CENTER); // Changed to center
+            paper.setMinWidth(620);
+            paper.setMaxWidth(620);
+            paper.setStyle("-fx-background-color: white; " +
+                    "-fx-padding: 50px; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 8);");
 
-            Label title = new Label("Code QR — " + equipe.getNom());
-            title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
+            // 1. HEADER (Logo + Title)
+            HBox header = new HBox(30);
+            header.setAlignment(Pos.CENTER_LEFT);
+            header.setPadding(new javafx.geometry.Insets(0, 0, 30, 0));
+            header.setStyle("-fx-border-color: #e5e7eb; -fx-border-width: 0 0 2px 0;");
 
-            Label hint = new Label(
-                    "Ne pas chercher la fiche sur cet écran : scannez ce QR avec la caméra du téléphone "
-                            + "ou un site de scan QR en ligne. Le résultat du scan est le texte de la fiche équipe "
-                            "(nom, jeu, catégorie, joueurs, coach), identique à l’affichage détail dans l’application."
-            );
-            hint.setWrapText(true);
-            hint.setStyle("-fx-text-fill: #9ca3af; -fx-font-size: 13px;");
-            hint.setMaxWidth(480);
+            ImageView logoView = new ImageView();
+            logoView.setFitWidth(100);
+            logoView.setFitHeight(100);
+            logoView.setPreserveRatio(true);
+            try {
+                if (equipe.getLogo() != null && !equipe.getLogo().isBlank()) {
+                    File file = new File(equipe.getLogo());
+                    if (file.exists()) logoView.setImage(new Image(file.toURI().toString()));
+                }
+            } catch (Exception ignored) {}
 
-            Button closeBtn = new Button("Fermer");
-            closeBtn.setStyle("-fx-background-color: #64748b; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+            VBox titleBox = new VBox(5);
+            Label docType = new Label("CLUTCHX ESPORTS - OFFICIAL REPORT");
+            docType.setStyle("-fx-text-fill: #3b82f6; -fx-font-weight: bold; -fx-font-size: 14px; -fx-letter-spacing: 2px;");
+            Label teamName = new Label(equipe.getNom().toUpperCase());
+            teamName.setStyle("-fx-font-size: 38px; -fx-font-weight: 900; -fx-text-fill: #111827;");
+            titleBox.getChildren().addAll(docType, teamName);
+            header.getChildren().addAll(logoView, titleBox);
 
-            VBox box = new VBox(14);
-            box.setAlignment(Pos.TOP_CENTER);
-            box.setStyle("-fx-background-color: #191c24; -fx-padding: 20px; -fx-border-color: #2e3b4e; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-            box.getChildren().addAll(title, hint, qrImageView, closeBtn);
+            // 2. METADATA GRID
+            GridPane infoGrid = new GridPane();
+            infoGrid.setHgap(40);
+            infoGrid.setVgap(10);
+            infoGrid.setPadding(new javafx.geometry.Insets(30, 0, 30, 0));
 
-            ScrollPane scroll = new ScrollPane(box);
+            addInfoRow(infoGrid, 0, "🎮 DISCIPLINE", equipe.getGame());
+            addInfoRow(infoGrid, 1, "📂 CATÉGORIE", equipe.getCategorie());
+            String coach = (equipe.getCoach() != null && equipe.getCoach().getUser() != null) 
+                    ? equipe.getCoach().getUser().getEmail() : "Non assigné";
+            addInfoRow(infoGrid, 2, "👨‍🏫 HEAD COACH", coach);
+
+            // 3. ROSTER LIST
+            VBox rosterBox = new VBox(15);
+            rosterBox.setPadding(new javafx.geometry.Insets(20, 0, 40, 0));
+            Label rosterTitle = new Label("TEAM ROSTER (" + (players != null ? players.size() : 0) + " Members)");
+            rosterTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #374151; -fx-padding: 0 0 10 0;");
+            rosterBox.getChildren().add(rosterTitle);
+
+            if (players != null) {
+                for (Player p : players) {
+                    HBox row = new HBox(15);
+                    row.setAlignment(Pos.CENTER_LEFT);
+                    row.setStyle("-fx-padding: 10px; -fx-border-color: #f3f4f6; -fx-border-width: 0 0 1px 0;");
+                    
+                    Label pName = new Label("•  " + (p.getUser() != null ? p.getUser().getEmail().replace("@", " [at] ") : "Joueur #" + p.getId()));
+                    pName.setStyle("-fx-font-size: 15px; -fx-text-fill: #4b5563;");
+                    
+                    Label pLevel = new Label(p.getNiveau() != null ? p.getNiveau() : "Membre");
+                    pLevel.setStyle("-fx-font-size: 11px; -fx-background-color: #f3f4f6; -fx-padding: 3 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                    
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+                    row.getChildren().addAll(pName, spacer, pLevel);
+                    rosterBox.getChildren().add(row);
+                }
+            }
+
+            // 4. FOOTER (QR CODE)
+            HBox footer = new HBox(40);
+            footer.setAlignment(Pos.CENTER_LEFT);
+            footer.setPadding(new javafx.geometry.Insets(30, 0, 0, 0));
+            footer.setStyle("-fx-border-color: #e5e7eb; -fx-border-width: 2px 0 0 0;");
+
+            VBox qrBox = new VBox(8);
+            qrBox.setAlignment(Pos.CENTER);
+            if (qrImage != null) {
+                qrBox.getChildren().add(new ImageView(qrImage));
+            }
+            
+            // URL label
+            Label urlLabel = new Label(qrUrl);
+            urlLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #6b7280; -fx-font-weight: bold;");
+            urlLabel.setWrapText(true);
+            urlLabel.setMaxWidth(230);
+            
+            Button copyBtn = new Button("Copier le lien");
+            copyBtn.setStyle("-fx-font-size: 10px; -fx-background-color: #f3f4f6; -fx-padding: 4 8; -fx-cursor: hand;");
+            copyBtn.setOnAction(ev -> {
+                final javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
+                final javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
+                content.putString(qrUrl);
+                clipboard.setContent(content);
+                copyBtn.setText("Lien Copié !");
+                new java.util.Timer().schedule(new java.util.TimerTask() {
+                    @Override public void run() { javafx.application.Platform.runLater(() -> copyBtn.setText("Copier le lien")); }
+                }, 2000);
+            });
+
+            Button changeIpBtn = new Button("Modifier IP");
+            changeIpBtn.setStyle("-fx-font-size: 10px; -fx-background-color: #f3f4f6; -fx-padding: 4 8; -fx-cursor: hand; -fx-margin-left: 5;");
+            changeIpBtn.setOnAction(ev -> {
+                TextInputDialog diag = new TextInputDialog(localIpAddress);
+                diag.setTitle("Configuration Réseau");
+                diag.setHeaderText("Saisir manuellement l'adresse IP de votre PC");
+                diag.setContentText("IP (ex: 192.168.1.15) :");
+                diag.showAndWait().ifPresent(newIp -> {
+                    Stage currentStage = (Stage) paper.getScene().getWindow();
+                    currentStage.close();
+                    showShareableTeamQrWithCustomIp(equipe, ownerStage, newIp);
+                });
+            });
+
+            HBox actions = new HBox(8, copyBtn, changeIpBtn);
+            actions.setAlignment(Pos.CENTER);
+
+            qrBox.getChildren().addAll(urlLabel, actions);
+            qrBox.setStyle("-fx-padding: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 5;");
+
+            VBox instructions = new VBox(10);
+            instructions.setAlignment(Pos.CENTER_LEFT);
+            Label scanTitle = new Label("VÉRIFICATION DIGITALE");
+            scanTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #111827;");
+            
+            Label scanHint = new Label(localIpAddress.equals("localhost") || localIpAddress.equals("127.0.0.1")
+                ? "⚠️ ERREUR RÉSEAU : Votre PC n'est pas connecté au WiFi. Le QR Code ne fonctionnera pas sur mobile."
+                : "Scannez ce QR Code avec votre téléphone pour ouvrir le rapport officiel.");
+            scanHint.setWrapText(true);
+            scanHint.setMaxWidth(280);
+            scanHint.setStyle("-fx-font-size: 11px; " + (localIpAddress.contains("127.0.0.1") || localIpAddress.equals("localhost") ? "-fx-text-fill: #ef4444; -fx-font-weight: bold;" : "-fx-text-fill: #6b7280;"));
+
+            Label wifiNote = new Label("💡 Tip : Pour que ça marche, connectez votre PC et votre téléphone sur le MÊME WiFi (ou hotspot).");
+            wifiNote.setWrapText(true);
+            wifiNote.setMaxWidth(280);
+            wifiNote.setStyle("-fx-font-size: 10px; -fx-text-fill: #b45309; -fx-background-color: #fef3c7; -fx-padding: 8; -fx-background-radius: 5;");
+
+            Button closeBtn = new Button("CLÔTURER LE RAPPORT");
+            closeBtn.setStyle("-fx-background-color: #111827; -fx-text-fill: white; -fx-padding: 10 25; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 12px;");
+
+            instructions.getChildren().addAll(scanTitle, scanHint, wifiNote, new Separator(), closeBtn);
+            footer.getChildren().addAll(qrBox, instructions);
+
+            paper.getChildren().addAll(header, infoGrid, rosterBox, footer);
+
+            // Container for shadowing and centering the paper
+            VBox overlay = new VBox(paper);
+            overlay.setAlignment(Pos.CENTER);
+            overlay.setStyle("-fx-background-color: #0f111a; -fx-padding: 40px;");
+            
+            ScrollPane scroll = new ScrollPane(overlay);
             scroll.setFitToWidth(true);
-            scroll.setStyle("-fx-background: #0f111a;");
+            scroll.setPrefViewportHeight(700);
+            scroll.setStyle("-fx-background-color: #0f111a; -fx-background: #0f111a;");
 
             Stage qrStage = new Stage();
             if (ownerStage != null) {
                 qrStage.initOwner(ownerStage);
                 qrStage.initModality(Modality.WINDOW_MODAL);
-            } else {
-                qrStage.initModality(Modality.APPLICATION_MODAL);
             }
-            qrStage.setTitle("Code QR — " + equipe.getNom());
-            Scene scene = new Scene(scroll, 420, 520);
-            scene.setFill(javafx.scene.paint.Color.web("#0f111a"));
+            qrStage.setTitle("Official Team Report - " + equipe.getNom());
+            Scene scene = new Scene(scroll, 750, 850);
             qrStage.setScene(scene);
             closeBtn.setOnAction(ev -> qrStage.close());
             qrStage.show();
             qrStage.toFront();
-            // #region agent log
-            dbg("H_ok", "showShareableTeamQr_shown", equipe.getId(), "w=" + qrImage.getWidth() + ",h=" + qrImage.getHeight());
-            // #endregion
+
         } catch (Exception e) {
-            // #region agent log
-            dbg("H_err", "showShareableTeamQr_fail", equipeRef != null ? equipeRef.getId() : -1,
-                    e.getClass().getSimpleName() + ":" + e.getMessage());
-            // #endregion
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Code QR");
-            alert.setHeaderText(null);
-            alert.setContentText("Impossible d’afficher le QR. Détail technique : " + e.getMessage()
-                    + "\n\nSi le message indique que les données sont trop grandes, réduisez le nombre de joueurs affichés ou contactez l’administrateur.");
-            alert.getDialogPane().setStyle("-fx-background-color: #0f111a;");
-            alert.showAndWait();
+            showError("Impossible de générer le rapport : " + e.getMessage());
+        }
+    }
+
+    private void addInfoRow(GridPane grid, int row, String labelText, String valueText) {
+        Label label = new Label(labelText);
+        label.setStyle("-fx-font-weight: bold; -fx-font-size: 11px; -fx-text-fill: #9ca3af;");
+        Label value = new Label(valueText != null ? valueText : "N/A");
+        value.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #111827;");
+        grid.add(label, 0, row);
+        grid.add(value, 1, row);
+    }
+
+    /**
+     * Navigates the main stage to the EquipeDetails.fxml view.
+     * @param equipe The team to display
+     * @param stage The stage to update
+     */
+    public void navigateToDetails(Equipe equipe, Stage stage) {
+        if (stage == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/EquipeDetails.fxml"));
+            Parent root = loader.load();
+
+            EquipeDetailsController controller = loader.getController();
+            controller.setEquipe(equipe);
+
+            stage.setScene(new Scene(root, 1200, 760));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Impossible d'ouvrir les détails : " + e.getMessage());
         }
     }
 
     /**
-     * Public method to show only the team details dialog (used by webcam scanner)
-     * @param equipe The team to show
+     * Old method for backward compatibility if needed, but we prefer full navigation now.
      */
     public void showOnlyDetails(Equipe equipe) {
+        // Fallback to dialog if no stage is available
         try {
             List<Player> players = playerService.getPlayersByEquipe(equipe.getId());
             showTeamDetailsDialog(equipe, players);
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Erreur lors de la récupération des détails.");
         }
     }
 

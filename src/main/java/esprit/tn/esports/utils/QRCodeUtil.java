@@ -85,39 +85,13 @@ public class QRCodeUtil {
     }
 
     /**
-     * Texte encodé dans le QR : même contenu que la fiche détail affichée dans l’app
-     * (visible sur téléphone / scanner en ligne après lecture du QR — pas sur la fenêtre PC).
+     * Encode the team's web page URL into the QR code.
+     * Scanning with any phone camera will open the team details page in the browser.
      */
     public static String createRichTeamQRString(Equipe equipe, List<Player> players) {
-        String nom = equipe.getNom() != null ? equipe.getNom() : "";
-        StringBuilder sb = new StringBuilder();
-        sb.append(createTeamQRString(equipe.getId(), nom)).append("\n\n");
-
-        sb.append("🏆 ").append(nom).append("\n");
-        sb.append("Jeu : ").append(nullSafe(equipe.getGame())).append("\n");
-        sb.append("Catégorie : ").append(nullSafe(equipe.getCategorie())).append("\n\n");
-
-        int n = players != null ? players.size() : 0;
-        sb.append("👥 Joueurs (").append(n).append(")\n");
-        if (players == null || players.isEmpty()) {
-            sb.append("Aucun joueur inscrit\n");
-        } else {
-            for (Player p : players) {
-                String display = (p.getUser() != null && p.getUser().getEmail() != null)
-                        ? p.getUser().getEmail()
-                        : ("Joueur #" + p.getId());
-                String niveau = p.getNiveau() != null ? p.getNiveau() : "Membre";
-                String pays = p.getPays() != null ? p.getPays() : "";
-                sb.append("  • ").append(display).append("  |  ").append(niveau).append("  |  ").append(pays).append("\n");
-            }
-        }
-
-        sb.append("\n");
-        String coachEmail = (equipe.getCoach() != null && equipe.getCoach().getUser() != null)
-                ? equipe.getCoach().getUser().getEmail() : "Aucun";
-        sb.append("👨‍🏫 Coach : ").append(coachEmail).append("\n\n");
-        sb.append("[ID APP: ").append(equipe.getId()).append("]");
-        return sb.toString();
+        if (equipe == null) return "error";
+        String ip = TeamWebServer.getLocalIp();
+        return "http://" + ip + ":4567/equipe/" + equipe.getId();
     }
 
     private static String nullSafe(String s) {

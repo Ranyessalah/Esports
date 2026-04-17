@@ -14,6 +14,8 @@
         <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="20">
             <Button text="⬅ Retour" onAction="#goBack" styleClass="btn-secondary"/>
             <Label text="🎮 Equipes Details" styleClass="page-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="📤 Partager QR" onAction="#showQR" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;"/>
         </HBox>
     </top>
 

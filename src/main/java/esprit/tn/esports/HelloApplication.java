@@ -1,5 +1,6 @@
 package esprit.tn.esports;
 
+import esprit.tn.esports.utils.TeamWebServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +11,8 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        // Start the local web server so QR codes link to a live HTML page
+        TeamWebServer.startServer();
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
 

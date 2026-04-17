@@ -4,6 +4,7 @@ import esprit.tn.esports.entite.Coach;
 import esprit.tn.esports.entite.Equipe;
 import esprit.tn.esports.entite.Player;
 import esprit.tn.esports.service.PlayerService;
+import esprit.tn.esports.utils.QRCodeDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -35,12 +36,14 @@ public class EquipeDetailsController {
 
     private PlayerService playerService = new PlayerService();
     private Runnable onBack;
+    private Equipe currentEquipe;
 
     public void setOnBack(Runnable onBack) {
         this.onBack = onBack;
     }
 
     public void setEquipe(Equipe e) {
+        this.currentEquipe = e;
         name.setText(e.getNom());
         game.setText(e.getGame());
         category.setText(e.getCategorie());
@@ -145,6 +148,14 @@ public class EquipeDetailsController {
 
         card.getChildren().addAll(img, nameLabel, pays, niveau);
         return card;
+    }
+
+    @FXML
+    private void showQR() {
+        if (currentEquipe != null) {
+            Stage owner = (Stage) name.getScene().getWindow();
+            new QRCodeDialog().showShareableTeamQr(currentEquipe, owner);
+        }
     }
 
     @FXML

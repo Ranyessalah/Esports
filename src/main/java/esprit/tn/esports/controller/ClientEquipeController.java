@@ -2,6 +2,8 @@ package esprit.tn.esports.controller;
 
 import esprit.tn.esports.entite.Equipe;
 import esprit.tn.esports.service.EquipeService;
+import esprit.tn.esports.utils.QRCodeDialog;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -79,9 +81,43 @@ public class ClientEquipeController {
         Label game = new Label(e.getGame());
         game.getStyleClass().add("card-sub");
 
-        card.getChildren().addAll(img, name, game);
+        Button qrBtn = new Button("Voir Équipe");
+        qrBtn.getStyleClass().add("btn-view");
+        qrBtn.setOnAction(ev -> {
+            Stage owner = (Stage) cardContainer.getScene().getWindow();
+            new QRCodeDialog().showShareableTeamQr(e, owner);
+        });
+
+        card.getChildren().addAll(img, name, game, qrBtn);
 
         return card;
+    }
+
+    // ================= DETAILS =================
+    private void openDetails(Equipe e) {
+        try {
+            // Capture stage BEFORE navigating — cardContainer loses its scene after setScene()
+            Stage stage = (Stage) cardContainer.getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/EquipeDetails.fxml"));
+            Parent root = loader.load();
+
+            EquipeDetailsController ctrl = loader.getController();
+            ctrl.setEquipe(e);
+            ctrl.setOnBack(() -> {
+                try {
+                    FXMLLoader backLoader = new FXMLLoader(getClass().getResource("/esprit/tn/esports/equipeIndex_client.fxml"));
+                    Parent backRoot = backLoader.load();
+                    stage.setScene(new Scene(backRoot, 1200, 760));
+                    stage.show();
+                } catch (Exception ex) { ex.printStackTrace(); }
+            });
+
+            stage.setScene(new Scene(root, 1200, 760));
+            stage.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     // ================= SEARCH =================
