@@ -212,4 +212,54 @@ public class UserService implements ICrud<User> {
             System.out.println("✅ Mot de passe mis à jour pour : " + user.getEmail());
         }
     }
-}
+
+
+    public User findByEmail(String email) throws SQLException {
+        String query = "SELECT * FROM user WHERE email = ?";
+
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+
+
+                return mapRow(rs);
+            }
+        }
+
+        return null;
+    }
+    public void updatePassword(String email, String newPassword) throws Exception {
+
+        // 1. Vérification basique
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email invalide");
+        }
+
+        if (newPassword == null || newPassword.length() < 6) {
+            throw new IllegalArgumentException("Mot de passe trop court (min 6 caractères)");
+        }
+
+        // 2. Hash du mot de passe
+        String hashed = org.mindrot.jbcrypt.BCrypt.hashpw(newPassword,
+                org.mindrot.jbcrypt.BCrypt.gensalt());
+
+        String sql = "UPDATE user SET password = ? WHERE email = ?";
+
+        // 3. Exécution SQL
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+
+            ps.setString(1, hashed);
+            ps.setString(2, email);
+
+            int rows = ps.executeUpdate();
+
+            // 4. Vérification si user existe
+            if (rows == 0) {
+                throw new Exception("Aucun utilisateur trouvé avec cet email");
+            }
+        }
+    }}

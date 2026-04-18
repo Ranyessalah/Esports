@@ -1616,3 +1616,13 @@
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
 }
+.otp-field {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 52px;
+    -fx-min-width: 52px;
+    -fx-max-width: 52px;
+    -fx-pref-height: 56px;
+    -fx-padding: 0;
+}

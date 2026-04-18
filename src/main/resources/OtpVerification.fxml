@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.OtpVerificationController"
+            fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+            styleClass="signup-scroll">
+    <VBox styleClass="signup-bg-overlay" alignment="CENTER" minHeight="600" spacing="0">
+        <padding><Insets top="30" bottom="30" left="20" right="20"/></padding>
+        <VBox styleClass="signup-card" spacing="0" alignment="CENTER" maxWidth="420" minWidth="280">
+            <padding><Insets top="36" bottom="36" left="32" right="32"/></padding>
+
+            <StackPane alignment="CENTER" styleClass="trophy-icon-container">
+                <Label text="📩" styleClass="trophy-icon"/>
+            </StackPane>
+
+            <Label text="Vérification OTP" styleClass="signup-title"
+                   wrapText="true" textAlignment="CENTER" maxWidth="Infinity" alignment="CENTER"/>
+            <Label fx:id="subtitleLabel"
+                   text="Un code à 6 chiffres a été envoyé à votre email"
+                   styleClass="signup-subtitle" wrapText="true"
+                   textAlignment="CENTER" maxWidth="Infinity" alignment="CENTER"/>
+
+            <VBox spacing="16" styleClass="form-fields">
+                <VBox.margin><Insets top="28"/></VBox.margin>
+
+                <!-- Champs OTP 6 cases -->
+                <VBox spacing="8">
+                    <Label text="CODE OTP" styleClass="field-label"/>
+                    <HBox spacing="10" alignment="CENTER">
+                        <TextField fx:id="otp1" styleClass="dark-input otp-field" maxWidth="52" alignment="CENTER"/>
+                        <TextField fx:id="otp2" styleClass="dark-input otp-field" maxWidth="52" alignment="CENTER"/>
+                        <TextField fx:id="otp3" styleClass="dark-input otp-field" maxWidth="52" alignment="CENTER"/>
+                        <TextField fx:id="otp4" styleClass="dark-input otp-field" maxWidth="52" alignment="CENTER"/>
+                        <TextField fx:id="otp5" styleClass="dark-input otp-field" maxWidth="52" alignment="CENTER"/>
+                        <TextField fx:id="otp6" styleClass="dark-input otp-field" maxWidth="52" alignment="CENTER"/>
+                    </HBox>
+                    <Label fx:id="otpError" styleClass="field-error"
+                           visible="false" managed="false"/>
+                </VBox>
+
+                <!-- Timer -->
+                <HBox alignment="CENTER" spacing="6">
+                    <Label text="Code expire dans :" styleClass="signup-hint"/>
+                    <Label fx:id="timerLabel" text="05:00"
+                           style="-fx-text-fill: #a855f7; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                </HBox>
+
+                <Label fx:id="globalMessage" styleClass="global-error"
+                       maxWidth="Infinity" wrapText="true"
+                       visible="false" managed="false"/>
+
+                <Button fx:id="verifyBtn" text="✅  Vérifier le code"
+                        styleClass="submit-btn" maxWidth="Infinity"
+                        onAction="#onVerify"/>
+
+                <Button fx:id="resendBtn" text="Renvoyer le code"
+                        styleClass="link-btn" alignment="CENTER"
+                        maxWidth="Infinity" onAction="#onResend"/>
+
+                <Button text="← Retour" styleClass="link-btn"
+                        alignment="CENTER" maxWidth="Infinity" onAction="#onBack"/>
+            </VBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

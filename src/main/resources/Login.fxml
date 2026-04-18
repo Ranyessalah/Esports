@@ -98,19 +98,16 @@
                             styleClass="link-btn" onAction="#onForgotPassword" />
                 </HBox>
 
-                <VBox spacing="6">
+                <VBox spacing="6" fx:id="captchaVBox">
                     <Label text="Vérification" styleClass="field-label"/>
 
                     <StackPane fx:id="captchaContainer"
-                               prefHeight="78"
-                               maxHeight="78"
                                style="-fx-background-color: transparent;" />
 
                     <Label fx:id="captchaError"
                            styleClass="field-error"
                            visible="false" managed="false"/>
                 </VBox>
-
 
                 <!-- GLOBAL ERROR (wrong credentials) -->
                 <Label fx:id="globalError" styleClass="global-error"
