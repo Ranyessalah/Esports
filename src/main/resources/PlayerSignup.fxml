@@ -44,13 +44,12 @@
                            visible="false" managed="false" />
                 </VBox>
 
-                <!-- MOT DE PASSE -->
-                <VBox spacing="4">
+                <!-- MOT DE PASSE — fx:id="passwordSection" lets the controller hide it after Google auth -->
+                <VBox fx:id="passwordSection" spacing="4">
                     <Label text="MOT DE PASSE" styleClass="field-label" />
                     <PasswordField fx:id="passwordField" styleClass="dark-input"
                                    promptText="Min. 8 car., 1 majuscule, 1 spécial"
                                    maxWidth="Infinity" />
-                    <!-- Strength bar: 4 segments -->
                     <HBox fx:id="strengthBar" spacing="4">
                         <Region styleClass="strength-segment" HBox.hgrow="ALWAYS" />
                         <Region styleClass="strength-segment" HBox.hgrow="ALWAYS" />
@@ -62,8 +61,8 @@
                            visible="false" managed="false" />
                 </VBox>
 
-                <!-- CONFIRM PASSWORD -->
-                <VBox spacing="4">
+                <!-- CONFIRM PASSWORD — fx:id="confirmSection" -->
+                <VBox fx:id="confirmSection" spacing="4">
                     <Label text="CONFIRMER LE MOT DE PASSE" styleClass="field-label" />
                     <PasswordField fx:id="confirmPasswordField" styleClass="dark-input"
                                    promptText="Retapez votre mot de passe" maxWidth="Infinity" />
@@ -110,9 +109,10 @@
                 </VBox>
 
                 <!-- CAPTCHA -->
-                <HBox styleClass="captcha-box" alignment="CENTER_LEFT" spacing="12">
-                    <CheckBox fx:id="captchaCheck" styleClass="captcha-check" />
-                    <Label text="Je ne suis pas un robot" styleClass="captcha-label" />
+                <HBox styleClass="captcha-box" alignment="CENTER_LEFT" spacing="12"
+                      onMouseClicked="#onOpenCaptchaPopup" style="-fx-cursor: hand;">
+                    <CheckBox fx:id="captchaCheck" styleClass="captcha-check" mouseTransparent="true" />
+                    <Label text="Je ne suis pas un robot" styleClass="captcha-label" mouseTransparent="true" />
                     <Region HBox.hgrow="ALWAYS" />
                     <VBox alignment="CENTER">
                         <Label text="reCAPTCHA" styleClass="recaptcha-brand" />
@@ -122,7 +122,7 @@
                 <Label fx:id="captchaError" styleClass="field-error"
                        visible="false" managed="false" />
 
-                <!-- GLOBAL ERROR -->
+                <!-- GLOBAL ERROR / INFO -->
                 <Label fx:id="globalError" styleClass="global-error"
                        maxWidth="Infinity" wrapText="true"
                        visible="false" managed="false" />
@@ -136,19 +136,18 @@
                     <Separator HBox.hgrow="ALWAYS" />
                 </HBox>
 
-
                 <Button styleClass="social-btn" maxWidth="Infinity" onAction="#onGoogleSignup">
                     <graphic>
                         <HBox alignment="CENTER" spacing="10">
                             <StackPane styleClass="social-icon-circle">
-                                <!-- Replace with your Google SVG ImageView -->
                                 <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
                                     <image>
                                         <Image url="@/images/google.png" />
                                     </image>
                                 </ImageView>
                             </StackPane>
-                            <Label text="S'inscrire avec Google (Joueur)" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;" />
+                            <Label text="S'inscrire avec Google (Joueur)"
+                                   style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;" />
                         </HBox>
                     </graphic>
                 </Button>

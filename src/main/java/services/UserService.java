@@ -262,4 +262,52 @@ public class UserService implements ICrud<User> {
                 throw new Exception("Aucun utilisateur trouvé avec cet email");
             }
         }
-    }}
+    }
+    public User registerWithGoogle(String email, String firstName,
+                                   String lastName, String googleId) throws SQLException {
+        // If account already exists (e.g. was just created), return it
+        User existing = findByEmail(email);
+        if (existing != null) return existing;
+
+        User user = new User();
+        user.setEmail(email);
+        user.setGoogleId(googleId);
+        user.setPassword(null);
+        user.setRole(Roles.ROLE_PLAYER);   // default role for Google sign-ups
+        user.setType("player");
+        user.setProfileImage("default.png");
+        user.setBlocked(false);
+        user.setTotpSecret(null);
+        user.setTotpEnabled(false);
+
+        String req = "INSERT INTO user (email, roles, password, type, google_id, is_blocked, profile_image, totp_secret, is_totp_enabled) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, user.getEmail());
+            ps.setString(2, "[\"" + user.getRole().name() + "\"]");
+            ps.setNull(3, Types.VARCHAR);                  // no password for Google users
+            ps.setString(4, user.getType());
+            ps.setString(5, user.getGoogleId());
+            ps.setBoolean(6, user.isBlocked());
+            ps.setString(7, user.getProfileImage());
+            ps.setNull(8, Types.VARCHAR);
+            ps.setBoolean(9, user.isTotpEnabled());
+
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) user.setId(rs.getInt(1));
+                else throw new SQLException("Creating Google user failed, no ID obtained.");
+            }
+        }
+
+        return user;
+    }
+
+
+
+
+
+}
+
