@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import services.FaceIdService;
 import services.GoogleAuthService;
 import services.UserService;
 import utils.PreferencesRepository;
@@ -20,7 +21,7 @@ import utils.PreferencesRepository;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import services.FaceIdService;
 public class LoginController implements Initializable {
 
     @FXML private TextField emailField;
@@ -488,7 +489,6 @@ public class LoginController implements Initializable {
 
     // ─────────────────────────── FXML ACTIONS ─────────────────────────────
 
-    @FXML private void onFaceIdLogin()  { showInfo("Face ID", "Reconnaissance faciale à implémenter."); }
     @FXML private void onSignupPlayer() { navigateTo("/PlayerSignup.fxml", "ClutchX — Inscription Joueur"); }
     @FXML private void onSignupCoach()  { navigateTo("/CoachSignup.fxml",  "ClutchX — Inscription Coach"); }
 
@@ -502,4 +502,62 @@ public class LoginController implements Initializable {
         stopCaptchaServer();
         navigateTo("/ForgotPassword.fxml", "ClutchX — Mot de passe oublié");
     }
+    private void openFaceIdCamera(FaceIdCameraController.Mode mode,
+                                  int userId,
+                                  java.util.function.Consumer<Boolean> onEnroll,
+                                  java.util.function.Consumer<Integer> onAuth) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    getClass().getResource("/FaceIdCamera.fxml"));
+            javafx.scene.Parent root = loader.load();
+            FaceIdCameraController ctrl = loader.getController();
+            ctrl.configure(mode, userId, onEnroll, onAuth);
+
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.initOwner(emailField.getScene().getWindow());
+            stage.setTitle("Face ID");
+            stage.setResizable(false);
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(
+                    getClass().getResource("/clutchx-theme.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            showGlobalError("❌  Impossible d'ouvrir Face ID : " + e.getMessage());
+        }
+    }
+    @FXML
+    private void onFaceIdLogin() {
+        if (!FaceIdService.getInstance().isAvailable()) {
+            showGlobalError("❌  Face ID non disponible (OpenCV introuvable).");
+            return;
+        }
+
+        openFaceIdCamera(FaceIdCameraController.Mode.AUTHENTICATE, -1,
+                null,
+                userId -> {
+                    if (userId < 0) {
+                        showGlobalError("❌  Visage non reconnu. Réessayez.");
+                        return;
+                    }
+                    UserService us = new UserService();
+                    try {
+                        User user = us.findById(userId);
+                        if (user == null) {
+                            showGlobalError("❌  Aucun compte associé.");
+                            return;
+                        }
+                        if (user.isBlocked()) {
+                            showGlobalError("🚫  Compte bloqué.");
+                            return;
+                        }
+                        prefs.saveSession(user, true);
+                        routeByRole(user);
+                    } catch (Exception e) {
+                        showGlobalError("❌  Erreur : " + e.getMessage());
+                    }
+                });
+    }
+
 }

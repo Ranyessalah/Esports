@@ -241,12 +241,53 @@ public class PlayerSignupController implements Initializable {
 
         try {
             playerService.ajouter(player);
+                int createdUserId = newUser.getId();
+                openFaceIdEnrollment(createdUserId);
         } catch (Exception e) {
             showGlobalError("❌  Profil joueur non créé : " + e.getMessage());
+        }
+    }
+
+    // ─────────────────────────── FACE ID ENROLLMENT ───────────────────────
+
+    private void openFaceIdEnrollment(int userId) {
+        if (!services.FaceIdService.getInstance().isAvailable()) {
+            onBackToLogin();
             return;
         }
 
-        onBackToLogin();
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/FaceIdCamera.fxml"));
+            Parent root = loader.load();
+            FaceIdCameraController ctrl = loader.getController();
+
+            ctrl.configure(
+                    FaceIdCameraController.Mode.ENROLL,
+                    userId,
+                    success -> {
+                        if (success) {
+                            showGlobalInfo("✅  Face ID enregistré !");
+                        }
+                        Platform.runLater(this::onBackToLogin);
+                    },
+                    null
+            );
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(emailField.getScene().getWindow());
+            stage.setTitle("Enregistrement Face ID");
+            stage.setResizable(false);
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    getClass().getResource("/clutchx-theme.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            showGlobalError("❌  " + e.getMessage());
+            onBackToLogin();
+        }
     }
 
     /**
@@ -419,7 +460,7 @@ public class PlayerSignupController implements Initializable {
                             String token = getCaptchaToken();
                             if (token != null && !token.isEmpty()) {
                                 lastCaptchaToken = token;
-                                javafx.application.Platform.runLater(stage::close);
+                                Platform.runLater(stage::close);
                             }
                         }
                     } catch (Exception ignored) {}
@@ -625,9 +666,12 @@ public class PlayerSignupController implements Initializable {
         stopCaptchaServer();
         if (googleAuthService != null) { googleAuthService.stop(); googleAuthService = null; }
         try {
+            if (emailField.getScene() == null || emailField.getScene().getWindow() == null) return;
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) emailField.getScene().getWindow();
+            if (stage == null) return;
             Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
             scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
             stage.setScene(scene);

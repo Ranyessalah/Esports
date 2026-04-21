@@ -42,35 +42,57 @@ public class CoachSignupController implements Initializable {
     private GoogleAuthService googleAuthService;
 
     // ─── State for Google pre-fill ────────────────────────────────────────
-    /** Set when the user authenticated via Google; signals we skip email/password fields. */
+    /**
+     * Set when the user authenticated via Google; signals we skip email/password fields.
+     */
     private GoogleAuthService.GoogleUser pendingGoogleUser = null;
 
-    @FXML private TextField emailField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
-    @FXML private ComboBox<String> specialityCombo;
-    @FXML private ComboBox<String> countryCombo;
-    @FXML private ToggleButton toggleOui;
-    @FXML private ToggleButton toggleNon;
-    @FXML private Label fileNameLabel;
-    @FXML private CheckBox captchaCheck;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
+    @FXML
+    private ComboBox<String> specialityCombo;
+    @FXML
+    private ComboBox<String> countryCombo;
+    @FXML
+    private ToggleButton toggleOui;
+    @FXML
+    private ToggleButton toggleNon;
+    @FXML
+    private Label fileNameLabel;
+    @FXML
+    private CheckBox captchaCheck;
 
     // Error labels
-    @FXML private Label emailError;
-    @FXML private Label passwordError;
-    @FXML private Label confirmError;
-    @FXML private Label specialityError;
-    @FXML private Label countryError;
-    @FXML private Label captchaError;
-    @FXML private Label globalError;
+    @FXML
+    private Label emailError;
+    @FXML
+    private Label passwordError;
+    @FXML
+    private Label confirmError;
+    @FXML
+    private Label specialityError;
+    @FXML
+    private Label countryError;
+    @FXML
+    private Label captchaError;
+    @FXML
+    private Label globalError;
 
     // Password strength
-    @FXML private javafx.scene.layout.HBox strengthBar;
-    @FXML private Label strengthLabel;
+    @FXML
+    private javafx.scene.layout.HBox strengthBar;
+    @FXML
+    private Label strengthLabel;
 
     // Password section container — hidden after Google auth
-    @FXML private VBox passwordSection;
-    @FXML private VBox confirmSection;
+    @FXML
+    private VBox passwordSection;
+    @FXML
+    private VBox confirmSection;
 
     private ToggleGroup availabilityGroup;
     private File selectedProfilePhoto;
@@ -209,9 +231,9 @@ public class CoachSignupController implements Initializable {
 
         if (!valid) return;
 
-        String speciality   = specialityCombo.getValue();
-        String country      = countryCombo.getValue();
-        boolean available   = toggleOui.isSelected();
+        String speciality = specialityCombo.getValue();
+        String country = countryCombo.getValue();
+        boolean available = toggleOui.isSelected();
         String profileImage = selectedProfilePhoto != null ? selectedProfilePhoto.getName() : "default.png";
 
         User newUser = new User();
@@ -256,14 +278,57 @@ public class CoachSignupController implements Initializable {
         coach.setPays(country);
         coach.setDisponibilite(available);
 
+        // In onCreateAccount(), change this block:
         try {
             coachService.ajouter(coach);
+                int createdUserId = newUser.getId();
+                openFaceIdEnrollment(createdUserId);
         } catch (Exception e) {
             showGlobalError("❌  Profil coach non créé : " + e.getMessage());
+        }
+
+// DELETE the onBackToLogin() call that comes after this block
+
+    }
+
+    private void openFaceIdEnrollment(int userId) {
+        if (!services.FaceIdService.getInstance().isAvailable()) {
+            onBackToLogin();
             return;
         }
 
-        onBackToLogin();
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    getClass().getResource("/FaceIdCamera.fxml"));
+            javafx.scene.Parent root = loader.load();
+            controllers.FaceIdCameraController ctrl = loader.getController();
+
+            ctrl.configure(
+                    controllers.FaceIdCameraController.Mode.ENROLL,
+                    userId,
+                    success -> {
+                        if (success) {
+                            showGlobalInfo("✅  Face ID enregistré !");
+                        }
+                        javafx.application.Platform.runLater(this::onBackToLogin);
+                    },
+                    null
+            );
+
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.initOwner(emailField.getScene().getWindow());
+            stage.setTitle("Enregistrement Face ID");
+            stage.setResizable(false);
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(
+                    getClass().getResource("/clutchx-theme.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            showGlobalError("❌  " + e.getMessage());
+            onBackToLogin();
+        }
     }
 
     /**
@@ -376,32 +441,32 @@ public class CoachSignupController implements Initializable {
         }
 
         String html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                html, body { background: transparent !important; width: 304px; overflow: visible; }
-            </style>
-        </head>
-        <body>
-            <div id="recaptcha-container"></div>
-            <script>
-                function onRecaptchaLoad() {
-                    grecaptcha.render('recaptcha-container', {
-                        'sitekey': '6LeqfbksAAAAAEKK6Ylor5-KLnUNrLa1rfg2DWDJ',
-                        'theme': 'dark',
-                        'size': 'normal',
-                        'callback': function(token) { window.captchaToken = token; },
-                        'expired-callback': function() { window.captchaToken = ''; }
-                    });
-                }
-                function getCaptchaToken() { return window.captchaToken || ''; }
-            </script>
-        </body>
-        </html>
-        """;
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        html, body { background: transparent !important; width: 304px; overflow: visible; }
+                    </style>
+                </head>
+                <body>
+                    <div id="recaptcha-container"></div>
+                    <script>
+                        function onRecaptchaLoad() {
+                            grecaptcha.render('recaptcha-container', {
+                                'sitekey': '6LeqfbksAAAAAEKK6Ylor5-KLnUNrLa1rfg2DWDJ',
+                                'theme': 'dark',
+                                'size': 'normal',
+                                'callback': function(token) { window.captchaToken = token; },
+                                'expired-callback': function() { window.captchaToken = ''; }
+                            });
+                        }
+                        function getCaptchaToken() { return window.captchaToken || ''; }
+                    </script>
+                </body>
+                </html>
+                """;
 
         captchaServer.createContext("/captcha", exchange -> {
             byte[] bytes = html.getBytes(java.nio.charset.StandardCharsets.UTF_8);
@@ -414,8 +479,14 @@ public class CoachSignupController implements Initializable {
     }
 
     private void stopCaptchaServer() {
-        if (heightPoller != null) { heightPoller.stop(); heightPoller = null; }
-        if (captchaServer != null) { captchaServer.stop(1); captchaServer = null; }
+        if (heightPoller != null) {
+            heightPoller.stop();
+            heightPoller = null;
+        }
+        if (captchaServer != null) {
+            captchaServer.stop(1);
+            captchaServer = null;
+        }
     }
 
     private void startHeightPoller(WebView wv, StackPane container, Stage stage) {
@@ -440,7 +511,8 @@ public class CoachSignupController implements Initializable {
                                 javafx.application.Platform.runLater(stage::close);
                             }
                         }
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 })
         );
         heightPoller.setCycleCount(javafx.animation.Animation.INDEFINITE);
@@ -450,7 +522,9 @@ public class CoachSignupController implements Initializable {
     private String getCaptchaToken() {
         try {
             return (String) captchaWebView.getEngine().executeScript("getCaptchaToken()");
-        } catch (Exception e) { return ""; }
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     private boolean verifyCaptcha(String token) {
@@ -469,7 +543,10 @@ public class CoachSignupController implements Initializable {
             String line;
             while ((line = reader.readLine()) != null) response.append(line);
             return response.toString().contains("\"success\": true");
-        } catch (Exception e) { e.printStackTrace(); return false; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // ─────────────────────────── SETUP ────────────────────────────────────
@@ -580,13 +657,13 @@ public class CoachSignupController implements Initializable {
     private void updateStrengthBar(String password) {
         if (strengthBar == null || strengthLabel == null) return;
         int score = 0;
-        if (password.length() >= 8)                                                   score++;
-        if (password.matches(".*[A-Z].*"))                                            score++;
-        if (password.matches(".*[0-9].*"))                                            score++;
-        if (password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*"))      score++;
+        if (password.length() >= 8) score++;
+        if (password.matches(".*[A-Z].*")) score++;
+        if (password.matches(".*[0-9].*")) score++;
+        if (password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) score++;
 
-        String[] styles = { "", "strength-weak", "strength-fair", "strength-good", "strength-strong" };
-        String[] labels = { "", "Faible", "Moyen", "Bon", "Fort" };
+        String[] styles = {"", "strength-weak", "strength-fair", "strength-good", "strength-strong"};
+        String[] labels = {"", "Faible", "Moyen", "Bon", "Fort"};
 
         for (int i = 0; i < strengthBar.getChildren().size(); i++) {
             strengthBar.getChildren().get(i).getStyleClass()
@@ -648,7 +725,10 @@ public class CoachSignupController implements Initializable {
     private void shake(Control field) {
         javafx.animation.TranslateTransition tt =
                 new javafx.animation.TranslateTransition(javafx.util.Duration.millis(60), field);
-        tt.setFromX(0); tt.setByX(8); tt.setCycleCount(6); tt.setAutoReverse(true);
+        tt.setFromX(0);
+        tt.setByX(8);
+        tt.setCycleCount(6);
+        tt.setAutoReverse(true);
         tt.play();
     }
 
@@ -674,11 +754,18 @@ public class CoachSignupController implements Initializable {
     @FXML
     private void onBackToLogin() {
         stopCaptchaServer();
-        if (googleAuthService != null) { googleAuthService.stop(); googleAuthService = null; }
+        if (googleAuthService != null) {
+            googleAuthService.stop();
+            googleAuthService = null;
+        }
         try {
+            // Guard against being called after stage is already gone
+            if (emailField.getScene() == null || emailField.getScene().getWindow() == null) return;
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) emailField.getScene().getWindow();
+            if (stage == null) return; // extra safety
             Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
             scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
             stage.setScene(scene);

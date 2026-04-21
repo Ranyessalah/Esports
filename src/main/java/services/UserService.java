@@ -304,7 +304,18 @@ public class UserService implements ICrud<User> {
 
         return user;
     }
+    public User findById(int userId) throws SQLException {
+        String query = "SELECT * FROM user WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapRow(rs);
+            }
+        }
 
+        return null;
+    }
 
 
 
