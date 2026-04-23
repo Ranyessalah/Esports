@@ -5,12 +5,14 @@ public class Coach {
     private boolean disponibilite;
     private String pays;
     private int id;
+    User user;
 
-    public Coach(String specialite, boolean disponibilite, String pays, int id) {
+    public Coach(String specialite, boolean disponibilite, String pays, int id, User user) {
         this.specialite = specialite;
         this.disponibilite = disponibilite;
         this.pays = pays;
         this.id = id;
+        this.user = user;
     }
 
     public Coach() {
@@ -48,6 +50,9 @@ public class Coach {
         this.id = id;
     }
 
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
     @Override
     public String toString() {
         return "Coach{" +

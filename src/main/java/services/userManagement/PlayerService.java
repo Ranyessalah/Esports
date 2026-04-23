@@ -1,7 +1,9 @@
 
 package services.userManagement;
 
+import entities.userManagement.Equipe;
 import entities.userManagement.Player;
+import entities.userManagement.User;
 import utils.DBConnection;
 
 import java.sql.*;
@@ -35,7 +37,7 @@ public class PlayerService implements IService<Player> {
             rewardService.createForUser(player.getId());
             System.out.println("✅ Reward inserted successfully");
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -82,6 +84,7 @@ public class PlayerService implements IService<Player> {
             }
         }
     }
+
     public void supprimer(int id) throws SQLException {
 
         String req = "DELETE FROM player WHERE id=?";
@@ -109,7 +112,7 @@ public class PlayerService implements IService<Player> {
         String req = "SELECT * FROM player";
 
         try (Statement st = cnx.createStatement();
-             ResultSet rs = st.executeQuery(req)) {
+                ResultSet rs = st.executeQuery(req)) {
 
             while (rs.next()) {
 
@@ -127,6 +130,7 @@ public class PlayerService implements IService<Player> {
 
         return players;
     }
+
     public Player getById(int id) throws SQLException {
         String req = "SELECT * FROM player WHERE id=?";
 
@@ -147,5 +151,76 @@ public class PlayerService implements IService<Player> {
 
         return null;
     }
-}
 
+    public List<Player> getPlayersByEquipe(int equipeId) {
+        List<Player> list = new ArrayList<>();
+        String sql = "SELECT u.id, u.email, p.pays, p.statut, p.niveau " +
+                "FROM user u " +
+                "JOIN player p ON u.id = p.id " +
+                "WHERE p.equipe_id = ?";
+
+        try {
+            PreparedStatement ps = cnx.prepareStatement(sql);
+            ps.setInt(1, equipeId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Player p = new Player();
+                p.setId(rs.getInt("id"));
+                p.setPays(rs.getString("pays"));
+                p.setStatut(rs.getBoolean("statut"));
+                p.setNiveau(rs.getString("niveau"));
+
+                User u = new User();
+                u.setId(rs.getInt("id"));
+                u.setEmail(rs.getString("email"));
+                p.setUser(u);
+
+                Equipe e = new Equipe();
+                e.setId(equipeId);
+                p.setEquipe_id(e.getId());
+
+                list.add(p);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return list;
+    }
+
+    public List<Player> getAll() {
+        List<Player> list = new ArrayList<>();
+
+        String sql = "SELECT u.id, u.email, p.pays, p.statut, p.niveau " +
+                "FROM user u " +
+                "LEFT JOIN player p ON u.id = p.id " +
+                "WHERE u.type LIKE 'player'";
+
+        try (Statement st = cnx.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Player p = new Player();
+                p.setId(rs.getInt("id"));
+                p.setPays(rs.getString("pays"));
+                p.setStatut(rs.getBoolean("statut"));
+                p.setNiveau(rs.getString("niveau"));
+
+                User u = new User();
+                u.setId(rs.getInt("id"));
+                u.setEmail(rs.getString("email"));
+                p.setUser(u);
+
+                // ❌ SUPPRIMÉ : aucune relation côté Player
+                // p.setEquipe(...)
+
+                list.add(p);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return list;
+    }
+}

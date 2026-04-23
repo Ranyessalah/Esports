@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<VBox spacing="10" styleClass="card" xmlns:fx="http://javafx.com/fxml">
+    <ImageView fx:id="logo" fitWidth="80" fitHeight="80"/>
+    <Label fx:id="name" styleClass="card-title"/>
+    <Label fx:id="game" styleClass="card-sub"/>
+
+    <HBox spacing="10">
+        <Button text="View" styleClass="btn-view"/>
+        <Button text="Edit" styleClass="btn-edit"/>
+        <Button text="Delete" styleClass="btn-delete"/>
+    </HBox>
+</VBox>

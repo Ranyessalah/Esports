@@ -6,13 +6,14 @@ public class Player {
     private boolean statut;
     private int equipe_id;
     private int id;
-
-    public Player(String pays, String niveau, boolean statut, int equipe_id, int id) {
+    private User user;
+    public Player(String pays, String niveau, boolean statut, int equipe_id, int id,  User user) {
         this.pays = pays;
         this.niveau = niveau;
         this.statut = statut;
         this.equipe_id = equipe_id;
         this.id = id;
+        this.user = user;
     }
     public Player() {}
 
@@ -56,6 +57,8 @@ public class Player {
         this.id = id;
     }
 
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
     @Override
     public String toString() {
         return "Player{" +

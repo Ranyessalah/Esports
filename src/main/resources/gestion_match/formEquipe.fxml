@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<VBox spacing="18"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.gestion_match.FormEquipeController"
+      stylesheets="@admin.css"
+      styleClass="modal-container">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label fx:id="formTitleLabel" text="Ajouter une Équipe" styleClass="page-title"/>
+            <Label text="Configurez votre organisation e-sportive professionnelle." styleClass="page-subtitle"/>
+        </VBox>
+        <Button text="Fermer" onAction="#closeWindow" styleClass="btn-secondary"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane-custom">
+        <content>
+            <VBox spacing="25" style="-fx-padding: 0 5 0 0;">
+                
+                <!-- SECTION 1: IDENTITY & BRANDING -->
+                <VBox spacing="20" styleClass="form-card-premium">
+                    <VBox styleClass="section-header-box">
+                        <Label text="IDENTITÉ DE L'ÉQUIPE" styleClass="section-title"/>
+                        <Label text="Gérez l'image de marque et les informations de base." styleClass="section-subtitle"/>
+                    </VBox>
+
+                    <!-- LOGO WORKSPACE -->
+                    <VBox alignment="CENTER" spacing="12">
+                        <StackPane styleClass="logo-workspace" maxWidth="154" maxHeight="154">
+                            <ImageView fx:id="preview" fitHeight="150" fitWidth="150" preserveRatio="true"/>
+                        </StackPane>
+                        <Button text="Choisir un logo" onAction="#uploadImage" styleClass="btn-secondary" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="imageError" styleClass="error-label" visible="false" managed="false"/>
+                    </VBox>
+
+                    <!-- INFO GRID -->
+                    <GridPane hgap="25" vgap="18">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50" />
+                            <ColumnConstraints percentWidth="50" />
+                        </columnConstraints>
+                        <children>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Nom de l'équipe *" styleClass="form-label"/>
+                                <TextField fx:id="nameField" promptText="Ex: Team Vitality" styleClass="form-input"/>
+                                <Label fx:id="nameError" styleClass="error-label" visible="false" managed="false"/>
+                            </VBox>
+
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Jeu *" styleClass="form-label"/>
+                                <TextField fx:id="gameField" promptText="Ex: Valorant" styleClass="form-input"/>
+                                <Label fx:id="gameError" styleClass="error-label" visible="false" managed="false"/>
+                            </VBox>
+
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                                <Label text="Catégorie *" styleClass="form-label"/>
+                                <TextField fx:id="catField" promptText="Ex: Pro, Amateur, Junior..." styleClass="form-input"/>
+                                <Label fx:id="catError" styleClass="error-label" visible="false" managed="false"/>
+                            </VBox>
+                        </children>
+                    </GridPane>
+                </VBox>
+
+                <!-- SECTION 2: ROSTER & STAFF -->
+                <VBox spacing="20" styleClass="form-card-premium">
+                    <VBox styleClass="section-header-box">
+                        <Label text="EFFECTIF &amp; STAFF" styleClass="section-title"/>
+                        <Label text="Affectez un encadrement technique et composez l'équipe." styleClass="section-subtitle"/>
+                    </VBox>
+
+                    <VBox spacing="18">
+                        <!-- COACH -->
+                        <VBox spacing="6">
+                            <Label text="Coach Responsable *" styleClass="form-label"/>
+                            <ComboBox fx:id="coachBox" promptText="Sélectionner un coach expert" maxWidth="Infinity" styleClass="form-combo"/>
+                            <Label fx:id="coachError" styleClass="error-label" visible="false" managed="false"/>
+                        </VBox>
+
+                        <!-- PLAYERS -->
+                        <VBox spacing="8">
+                            <Label text="Joueurs Membres (Multi-sélection : Ctrl + Clic) *" styleClass="form-label"/>
+                            <ListView fx:id="playersListView" prefHeight="200" styleClass="form-list-view"/>
+                            <Label fx:id="playersError" styleClass="error-label" visible="false" managed="false"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ACTIONS -->
+                <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                    <Button text="Annuler" onAction="#closeWindow" styleClass="btn-cancel" prefHeight="45" prefWidth="120"/>
+                    <Button fx:id="saveBtn" text="Enregistrer" onAction="#save" styleClass="btn-success-lg" prefHeight="45" prefWidth="180"/>
+                </HBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+
+
+</VBox>
