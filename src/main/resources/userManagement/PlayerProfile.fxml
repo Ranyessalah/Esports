@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+
+<ScrollPane fitToWidth="true" styleClass="profile-scroll"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.userManagement.PlayerProfileController"
+            stylesheets="@/userManagement/clutchx-theme.cssutchx-theme.css">
+
+    <VBox spacing="24" styleClass="profile-root" maxWidth="680">
+        <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
+
+        <!-- Header row: back button + title -->
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <Button styleClass="btn-back" text="← Retour" onAction="#onBack"/>
+            <VBox spacing="4">
+                <Label text="Mon Profil" styleClass="page-title"/>
+                <Label text="Mettre à jour mes informations personnelles" styleClass="page-subtitle"/>
+            </VBox>
+        </HBox>
+
+        <!-- Profile Card -->
+        <VBox styleClass="profile-card" spacing="0">
+
+            <!-- Avatar banner -->
+            <HBox styleClass="profile-banner" alignment="CENTER_LEFT" spacing="20">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                <StackPane styleClass="avatar-wrapper">
+                    <Circle fx:id="avatarCircleBg" radius="40" styleClass="avatar-circle-bg"/>
+                    <ImageView fx:id="profileAvatar" fitWidth="72" fitHeight="72"
+                               preserveRatio="true" styleClass="profile-avatar-img">
+                        <image><Image url="@/images/avatar.png"/></image>
+                    </ImageView>
+                </StackPane>
+                <VBox spacing="4">
+                    <Label fx:id="displayEmail" styleClass="profile-display-name" text="player@clutchx.tn"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label styleClass="role-badge-player" text="JOUEUR"/>
+                        <Label fx:id="statutTag" styleClass="disponibilite-tag" text="● Actif"/>
+                    </HBox>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="editBtn" styleClass="btn-edit-profile" text="✎  Modifier le profil"
+                        onAction="#onEditClick"/>
+            </HBox>
+
+            <Separator styleClass="card-divider"/>
+
+            <!-- Info Grid -->
+            <GridPane styleClass="info-grid" hgap="32" vgap="20">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Email" styleClass="info-label"/>
+                    <Label fx:id="infoEmail" text="—" styleClass="info-value"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="Pays" styleClass="info-label"/>
+                    <Label fx:id="infoPays" text="—" styleClass="info-value"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label text="Niveau" styleClass="info-label"/>
+                    <Label fx:id="infoNiveau" text="—" styleClass="info-value"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Statut" styleClass="info-label"/>
+                    <Label fx:id="infoStatut" text="—" styleClass="info-value"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                    <Label text="Équipe" styleClass="info-label"/>
+                    <Label fx:id="infoEquipe" text="—" styleClass="info-value"/>
+                </VBox>
+
+            </GridPane>
+        </VBox>
+
+        <!-- Danger Zone Card -->
+        <VBox styleClass="profile-card danger-zone-card" spacing="0">
+
+            <!-- Card header -->
+            <HBox styleClass="danger-zone-header" alignment="CENTER_LEFT" spacing="12">
+                <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+                <Label text="⚠" styleClass="danger-zone-icon"/>
+                <VBox spacing="2">
+                    <Label text="Zone dangereuse" styleClass="danger-title"/>
+                    <Label text="Actions irréversibles sur votre compte" styleClass="danger-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <Separator styleClass="danger-divider"/>
+
+            <!-- Card body -->
+            <HBox styleClass="danger-zone-body" alignment="CENTER_LEFT" spacing="16">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Supprimer mon compte" styleClass="danger-action-title"/>
+                    <Label text="Une fois supprimé, toutes vos données seront définitivement effacées."
+                           styleClass="danger-action-desc" wrapText="true"/>
+                </VBox>
+                <Button fx:id="deleteAccountBtn"
+                        text="Supprimer"
+                        styleClass="btn-delete-account"
+                        onAction="#onDeleteAccount"/>
+            </HBox>
+
+        </VBox>
+
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.userManagement.CoachSignupController"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            styleClass="signup-scroll">
+
+    <VBox styleClass="signup-bg-overlay" alignment="CENTER"
+          minHeight="700" spacing="0">
+        <padding>
+            <Insets top="30" bottom="30" left="20" right="20"/>
+        </padding>
+
+        <VBox styleClass="signup-card" spacing="0" alignment="CENTER"
+              maxWidth="460" minWidth="280">
+            <padding>
+                <Insets top="36" bottom="36" left="32" right="32"/>
+            </padding>
+
+            <StackPane alignment="CENTER" styleClass="trophy-icon-container">
+                <Label text="🏆" styleClass="trophy-icon"/>
+            </StackPane>
+
+            <Label text="Rejoindre en tant que Coach" styleClass="signup-title"
+                   wrapText="true" textAlignment="CENTER"
+                   maxWidth="Infinity" alignment="CENTER"/>
+            <Label text="Partagez votre expertise sur ClutchX"
+                   styleClass="signup-subtitle" wrapText="true"
+                   textAlignment="CENTER" maxWidth="Infinity" alignment="CENTER"/>
+
+            <VBox spacing="14" styleClass="form-fields">
+                <VBox.margin>
+                    <Insets top="24"/>
+                </VBox.margin>
+
+                <!-- EMAIL -->
+                <VBox spacing="4">
+                    <Label text="EMAIL" styleClass="field-label"/>
+                    <TextField fx:id="emailField" styleClass="dark-input"
+                               promptText="exemple@email.com" maxWidth="Infinity"/>
+                    <Label fx:id="emailError" styleClass="field-error"
+                           visible="false" managed="false"/>
+                </VBox>
+
+                <!-- MOT DE PASSE — fx:id="passwordSection" lets the controller hide it after Google auth -->
+                <VBox fx:id="passwordSection" spacing="4">
+                    <Label text="MOT DE PASSE" styleClass="field-label"/>
+                    <PasswordField fx:id="passwordField" styleClass="dark-input"
+                                   promptText="Min. 8 car., 1 majuscule, 1 spécial"
+                                   maxWidth="Infinity"/>
+                    <HBox fx:id="strengthBar" spacing="4">
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS"/>
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS"/>
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS"/>
+                        <Region styleClass="strength-segment" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                    <Label fx:id="strengthLabel" styleClass="strength-text" text=""/>
+                    <Label fx:id="passwordError" styleClass="field-error"
+                           visible="false" managed="false"/>
+                </VBox>
+
+                <!-- CONFIRM PASSWORD — fx:id="confirmSection" -->
+                <VBox fx:id="confirmSection" spacing="4">
+                    <Label text="CONFIRMER LE MOT DE PASSE" styleClass="field-label"/>
+                    <PasswordField fx:id="confirmPasswordField" styleClass="dark-input"
+                                   promptText="Retapez votre mot de passe" maxWidth="Infinity"/>
+                    <Label fx:id="confirmError" styleClass="field-error"
+                           visible="false" managed="false"/>
+                </VBox>
+
+                <!-- SPÉCIALITÉ -->
+                <VBox spacing="4">
+                    <Label text="SPÉCIALITÉ" styleClass="field-label"/>
+                    <ComboBox fx:id="specialityCombo" styleClass="dark-combo"
+                              maxWidth="Infinity"
+                              promptText="Sélectionnez une spécialité"/>
+                    <Label fx:id="specialityError" styleClass="field-error"
+                           visible="false" managed="false"/>
+                </VBox>
+
+                <!-- PAYS -->
+                <VBox spacing="4">
+                    <Label text="PAYS" styleClass="field-label"/>
+                    <ComboBox fx:id="countryCombo" styleClass="dark-combo"
+                              maxWidth="Infinity"
+                              promptText="Sélectionnez un pays"/>
+                    <Label fx:id="countryError" styleClass="field-error"
+                           visible="false" managed="false"/>
+                </VBox>
+
+                <!-- DISPONIBILITÉ -->
+                <VBox spacing="5">
+                    <Label text="DISPONIBILITÉ" styleClass="field-label"/>
+                    <HBox spacing="10">
+                        <ToggleButton fx:id="toggleOui" text="Oui"
+                                      styleClass="toggle-btn"
+                                      maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                        <ToggleButton fx:id="toggleNon" text="Non"
+                                      styleClass="toggle-btn"
+                                      maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                </VBox>
+
+                <!-- PHOTO -->
+                <VBox spacing="5">
+                    <Label text="PHOTO DE PROFIL (POUR FACE ID)" styleClass="field-label"/>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Button fx:id="chooseFileBtn" text="Choisir un fichier"
+                                styleClass="file-choose-btn" onAction="#onChooseFile"/>
+                        <Label fx:id="fileNameLabel" text="Aucun fichier sélectionné"
+                               styleClass="file-name-label"
+                               HBox.hgrow="ALWAYS" wrapText="true"/>
+                    </HBox>
+                    <Label text="ℹ Optionnel — Permet la connexion par reconnaissance faciale (Face ID)"
+                           styleClass="hint-text" wrapText="true"/>
+                </VBox>
+
+                <!-- CAPTCHA -->
+                <HBox styleClass="captcha-box" alignment="CENTER_LEFT" spacing="12"
+                      onMouseClicked="#onOpenCaptchaPopup" style="-fx-cursor: hand;">
+                    <CheckBox fx:id="captchaCheck" styleClass="captcha-check" mouseTransparent="true"/>
+                    <Label text="Je ne suis pas un robot" styleClass="captcha-label" mouseTransparent="true"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <VBox alignment="CENTER">
+                        <Label text="reCAPTCHA" styleClass="recaptcha-brand"/>
+                        <Label text="Confidentialité - Conditions" styleClass="recaptcha-sub"/>
+                    </VBox>
+                </HBox>
+                <Label fx:id="captchaError" styleClass="field-error"
+                       visible="false" managed="false"/>
+
+                <!-- GLOBAL ERROR / INFO -->
+                <Label fx:id="globalError" styleClass="global-error"
+                       maxWidth="Infinity" wrapText="true"
+                       visible="false" managed="false"/>
+
+                <Button text="✈  Créer mon compte" styleClass="submit-btn"
+                        maxWidth="Infinity" onAction="#onCreateAccount"/>
+
+                <HBox alignment="CENTER" spacing="12">
+                    <Separator HBox.hgrow="ALWAYS"/>
+                    <Label text="OU" styleClass="divider-label"/>
+                    <Separator HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <Button styleClass="social-btn" maxWidth="Infinity" onAction="#onGoogleSignup">
+                    <graphic>
+                        <HBox alignment="CENTER" spacing="10">
+                            <StackPane styleClass="social-icon-circle">
+                                <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
+                                    <image>
+                                        <Image url="@/images/google.png"/>
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+                            <Label text="S'inscrire avec Google (coach)"
+                                   style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Button text="← Déjà un compte ? Se connecter"
+                        styleClass="link-btn" maxWidth="Infinity"
+                        alignment="CENTER" onAction="#onBackToLogin"/>
+            </VBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

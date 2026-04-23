@@ -1732,7 +1732,7 @@ instanceKlass com/sun/javafx/iio/jpeg/JPEGImageLoader$Lock
 instanceKlass javafx/fxml/FXMLLoader$ControllerMethodEventHandler
 instanceKlass javafx/fxml/FXMLLoader$MethodHandler
 instanceKlass javafx/fxml/FXML
-instanceKlass entities/User
+instanceKlass entities/userManagement/User
 instanceKlass com/sun/net/httpserver/HttpExchange
 instanceKlass org/w3c/dom/Document
 instanceKlass org/w3c/dom/Node

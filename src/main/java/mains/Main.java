@@ -1,8 +1,8 @@
 package mains;
 
-import entities.Roles;
-import entities.User;
-import services.UserService;
+import entities.userManagement.Roles;
+import entities.userManagement.User;
+import services.userManagement.UserService;
 
 import java.sql.SQLException;
 

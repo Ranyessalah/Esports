@@ -1,8 +1,8 @@
 package utils;
 
 
-import entities.Roles;
-import entities.User;
+import entities.userManagement.Roles;
+import entities.userManagement.User;
 
 import java.util.prefs.Preferences;
 

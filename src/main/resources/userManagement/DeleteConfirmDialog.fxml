@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.DeleteConfirmDialogController"
+      stylesheets="@/userManagement/clutchx-theme.cssutchx-theme.css"
+      styleClass="dialog-root, delete-dialog-root"
+      spacing="0" minWidth="420" maxWidth="460"
+      fx:id="dialogRoot">
+
+    <!-- Icon + title header -->
+    <VBox styleClass="delete-dialog-header" alignment="CENTER" spacing="16">
+        <padding><Insets top="36" right="32" bottom="28" left="32"/></padding>
+
+        <!-- Danger icon circle -->
+        <StackPane styleClass="delete-icon-circle" minWidth="64" minHeight="64"
+                   maxWidth="64" maxHeight="64">
+            <Label text="🗑" styleClass="delete-icon-label"/>
+        </StackPane>
+
+        <VBox spacing="8" alignment="CENTER">
+            <Label text="Supprimer le compte ?" styleClass="delete-dialog-title"/>
+            <Label styleClass="delete-dialog-email" fx:id="emailLabel"
+                   text="utilisateur@clutchx.tn" wrapText="true"/>
+        </VBox>
+    </VBox>
+
+    <!-- Warning body -->
+    <VBox styleClass="delete-dialog-body" spacing="12">
+        <padding><Insets top="0" right="32" bottom="24" left="32"/></padding>
+
+        <Label styleClass="delete-dialog-warning"
+               text="Cette action est irréversible. Les éléments suivants seront supprimés définitivement :"
+               wrapText="true"/>
+
+        <VBox spacing="8" styleClass="delete-consequences-list">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="✕" styleClass="delete-consequence-icon"/>
+                <Label text="Votre profil et toutes vos informations" styleClass="delete-consequence-text"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="✕" styleClass="delete-consequence-icon"/>
+                <Label text="Votre historique et statistiques" styleClass="delete-consequence-text"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="✕" styleClass="delete-consequence-icon"/>
+                <Label text="Votre accès à la plateforme ClutchX" styleClass="delete-consequence-text"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <Separator styleClass="card-divider"/>
+
+    <!-- Footer actions -->
+    <HBox styleClass="delete-dialog-footer" alignment="CENTER" spacing="12">
+        <padding><Insets top="20" right="32" bottom="24" left="32"/></padding>
+        <Button styleClass="btn-secondary" text="Annuler" onAction="#onCancel"
+                maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Button styleClass="btn-danger-confirm" text="Oui, supprimer"
+                onAction="#onConfirm" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+</VBox>

@@ -2060,7 +2060,7 @@ instanceKlass javafx/fxml/FXML
 instanceKlass org/w3c/dom/Document
 instanceKlass org/w3c/dom/Node
 instanceKlass com/sun/net/httpserver/HttpExchange
-instanceKlass entities/User
+instanceKlass entities/userManagement/User
 instanceKlass javafx/fxml/FXMLLoader$ControllerAccessor$1
 instanceKlass com/sun/prism/Image$Serial
 instanceKlass com/sun/javafx/image/impl/ByteRgba$Accessor
