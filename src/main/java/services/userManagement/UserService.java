@@ -317,7 +317,26 @@ public class UserService implements ICrud<User> {
         return null;
     }
 
+    public List<User> getAllPlayersByEquipes(int equipeId) throws SQLException {
+        List<User> players = new ArrayList<>();
 
+        String query = "SELECT u.* " +
+                "FROM user u " +
+                "JOIN player p ON u.id = p.user_id " +
+                "WHERE p.equipe_id = ?";
+
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setInt(1, equipeId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                players.add(mapRow(rs));
+            }
+        }
+
+        return players;
+    }
 
 
 }

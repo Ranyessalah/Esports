@@ -66,6 +66,7 @@ public class RewardService {
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

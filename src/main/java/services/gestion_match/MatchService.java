@@ -3,6 +3,9 @@ package services.gestion_match;
 
 import entities.Equipe;
 import entities.Matchs;
+import entities.userManagement.User;
+import services.userManagement.RewardService;
+import services.userManagement.UserService;
 import utils.DBConnection;
 
 import java.sql.*;
@@ -145,6 +148,18 @@ public class MatchService {
                 ps.setNull(5, Types.INTEGER);
             }
 
+            //user-management add gems
+            UserService userService = new UserService();
+            List<User> players1= userService.getAllPlayersByEquipes(m.getEquipe1().getId());
+            List<User> players2= userService.getAllPlayersByEquipes(m.getEquipe2().getId());
+            RewardService rewardService = new RewardService();
+            if (m.getScoreEquipe1()>m.getScoreEquipe2()) {
+            players1.stream().forEach(u -> {rewardService.addGems(u.getId(),50);});
+            }else {
+                players2.stream().forEach(u -> {
+                    rewardService.addGems(u.getId(), 50);
+                });
+            }
             ps.setString(6, m.getNomMatch());
 
             // Equipes
