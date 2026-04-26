@@ -1,0 +1,496 @@
+/* ═══════════════════════════════════════════════════
+   stats_client.css  —  Esports Classement UI
+   Dark gaming theme · Violet accent · Clean cards
+═══════════════════════════════════════════════════ */
+
+/* ── Root ── */
+.root-pane {
+    -fx-background-color: #070d1a;
+    -color-bg:        #070d1a;
+    -color-surface:   #0f1829;
+    -color-surface2:  #141f33;
+    -color-border:    rgba(99, 102, 241, 0.18);
+    -color-accent:    #6366f1;
+    -color-accent2:   #8b5cf6;
+    -color-green:     #10b981;
+    -color-red:       #ef4444;
+    -color-text:      #e2e8f0;
+    -color-muted:     #64748b;
+    -color-muted2:    #94a3b8;
+}
+
+.main-content {
+    -fx-background-color: -color-bg;
+    -fx-min-height: 700;
+}
+
+/* ── Navbar ── */
+.navbar {
+    -fx-background-color: -color-surface;
+    -fx-border-color: transparent transparent -color-border transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-min-height: 68;
+    -fx-pref-height: 68;
+    -fx-max-height: 68;
+}
+
+.nav-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI Semibold", "Arial", sans-serif;
+}
+
+.nav-subtitle {
+    -fx-text-fill: -color-muted2;
+    -fx-font-size: 11px;
+}
+
+.nav-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-muted2;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+}
+.nav-link:hover {
+    -fx-background-color: rgba(99,102,241,0.1);
+    -fx-text-fill: white;
+}
+
+.nav-link-active {
+    -fx-background-color: linear-gradient(to right, #4f46e5, #7c3aed);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.45), 12, 0, 0, 3);
+}
+
+.nav-link-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f87171;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+}
+.nav-link-danger:hover {
+    -fx-background-color: rgba(239,68,68,0.1);
+    -fx-text-fill: #ef4444;
+}
+
+.btn-refresh {
+    -fx-background-color: linear-gradient(to right, #10b981, #059669);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 9 20 9 20;
+    -fx-background-radius: 9;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(16,185,129,0.40), 10, 0, 0, 3);
+}
+.btn-refresh:hover {
+    -fx-background-color: linear-gradient(to right, #059669, #047857);
+}
+
+/* ── Body scroll ── */
+.body-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+.body-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.body-content {
+    -fx-background-color: transparent;
+}
+
+/* ── Cards ── */
+.card {
+    -fx-background-color: -color-surface;
+    -fx-background-radius: 16;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 18, 0, 0, 4);
+}
+
+.card-chat {
+    -fx-border-color: rgba(99,102,241,0.30);
+}
+
+/* ── Filter bar ── */
+.input-search {
+    -fx-background-color: -color-surface2;
+    -fx-background-radius: 10;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-text-fill: -color-text;
+    -fx-prompt-text-fill: -color-muted;
+    -fx-font-size: 13px;
+    -fx-padding: 9 14 9 14;
+    -fx-pref-height: 38;
+}
+.input-search:focused {
+    -fx-border-color: -color-accent;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.25), 8, 0, 0, 0);
+}
+
+.combo-filter {
+    -fx-background-color: -color-surface2;
+    -fx-background-radius: 10;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-font-size: 13px;
+    -fx-pref-height: 38;
+}
+.combo-filter .list-cell {
+    -fx-text-fill: -color-text;
+    -fx-background-color: transparent;
+}
+.combo-filter:focused {
+    -fx-border-color: -color-accent;
+}
+
+.btn-reset {
+    -fx-background-color: -color-surface2;
+    -fx-text-fill: -color-muted2;
+    -fx-background-radius: 10;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-font-size: 13px;
+    -fx-padding: 9 18 9 18;
+    -fx-cursor: hand;
+    -fx-pref-height: 38;
+}
+.btn-reset:hover {
+    -fx-background-color: rgba(99,102,241,0.12);
+    -fx-text-fill: white;
+    -fx-border-color: -color-accent;
+}
+
+/* ── Chat header ── */
+.chat-header {
+    -fx-background-color: rgba(99,102,241,0.06);
+    -fx-background-radius: 16 16 0 0;
+}
+
+.chat-avatar-header {
+    -fx-background-color: rgba(99,102,241,0.22);
+    -fx-background-radius: 50;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-max-width: 36;
+    -fx-max-height: 36;
+}
+
+.chat-title {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.chat-subtitle {
+    -fx-text-fill: -color-muted2;
+    -fx-font-size: 11px;
+}
+
+.btn-chat-action {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-text-fill: -color-muted2;
+    -fx-background-radius: 8;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-font-size: 12px;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+}
+.btn-chat-action:hover {
+    -fx-background-color: rgba(99,102,241,0.15);
+    -fx-text-fill: white;
+    -fx-border-color: rgba(99,102,241,0.4);
+}
+
+/* ── Chat divider ── */
+.chat-divider {
+    -fx-background-color: -color-border;
+}
+
+/* ── Chat scroll & messages ── */
+.chat-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.chat-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.chat-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6;
+}
+.chat-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(99,102,241,0.35);
+    -fx-background-radius: 3;
+}
+
+.chat-messages-box {
+    -fx-background-color: rgba(7,13,26,0.6);
+    -fx-min-width: 100;
+}
+
+/* ── Chat bubbles ── */
+.bubble-user {
+    -fx-background-color: linear-gradient(to bottom-right, #4f46e5, #7c3aed);
+    -fx-background-radius: 18 18 4 18;
+    -fx-padding: 10 14 10 14;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.30), 8, 0, 0, 2);
+}
+.bubble-user-text {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+}
+
+.bubble-bot {
+    -fx-background-color: -color-surface2;
+    -fx-background-radius: 18 18 18 4;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 18 18 18 4;
+    -fx-border-width: 1;
+    -fx-padding: 10 14 10 14;
+}
+.bubble-bot-text {
+    -fx-text-fill: -color-text;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+}
+
+.bubble-time {
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 10px;
+}
+
+/* ── Chat avatar ── */
+.chat-avatar {
+    -fx-background-color: rgba(99,102,241,0.20);
+    -fx-background-radius: 50;
+    -fx-border-color: rgba(99,102,241,0.35);
+    -fx-border-radius: 50;
+    -fx-border-width: 1;
+}
+
+/* ── Typing indicator ── */
+.typing-indicator {
+    -fx-background-color: -color-surface2;
+    -fx-background-radius: 14;
+    -fx-padding: 10 16 10 16;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+}
+.typing-dot {
+    -fx-fill: -color-accent;
+}
+
+/* ── Suggestions ── */
+.suggestions-row {
+    -fx-background-color: rgba(99,102,241,0.04);
+}
+
+.suggestion-chip {
+    -fx-background-color: rgba(99,102,241,0.12);
+    -fx-text-fill: #a5b4fc;
+    -fx-background-radius: 999;
+    -fx-border-color: rgba(99,102,241,0.28);
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-font-size: 11.5px;
+    -fx-padding: 5 12 5 12;
+    -fx-cursor: hand;
+}
+.suggestion-chip:hover {
+    -fx-background-color: rgba(99,102,241,0.28);
+    -fx-text-fill: white;
+    -fx-border-color: -color-accent;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.25), 6, 0, 0, 0);
+}
+
+/* ── Chat input ── */
+.chat-input-row {
+    -fx-background-color: rgba(15,24,42,0.8);
+    -fx-background-radius: 0 0 16 16;
+}
+
+.chat-input {
+    -fx-background-color: -color-surface2;
+    -fx-background-radius: 10;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-text-fill: -color-text;
+    -fx-prompt-text-fill: -color-muted;
+    -fx-font-size: 13px;
+    -fx-padding: 10 14 10 14;
+    -fx-pref-height: 40;
+}
+.chat-input:focused {
+    -fx-border-color: -color-accent;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.22), 8, 0, 0, 0);
+}
+
+.btn-send {
+    -fx-background-color: linear-gradient(to right, #4f46e5, #7c3aed);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10 22 10 22;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.40), 10, 0, 0, 3);
+}
+.btn-send:hover {
+    -fx-background-color: linear-gradient(to right, #4338ca, #6d28d9);
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.60), 14, 0, 0, 4);
+}
+
+/* ── Table card header ── */
+.table-header-row {
+    -fx-background-color: rgba(99,102,241,0.05);
+    -fx-background-radius: 16 16 0 0;
+}
+
+.table-card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.live-badge {
+    -fx-text-fill: #34d399;
+    -fx-font-size: 11.5px;
+}
+
+/* ── TableView ── */
+.stats-table {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-table-cell-border-color: rgba(255,255,255,0.04);
+    -fx-padding: 0;
+    -fx-background-radius: 0 0 16 16;
+}
+
+.stats-table .column-header-background {
+    -fx-background-color: rgba(99,102,241,0.08);
+    -fx-background-radius: 0;
+    -fx-border-color: transparent transparent rgba(99,102,241,0.2) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.stats-table .column-header {
+    -fx-background-color: transparent;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.stats-table .column-header .label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER;
+    -fx-padding: 0 8 0 8;
+}
+
+.stats-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.04) transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-pref-height: 52;
+}
+
+.stats-table .table-row-cell:odd {
+    -fx-background-color: rgba(255,255,255,0.015);
+}
+
+.stats-table .table-row-cell:hover {
+    -fx-background-color: rgba(99,102,241,0.10);
+    -fx-cursor: hand;
+}
+
+.stats-table .table-row-cell:selected {
+    -fx-background-color: rgba(99,102,241,0.18);
+}
+
+.stats-table .table-cell {
+    -fx-text-fill: -color-text;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER;
+    -fx-padding: 0 8 0 8;
+}
+
+/* Rank badge */
+.table-rank-badge {
+    -fx-background-color: rgba(99,102,241,0.15);
+    -fx-text-fill: #a5b4fc;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(99,102,241,0.30);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 4 10 4 10;
+}
+
+/* Team text */
+.table-team-text {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* Points pill */
+.table-pts-pill {
+    -fx-background-color: linear-gradient(to right, #4f46e5, #7c3aed);
+    -fx-text-fill: white;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999;
+    -fx-padding: 4 12 4 12;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.30), 6, 0, 0, 1);
+}
+
+/* Placeholder */
+.table-placeholder {
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 14px;
+}
+
+/* Scrollbar global */
+.scroll-bar:vertical {
+    -fx-pref-width: 8;
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(99,102,241,0.28);
+    -fx-background-radius: 4;
+}
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+}
