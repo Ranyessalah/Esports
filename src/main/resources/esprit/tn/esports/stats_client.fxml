@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.Statsclientcontroller"
+            stylesheets="@stats.css"
+            styleClass="root-pane">
+
+    <center>
+        <VBox spacing="0" styleClass="main-content">
+
+            <!-- ══════════ TOP NAVBAR ══════════ -->
+            <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="0">
+                <padding><Insets top="0" right="24" bottom="0" left="24"/></padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="🏆" style="-fx-font-size: 22px;"/>
+                    <VBox spacing="1">
+                        <Label text="Classement des équipes" styleClass="nav-title"/>
+                        <Label fx:id="totalLabel" text="Total équipes : 0" styleClass="nav-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="6" alignment="CENTER">
+                    <Button text="Matchs"         styleClass="nav-link"        onAction="#goMatchs"/>
+                    <Button text="Équipes"        styleClass="nav-link"        onAction="#goEquipes"/>
+                    <Button text="Statistiques"   styleClass="nav-link-active" onAction="#goStats"/>
+                    <Button text="🚪 Déconnexion" styleClass="nav-link-danger" onAction="#logout"/>
+                    <Button text="↻ Actualiser"   styleClass="btn-refresh"     onAction="#refresh"/>
+                </HBox>
+            </HBox>
+
+            <!-- ══════════ BODY ══════════ -->
+            <ScrollPane fitToWidth="true" styleClass="body-scroll" VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox spacing="20" styleClass="body-content">
+                        <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+                        <!-- FILTER BAR -->
+                        <HBox spacing="12" alignment="CENTER_LEFT" styleClass="card">
+                            <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+
+                            <TextField fx:id="searchField"
+                                       promptText="🔎  Rechercher une équipe..."
+                                       onKeyReleased="#filterData"
+                                       HBox.hgrow="ALWAYS"
+                                       styleClass="input-search"/>
+
+                            <ComboBox fx:id="gameFilter"
+                                      onAction="#filterData"
+                                      prefWidth="190"
+                                      styleClass="combo-filter"/>
+
+                            <ComboBox fx:id="sortFilter"
+                                      onAction="#filterData"
+                                      prefWidth="210"
+                                      styleClass="combo-filter"/>
+
+                            <Button text="Reset" onAction="#resetFilters" styleClass="btn-reset"/>
+                        </HBox>
+
+                        <!-- ══════════ CHATBOT CARD ══════════ -->
+                        <VBox spacing="0" styleClass="card card-chat">
+
+                            <!-- Chat Header -->
+                            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="chat-header">
+                                <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+                                <StackPane styleClass="chat-avatar-header">
+                                    <Label text="🤖" style="-fx-font-size: 15px;"/>
+                                </StackPane>
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="Assistant Classement" styleClass="chat-title"/>
+                                    <Label text="Posez une question sur le classement" styleClass="chat-subtitle"/>
+                                </VBox>
+                                <HBox spacing="8">
+                                    <Button text="❓ Aide"  onAction="#showChatbotHelp" styleClass="btn-chat-action"/>
+                                    <Button text="🗑 Vider" onAction="#clearChatbot"    styleClass="btn-chat-action"/>
+                                </HBox>
+                            </HBox>
+
+                            <Region styleClass="chat-divider" minHeight="1" maxHeight="1"/>
+
+                            <!-- Messages ScrollPane -->
+                            <ScrollPane fx:id="chatScrollPane"
+                                        fitToWidth="true"
+                                        prefHeight="280"
+                                        minHeight="200"
+                                        styleClass="chat-scroll">
+                                <content>
+                                    <VBox fx:id="chatMessagesBox"
+                                          spacing="8"
+                                          styleClass="chat-messages-box">
+                                        <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+
+                            <Region styleClass="chat-divider" minHeight="1" maxHeight="1"/>
+
+                            <!-- Suggestions chips -->
+                            <HBox fx:id="suggestionsBox"
+                                  spacing="8"
+                                  alignment="CENTER_LEFT"
+                                  styleClass="suggestions-row">
+                                <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+                            </HBox>
+
+                            <Region styleClass="chat-divider" minHeight="1" maxHeight="1"/>
+
+                            <!-- Input -->
+                            <HBox spacing="10" alignment="CENTER" styleClass="chat-input-row">
+                                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                                <TextField fx:id="chatInput"
+                                           HBox.hgrow="ALWAYS"
+                                           promptText="Posez votre question… (ex: top 3, points ESS, meilleure attaque)"
+                                           onAction="#askChatbot"
+                                           styleClass="chat-input"/>
+                                <Button text="Envoyer ➤" onAction="#askChatbot" styleClass="btn-send"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- ══════════ TABLE CARD ══════════ -->
+                        <VBox spacing="0" styleClass="card" VBox.vgrow="ALWAYS">
+
+                            <HBox alignment="CENTER_LEFT" styleClass="table-header-row">
+                                <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+                                <HBox alignment="CENTER_LEFT" spacing="8" HBox.hgrow="ALWAYS">
+                                    <Label text="📊" style="-fx-font-size:16px;"/>
+                                    <Label text="Tableau officiel" styleClass="table-card-title"/>
+                                </HBox>
+                                <Label text="● Mis à jour en temps réel" styleClass="live-badge"/>
+                            </HBox>
+
+                            <Region styleClass="chat-divider" minHeight="1" maxHeight="1"/>
+
+                            <TableView fx:id="tableView"
+                                       VBox.vgrow="ALWAYS"
+                                       prefHeight="400"
+                                       styleClass="stats-table">
+                                <columns>
+                                    <TableColumn fx:id="rankCol"   text="Pos"    prefWidth="80"/>
+                                    <TableColumn fx:id="teamCol"   text="Équipe" prefWidth="210"/>
+                                    <TableColumn fx:id="gameCol"   text="Jeu"    prefWidth="150"/>
+                                    <TableColumn fx:id="playedCol" text="J"      prefWidth="55"/>
+                                    <TableColumn fx:id="winCol"    text="V"      prefWidth="55"/>
+                                    <TableColumn fx:id="drawCol"   text="N"      prefWidth="55"/>
+                                    <TableColumn fx:id="lossCol"   text="D"      prefWidth="55"/>
+                                    <TableColumn fx:id="bpCol"     text="BP"     prefWidth="65"/>
+                                    <TableColumn fx:id="bcCol"     text="BC"     prefWidth="65"/>
+                                    <TableColumn fx:id="diffCol"   text="Diff"   prefWidth="75"/>
+                                    <TableColumn fx:id="ptsCol"    text="Points" prefWidth="100"/>
+                                </columns>
+                                <placeholder>
+                                    <Label text="Aucune équipe trouvée" styleClass="table-placeholder"/>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+        </VBox>
+    </center>
+
+</BorderPane>
