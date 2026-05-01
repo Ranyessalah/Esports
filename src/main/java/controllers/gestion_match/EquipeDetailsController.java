@@ -1,9 +1,9 @@
 package controllers.gestion_match;
 
-import entities.Coach;
+import entities.userManagement.Coach;
 import entities.Equipe;
-import entities.Player;
-import services.PlayerService;
+import entities.userManagement.Player;
+import services.userManagement.PlayerService;
 import utils.QRCodeDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

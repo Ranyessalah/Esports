@@ -2,6 +2,7 @@ package services.userManagement;
 
 import entities.userManagement.Coach;
 import entities.userManagement.User;
+import utils.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;

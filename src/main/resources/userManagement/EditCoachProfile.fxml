@@ -7,7 +7,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.userManagement.EditCoachProfileController"
-      stylesheets="@/userManagement/clutchx-theme.cssutchx-theme.css"
+      stylesheets="@/userManagement/clutchx-theme.css"
       styleClass="dialog-root"
       spacing="0" minWidth="480" maxWidth="520">
 

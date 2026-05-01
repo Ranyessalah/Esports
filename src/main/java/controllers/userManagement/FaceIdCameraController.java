@@ -81,7 +81,8 @@ public class FaceIdCameraController implements Initializable {
     // ── Camera ─────────────────────────────────────────────────────────────
 
     private void startCamera() {
-        camera   = new VideoCapture(0);
+        //camera   = new VideoCapture(0);
+        camera = new VideoCapture(0 + org.opencv.videoio.Videoio.CAP_DSHOW);
         executor = Executors.newSingleThreadScheduledExecutor();
 
         if (!camera.isOpened()) {
@@ -216,7 +217,7 @@ public class FaceIdCameraController implements Initializable {
             statusLabel.setText("🔍  Vérification…");
             actionButton.setDisable(true);
         });
-
+        stopCamera();
         new Thread(() -> {
             try {
                 int result = FaceIdService.getInstance()

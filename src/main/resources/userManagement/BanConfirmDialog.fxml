@@ -5,8 +5,8 @@
 <?import javafx.geometry.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.BanConfirmDialogController"
-      stylesheets="@/userManagement/clutchx-theme.cssutchx-theme.css"
+      fx:controller="controllers.userManagement.BanConfirmDialogController"
+      stylesheets="@/userManagement/clutchx-theme.css"
       styleClass="dialog-root, ban-dialog-root"
       spacing="0" minWidth="400" maxWidth="440">
 

@@ -1,6 +1,9 @@
 package entities;
 
 
+import entities.userManagement.Coach;
+import entities.userManagement.Player;
+
 import java.util.List;
 
 public class Equipe {

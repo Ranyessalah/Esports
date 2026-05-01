@@ -1,9 +1,9 @@
 package utils;
 
 import entities.Equipe;
-import entities.Player;
+import entities.userManagement.Player;
 import services.gestion_match.EquipeService;
-import services.PlayerService;
+import services.userManagement.PlayerService;
 import fi.iki.elonen.NanoHTTPD;
 
 import java.io.IOException;

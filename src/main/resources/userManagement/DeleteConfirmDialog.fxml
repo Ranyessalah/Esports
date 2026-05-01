@@ -5,8 +5,8 @@
 <?import javafx.geometry.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.DeleteConfirmDialogController"
-      stylesheets="@/userManagement/clutchx-theme.cssutchx-theme.css"
+      fx:controller="controllers.userManagement.DeleteConfirmDialogController"
+      stylesheets="@/userManagement/clutchx-theme.css"
       styleClass="dialog-root, delete-dialog-root"
       spacing="0" minWidth="420" maxWidth="460"
       fx:id="dialogRoot">

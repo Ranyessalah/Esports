@@ -164,6 +164,7 @@ public class CoachSignupController implements Initializable {
                 return;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             showGlobalError("❌  Erreur lors de la vérification : " + e.getMessage());
             return;
         }
@@ -255,6 +256,7 @@ public class CoachSignupController implements Initializable {
             try {
                 newUser = insertGoogleCoach(newUser);
             } catch (Exception e) {
+                e.printStackTrace();
                 showGlobalError("❌  " + e.getMessage());
                 return;
             }
@@ -266,9 +268,11 @@ public class CoachSignupController implements Initializable {
             try {
                 newUser = userService.insertOne(newUser);
             } catch (SQLException e) {
+                e.printStackTrace();
                 showGlobalError("❌  Impossible de créer le compte : " + e.getMessage());
                 return;
             } catch (IllegalArgumentException e) {
+                e.printStackTrace();
                 showGlobalError("❌  " + e.getMessage());
                 return;
             }
@@ -287,6 +291,7 @@ public class CoachSignupController implements Initializable {
                 int createdUserId = newUser.getId();
                 openFaceIdEnrollment(createdUserId);
         } catch (Exception e) {
+            e.printStackTrace();
             showGlobalError("❌  Profil coach non créé : " + e.getMessage());
         }
 
@@ -329,6 +334,7 @@ public class CoachSignupController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
+            e.printStackTrace();
             showGlobalError("❌  " + e.getMessage());
             onBackToLogin();
         }
@@ -401,7 +407,7 @@ public class CoachSignupController implements Initializable {
                         "AppleWebKit/537.36 (KHTML, like Gecko) " +
                         "Chrome/120.0.0.0 Safari/537.36"
         );
-        captchaWebView.getEngine().load("http://localhost:8766/captcha");
+        captchaWebView.getEngine().load("http://localhost:8772/captcha");
 
         captchaWebView.getEngine().documentProperty().addListener((obs, oldDoc, doc) -> {
             if (doc != null) startHeightPoller(captchaWebView, container, popupStage);
@@ -435,9 +441,10 @@ public class CoachSignupController implements Initializable {
         for (int i = 0; i < maxRetries; i++) {
             try {
                 captchaServer = com.sun.net.httpserver.HttpServer.create(
-                        new java.net.InetSocketAddress("localhost", 8766), 0);
+                        new java.net.InetSocketAddress("localhost", 8772), 0);
                 break;
             } catch (java.net.BindException e) {
+                e.printStackTrace();
                 if (i == maxRetries - 1) throw e;
                 Thread.sleep(300);
             }
@@ -515,6 +522,7 @@ public class CoachSignupController implements Initializable {
                             }
                         }
                     } catch (Exception ignored) {
+                        ignored.printStackTrace();
                     }
                 })
         );
@@ -526,6 +534,7 @@ public class CoachSignupController implements Initializable {
         try {
             return (String) captchaWebView.getEngine().executeScript("getCaptchaToken()");
         } catch (Exception e) {
+            e.printStackTrace();
             return "";
         }
     }

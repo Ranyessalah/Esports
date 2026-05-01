@@ -12,7 +12,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
+import org.opencv.videoio.Videoio;
 /**
  * Face ID service using OpenCV Haar cascade for detection
  * and histogram-based comparison for recognition.
@@ -186,7 +186,9 @@ public class FaceIdService {
         return CompletableFuture.supplyAsync(() -> {
             if (!opencvLoaded) return false;
 
-            VideoCapture cap = new VideoCapture(0);
+            //VideoCapture cap = new VideoCapture(0);
+            VideoCapture cap = new VideoCapture(0 + Videoio.CAP_DSHOW);
+
             if (!cap.isOpened()) throw new RuntimeException("Impossible d'ouvrir la webcam.");
 
             try {
@@ -234,7 +236,9 @@ public class FaceIdService {
         return CompletableFuture.supplyAsync(() -> {
             if (!opencvLoaded) return -1;
 
-            VideoCapture cap = new VideoCapture(0);
+            //VideoCapture cap = new VideoCapture(0);
+            VideoCapture cap = new VideoCapture(0 + Videoio.CAP_DSHOW);
+
             if (!cap.isOpened()) throw new RuntimeException("Impossible d'ouvrir la webcam.");
 
             try {

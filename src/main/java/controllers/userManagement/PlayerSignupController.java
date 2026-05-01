@@ -359,7 +359,7 @@ public class PlayerSignupController implements Initializable {
                         "AppleWebKit/537.36 (KHTML, like Gecko) " +
                         "Chrome/120.0.0.0 Safari/537.36"
         );
-        captchaWebView.getEngine().load("http://localhost:8767/captcha");
+        captchaWebView.getEngine().load("http://localhost:8771/captcha");
 
         captchaWebView.getEngine().documentProperty().addListener((obs, oldDoc, doc) -> {
             if (doc != null) startHeightPoller(captchaWebView, container, popupStage);
@@ -393,7 +393,7 @@ public class PlayerSignupController implements Initializable {
         for (int i = 0; i < maxRetries; i++) {
             try {
                 captchaServer = com.sun.net.httpserver.HttpServer.create(
-                        new java.net.InetSocketAddress("localhost", 8767), 0);
+                        new java.net.InetSocketAddress("localhost", 8771), 0);
                 break;
             } catch (java.net.BindException e) {
                 if (i == maxRetries - 1) throw e;

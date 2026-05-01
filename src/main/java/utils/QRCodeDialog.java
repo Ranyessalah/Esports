@@ -2,9 +2,9 @@ package utils;
 
 import controllers.gestion_match.EquipeDetailsController;
 import entities.Equipe;
-import entities.Player;
+import entities.userManagement.Player;
 import services.gestion_match.EquipeService;
-import services.PlayerService;
+import services.userManagement.PlayerService;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;

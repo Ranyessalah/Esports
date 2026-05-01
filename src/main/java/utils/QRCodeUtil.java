@@ -8,7 +8,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import entities.Equipe;
-import entities.Player;
+import entities.userManagement.Player;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 

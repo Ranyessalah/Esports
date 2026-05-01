@@ -63,7 +63,8 @@ public class LoginController implements Initializable {
         // Disable button to prevent double-click
         setGoogleButtonsDisabled(true);
         showGlobalInfo("⏳  Ouverture de Google dans votre navigateur…");
-
+        stopCaptchaServer();   // free port 8768 if CAPTCHA popup was used
+        stopGoogleAuth();
         googleAuthService = new GoogleAuthService();
 
         googleAuthService.authenticate()
@@ -104,7 +105,10 @@ public class LoginController implements Initializable {
         try {
             // Attempt login by email (Google users have no password stored)
             user = userService.findByEmail(googleUser.email());
-        } catch (Exception ignored) {}
+        } catch (Exception ee) {
+            ee.printStackTrace();
+
+        }
 
         if (user == null) {
             // Auto-register with Google profile data
@@ -116,9 +120,13 @@ public class LoginController implements Initializable {
                         googleUser.googleId()
                 );
             } catch (IllegalStateException e) {
+                e.printStackTrace();
+
                 showGlobalError("Compte bloqué.");
                 return;
             } catch (Exception e) {
+                e.printStackTrace();
+
                 showGlobalError("❌  Impossible de créer le compte : " + e.getMessage());
                 return;
             }
@@ -174,7 +182,7 @@ public class LoginController implements Initializable {
                         "AppleWebKit/537.36 (KHTML, like Gecko) " +
                         "Chrome/120.0.0.0 Safari/537.36"
         );
-        captchaWebView.getEngine().load("http://localhost:8768/captcha");
+        captchaWebView.getEngine().load("http://localhost:8770/captcha");
 
         captchaWebView.getEngine().documentProperty().addListener((obs, oldDoc, doc) -> {
             if (doc != null) startHeightPoller(captchaWebView, container, popupStage);
@@ -208,9 +216,11 @@ public class LoginController implements Initializable {
         for (int i = 0; i < maxRetries; i++) {
             try {
                 captchaServer = com.sun.net.httpserver.HttpServer.create(
-                        new java.net.InetSocketAddress("localhost", 8768), 0);
+                        new java.net.InetSocketAddress("localhost", 8770), 0);
                 break;
             } catch (java.net.BindException e) {
+                e.printStackTrace();
+
                 if (i == maxRetries - 1) throw e;
                 Thread.sleep(300);
             }
@@ -281,7 +291,10 @@ public class LoginController implements Initializable {
                                 javafx.application.Platform.runLater(stage::close);
                             }
                         }
-                    } catch (Exception ignored) {}
+                    } catch (Exception ee) {
+                        ee.printStackTrace();
+
+                    }
                 })
         );
         heightPoller.setCycleCount(javafx.animation.Animation.INDEFINITE);
@@ -291,7 +304,9 @@ public class LoginController implements Initializable {
     private String getCaptchaToken() {
         try {
             return (String) captchaWebView.getEngine().executeScript("getCaptchaToken()");
-        } catch (Exception e) { return ""; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ""; }
     }
 
     private boolean verifyCaptcha(String token) {
@@ -310,7 +325,9 @@ public class LoginController implements Initializable {
             String line;
             while ((line = reader.readLine()) != null) response.append(line);
             return response.toString().contains("\"success\": true");
-        } catch (Exception e) { e.printStackTrace(); return false; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; }
     }
 
     // ─────────────────────────── LOGIN ────────────────────────────────────
@@ -350,9 +367,13 @@ public class LoginController implements Initializable {
         try {
             user = authenticate(email, password);
         } catch (IllegalStateException e) {
+            e.printStackTrace();
+
             showGlobalError("Compte bloqué.");
             return;
         } catch (Exception e) {
+            e.printStackTrace();
+
             user = null;
         }
 
@@ -524,6 +545,8 @@ public class LoginController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
+            e.printStackTrace();
+
             showGlobalError("❌  Impossible d'ouvrir Face ID : " + e.getMessage());
         }
     }
@@ -555,6 +578,8 @@ public class LoginController implements Initializable {
                         prefs.saveSession(user, true);
                         routeByRole(user);
                     } catch (Exception e) {
+                        e.printStackTrace();
+
                         showGlobalError("❌  Erreur : " + e.getMessage());
                     }
                 });

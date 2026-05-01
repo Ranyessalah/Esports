@@ -1,11 +1,9 @@
 package mains;
 
-import controllers.AdminDashboardController;
-import controllers.MainLayoutController;
 import controllers.gestion_match.ClientEquipeController;
 import controllers.gestion_match.MatchController;
-import entities.Roles;
-import entities.User;
+import entities.userManagement.Roles;
+import entities.userManagement.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -51,9 +49,9 @@ public class MainFXNermine extends Application {
 
     private void loadLogin(Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userManagement/Login.fxml"));
             Scene scene = new Scene(loader.load(), 1280, 760);
-            scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/userManagement/clutchx-theme.css").toExternalForm());
             stage.setTitle("ClutchX");
             stage.setScene(scene);
         } catch (IOException e) {

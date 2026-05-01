@@ -1,9 +1,9 @@
 package controllers.gestion_match;
 
 
-import entities.Coach;
+import entities.userManagement.Coach;
 import entities.Equipe;
-import entities.Player;
+import entities.userManagement.Player;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,8 +15,8 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import services.CoachService;
-import services.PlayerService;
+import services.userManagement.CoachService;
+import services.userManagement.PlayerService;
 import services.gestion_match.EquipeService;
 
 import java.io.File;

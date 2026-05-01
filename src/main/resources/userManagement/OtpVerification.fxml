@@ -4,7 +4,7 @@
 <?import javafx.geometry.*?>
 
 <ScrollPane xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.OtpVerificationController"
+            fx:controller="controllers.userManagement.OtpVerificationController"
             fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
             styleClass="signup-scroll">
     <VBox styleClass="signup-bg-overlay" alignment="CENTER" minHeight="600" spacing="0">

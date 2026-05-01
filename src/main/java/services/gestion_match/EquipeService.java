@@ -1,10 +1,10 @@
 package services.gestion_match;
 
 
-import entities.Coach;
+import entities.userManagement.Coach;
 import entities.Equipe;
-import entities.Player;
-import entities.User;
+import entities.userManagement.Player;
+import entities.userManagement.User;
 import utils.DBConnection;
 
 import java.sql.*;
