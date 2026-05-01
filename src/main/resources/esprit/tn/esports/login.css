@@ -1,0 +1,92 @@
+/* login.css */
+
+.login-card {
+    -fx-background-color: #1a1727;
+    -fx-background-radius: 15;
+    -fx-border-color: #2a2542;
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+}
+
+.logo-container {
+    -fx-background-color: #7d5fff;
+    -fx-background-radius: 25;
+}
+
+.social-btn {
+    -fx-background-color: #2b2838;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 13px;
+    -fx-padding: 8;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.social-btn:hover {
+    -fx-background-color: #3f3a52;
+}
+
+.input-field {
+    -fx-background-color: #2b2838;
+    -fx-text-fill: #e0e0e0;
+    -fx-border-color: #3f3a52;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+}
+
+.input-field:focused {
+    -fx-border-color: #7d5fff;
+}
+
+.primary-btn {
+    -fx-background-color: #7d5fff;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.primary-btn:hover {
+    -fx-background-color: #6146e5;
+}
+
+.secondary-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e0e0e0;
+    -fx-border-color: #3f3a52;
+    -fx-border-radius: 8;
+    -fx-font-size: 12px;
+    -fx-padding: 8 15 8 15;
+    -fx-cursor: hand;
+}
+
+.secondary-btn:hover {
+    -fx-background-color: #2b2838;
+}
+
+.recaptcha-container {
+    -fx-background-color: #2b2838;
+    -fx-border-color: #3f3a52;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.remember-me .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #3f3a52;
+    -fx-border-radius: 3;
+}
+
+.remember-me:selected .box {
+    -fx-background-color: #7d5fff;
+    -fx-border-color: #7d5fff;
+}
+
+.forgot-password:hover {
+    -fx-underline: true;
+    -fx-cursor: hand;
+}

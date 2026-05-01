@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.MatchDetailsController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <!-- TOPBAR -->
+    <top>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="20">
+            <Button text="⬅ Retour" onAction="#goBack" styleClass="btn-secondary"/>
+            <Label text="🏆 Détails du match" styleClass="page-title"/>
+        </HBox>
+    </top>
+
+    <!-- CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane-custom">
+            <content>
+                <VBox spacing="35" styleClass="details-wrapper">
+                    <padding>
+                        <Insets top="30" right="40" bottom="40" left="40"/>
+                    </padding>
+
+                    <!-- HERO SCOREBOARD CARD -->
+                    <VBox styleClass="scoreboard-card">
+                        <padding>
+                            <Insets top="40" bottom="40" left="20" right="20"/>
+                        </padding>
+                        
+                        <Label fx:id="matchTitle" styleClass="big-title" style="-fx-font-size: 32px; -fx-text-fill: white; -fx-padding: 0 0 20 0;" alignment="CENTER" maxWidth="Infinity"/>
+
+                        <HBox alignment="CENTER" spacing="80">
+                            <!-- Team 1 -->
+                            <VBox alignment="CENTER" spacing="15">
+                                <ImageView fx:id="team1Logo" fitWidth="160" fitHeight="160" preserveRatio="true"/>
+                                <Label fx:id="team1Name" styleClass="team-name" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                            </VBox>
+
+                            <!-- VS & SCORE -->
+                            <VBox alignment="CENTER" spacing="10">
+                                <Label text="VS" styleClass="vs-label" style="-fx-font-size: 48px; -fx-opacity: 0.3;"/>
+                                <Label fx:id="scoreLabel" styleClass="score-value" style="-fx-font-size: 72px; -fx-text-fill: white; -fx-font-weight: 900;"/>
+                                <Label fx:id="statusLabel" styleClass="badge" style="-fx-font-size: 14px; -fx-padding: 6 15;"/>
+                            </VBox>
+
+                            <!-- Team 2 -->
+                            <VBox alignment="CENTER" spacing="15">
+                                <ImageView fx:id="team2Logo" fitWidth="160" fitHeight="160" preserveRatio="true"/>
+                                <Label fx:id="team2Name" styleClass="team-name" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- INFO GRID -->
+                    <HBox spacing="25">
+                        <VBox styleClass="stat-pill" HBox.hgrow="ALWAYS">
+                            <Label text="PLANIFICATION" styleClass="stat-title"/>
+                            <VBox spacing="5" style="-fx-padding: 5 0 0 0;">
+                                <Label fx:id="dateMatchLabel" styleClass="stat-value" style="-fx-font-size: 18px;"/>
+                                <Label fx:id="dateFinLabel" styleClass="stat-value" style="-fx-font-size: 18px; -fx-opacity: 0.6;"/>
+                            </VBox>
+                        </VBox>
+
+                        <VBox styleClass="stat-pill" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+                            <Label text="INFORMATIONS" styleClass="stat-title"/>
+                            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                                <Label text="E-sport Match" styleClass="badge" style="-fx-background-color: #7c3aed;"/>
+                                <Label text="Premium View" styleClass="badge" style="-fx-background-color: #3b82f6;"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
