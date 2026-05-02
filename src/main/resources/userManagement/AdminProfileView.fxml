@@ -5,7 +5,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.userManagement.AdminProfileViewController"
-            styleClass="profile-screen-root" stylesheets="@/userManagement/admin-theme.css">
+            styleClass="profile-screen-root" stylesheets="/userManagement/admin-theme.css">
 
     <!-- ── Top bar with back button ── -->
     <top>

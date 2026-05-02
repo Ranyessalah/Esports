@@ -113,7 +113,7 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>
-                        mains.MainFXNermine
+                        mains.MainFX
                     </mainClass>
                     <options>
                         <option>--add-modules</option>

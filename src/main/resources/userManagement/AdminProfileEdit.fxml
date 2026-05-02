@@ -4,8 +4,8 @@
 <?import javafx.geometry.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.AdminProfileEditController"
-      styleClass="edit-root" spacing="0" stylesheets="admin-theme.css">
+      fx:controller="controllers.userManagement.AdminProfileEditController"
+      styleClass="edit-root" spacing="0" stylesheets="/userManagement/admin-theme.css">
 
     <!-- Header -->
     <HBox styleClass="edit-header" alignment="CENTER_LEFT" spacing="14">

@@ -68,8 +68,8 @@ public class MainFXNermine extends Application {
             //ctrl.setAdminEmail(user.getEmail());
 
             Scene scene = new Scene(root, 1280, 760);
-            scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("/admin-theme.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/userManagement/clutchx-theme.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/userManagement/admin-theme.css").toExternalForm());
             stage.setTitle("ClutchX — Backoffice Admin");
             stage.setScene(scene);
         } catch (IOException e) {
@@ -86,7 +86,7 @@ public class MainFXNermine extends Application {
             //ctrl.setUserEmail(user.getEmail());
 
             Scene scene = new Scene(root, 1280, 760);
-            scene.getStylesheets().add(getClass().getResource("/clutchx-theme.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/userManagement/clutchx-theme.css").toExternalForm());
             stage.setTitle("ClutchX — Dashboard");
             stage.setScene(scene);
         } catch (IOException e) {

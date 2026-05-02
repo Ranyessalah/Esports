@@ -80,8 +80,8 @@ public class EditCoachProfileController implements Initializable {
             if (!is && !confirmPasswordField.getText().isEmpty()) validateConfirm();
         });
 
-        paysCombo.valueProperty().addListener((obs, o, n) -> { if (n != null) clearError(null, paysError); });
-        specialiteCombo.valueProperty().addListener((obs, o, n) -> { if (n != null) clearError(null, specialiteError); });
+        //paysCombo.valueProperty().addListener((obs, o, n) -> { if (!n.isEmpty()) clearError(null, paysError); });
+        //specialiteCombo.valueProperty().addListener((obs, o, n) -> { if (!n.isEmpty()) clearError(null, specialiteError); });
     }
 
     public void setData(User user, Coach coach) {
