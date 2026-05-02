@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.esports.controller.MatchController"
+            stylesheets="@admin.css"
+            styleClass="root">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox spacing="18" styleClass="sidebar" prefWidth="220">
+            <padding>
+                <Insets top="24" right="18" bottom="24" left="18"/>
+            </padding>
+
+            <Label text="E-Sports Admin" styleClass="logo"/>
+
+            <VBox spacing="10">
+                <Button text="Dashboard" styleClass="menu-btn" onAction="#goDashboard" maxWidth="1.7976931348623157E308"/>
+                <Button text="Equipes" styleClass="menu-btn" onAction="#goEquipes" maxWidth="1.7976931348623157E308"/>
+                <Button text="Matchs" styleClass="menu-btn active" maxWidth="1.7976931348623157E308"
+                        style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 12; -fx-text-fill: white;"/>
+
+                <Button text="🏆 Statistiques"
+                        styleClass="menu-btn"
+                        onAction="#goStats"
+                        maxWidth="1.7976931348623157E308"
+                />
+                
+                <!-- Spacer for visual separation -->
+                <Region prefHeight="10.0" />
+                <Button text="🚪 Déconnexion" 
+                        styleClass="menu-btn" 
+                        onAction="#logout"
+                        maxWidth="1.7976931348623157E308"
+                        style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <VBox spacing="8" styleClass="sidebar-footer-card">
+                <Label text="Tip" styleClass="tip-title"/>
+                <Label text="Ajoutez, modifiez et mettez à jour les scores des matchs facilement." wrapText="true" styleClass="tip-text"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- MAIN -->
+    <center>
+        <VBox fx:id="mainContent" spacing="18" styleClass="main-content">
+            <padding>
+                <Insets top="22" right="22" bottom="22" left="22"/>
+            </padding>
+
+            <!-- HEADER -->
+            <VBox spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Nos Matchs" styleClass="page-title"/>
+                        <Label text="Gérez vos affiches, consultez les scores et organisez vos matchs professionnellement." styleClass="page-subtitle"/>
+                    </VBox>
+
+                    <HBox alignment="CENTER_RIGHT" spacing="15">
+                        <Button fx:id="notifButton" text="🔔 0" style="-fx-background-color: #334155; -fx-text-fill: #cbd5e1; -fx-font-size: 14px; -fx-background-radius: 8px;" onAction="#openNotifications"/>
+                        <Button text="+ Ajouter Match"
+                                onAction="#openAddModal"
+                                styleClass="btn-success-lg"/>
+                    </HBox>
+                </HBox>
+            </VBox>
+
+            <!-- TOPBAR -->
+            <!-- TOPBAR corrigé same style -->
+
+            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="topbar-box">
+
+                <TextField fx:id="searchField"
+                           promptText="Rechercher un match, une équipe..."
+                           onKeyReleased="#search"
+                           HBox.hgrow="ALWAYS"
+                           styleClass="search-field"/>
+
+                <!-- FILTRE STATUT -->
+                <ComboBox fx:id="statusFilter"
+                          onAction="#search"
+                          prefWidth="220"
+                          prefHeight="42"
+                          promptText="Filtrer statut"
+                          visibleRowCount="4"
+                          styleClass="form-combo"/>
+
+                <Button text="Actualiser"
+                        onAction="#refresh"
+                        styleClass="btn-secondary"/>
+
+                <Label fx:id="countLabel"
+                       text="0 matchs"
+                       styleClass="count-badge"/>
+
+            </HBox>
+            <!-- SCROLL CONTENT -->
+            <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane-custom" VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox fx:id="matchContainer"
+                          spacing="14"
+                          styleClass="cards"/>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>
