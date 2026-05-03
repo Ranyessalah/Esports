@@ -1,7 +1,7 @@
 package mains;
 
-import controllers.gestion_match.ClientEquipeController;
-import controllers.gestion_match.MatchController;
+import controllers.matchManagement.ClientEquipeController;
+import controllers.matchManagement.MatchController;
 import entities.userManagement.Roles;
 import entities.userManagement.User;
 import javafx.application.Application;
@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utils.PreferencesRepository;
-import utils.TeamWebServer;
 
 import java.io.IOException;
 
@@ -61,7 +60,7 @@ public class MainFXNermine extends Application {
 
     private void loadAdmin(User user, Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gestion_match/matchIndex.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/matchIndex.fxml"));
             Parent root = loader.load();
 
             MatchController ctrl = loader.getController();
@@ -79,7 +78,7 @@ public class MainFXNermine extends Application {
 
     private void loadMain(User user, Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gestion_match/equipeIndex_client.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/equipeIndex_client.fxml"));
             Parent root = loader.load();
 
             ClientEquipeController ctrl = loader.getController();

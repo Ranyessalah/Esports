@@ -175,8 +175,8 @@ public class EditCoachProfileController implements Initializable {
         clearError(emailField, emailError);
         clearError(passwordField, passwordError);
         clearError(confirmPasswordField, confirmError);
-        clearError(null, paysError);
-        clearError(null, specialiteError);
+        //clearError(null, paysError);
+        //clearError(null, specialiteError);
         globalError.setVisible(false); globalError.setManaged(false);
     }
 

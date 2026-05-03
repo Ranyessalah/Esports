@@ -1,7 +1,8 @@
 
 package services.userManagement;
 
-import entities.Equipe;
+
+import entities.matchManagement.Equipe;
 import entities.userManagement.Player;
 import entities.userManagement.User;
 import utils.DBConnection;
