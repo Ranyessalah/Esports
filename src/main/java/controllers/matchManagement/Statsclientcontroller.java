@@ -1,5 +1,6 @@
 package controllers.matchManagement;
 
+import controllers.MainLayoutController;
 import entities.matchManagement.Equipe;
 import entities.matchManagement.StatsRow;
 import services.matchManagement.ChatbotStatsService;
@@ -405,23 +406,41 @@ public class Statsclientcontroller {
         }
     }
 
-    private void navigateToTeamDetails(Equipe equipe) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/matchManagement/EquipeDetails.fxml"));
-            Parent root = loader.load();
-            EquipeDetailsController ctrl = loader.getController();
-            ctrl.setEquipe(equipe);
-            Stage stage = (Stage) tableView.getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 760));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Impossible d'ouvrir les détails de l'équipe.");
-        }
-    }
+//    private void navigateToTeamDetails(Equipe equipe) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+//                    "/matchManagement/EquipeDetails.fxml"));
+//            Parent root = loader.load();
+//            EquipeDetailsController ctrl = loader.getController();
+//            ctrl.setEquipe(equipe);
+//            Stage stage = (Stage) tableView.getScene().getWindow();
+//            stage.setScene(new Scene(root, 1200, 760));
+//            stage.show();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            showError("Impossible d'ouvrir les détails de l'équipe.");
+//        }
+//    }
+private void navigateToTeamDetails(Equipe equipe) {
+    try {
+        BorderPane rootPane = (BorderPane) tableView.getScene().getRoot();
+        MainLayoutController mainLayout = (MainLayoutController) rootPane.getUserData();
 
-    // ═══════════════════════════ NAVIGATION ═══════════════════════════
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/EquipeDetails.fxml"));
+        javafx.scene.Node node = loader.load();
+
+        EquipeDetailsController ctrl = loader.getController();
+        ctrl.setEquipe(equipe);
+        ctrl.setMainLayout(mainLayout);
+        ctrl.setOnBack(() -> mainLayout.onDashboardClick()); // ← back to stats
+
+        mainLayout.loadNode(node);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        showError("Impossible d'ouvrir les détails de l'équipe.");
+    }
+}    // ═══════════════════════════ NAVIGATION ═══════════════════════════
 
     @FXML public void goEquipes(javafx.event.ActionEvent event) { navigate(event, "/matchManagement/equipeIndex_client.fxml"); }
     @FXML public void goMatchs(javafx.event.ActionEvent event)  { navigate(event, "/matchManagement/matchIndex_client.fxml"); }
@@ -430,7 +449,7 @@ public class Statsclientcontroller {
     @FXML
     public void logout(javafx.event.ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userManagement/Login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root, 1200, 760));

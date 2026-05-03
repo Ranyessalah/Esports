@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.stage.*;
+import utils.PreferencesRepository;
 
 import java.io.File;
 import java.util.List;
@@ -282,8 +283,10 @@ public class AdminEquipeController {
     @FXML
     public void logout(ActionEvent event) {
         try {
+            PreferencesRepository prefs = new PreferencesRepository();
+            prefs.clearSession();
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/matchManagement/Login.fxml")
+                    getClass().getResource("/userManagement/Login.fxml")
             );
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

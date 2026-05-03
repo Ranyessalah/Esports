@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.userManagement.AdminUsersController"
+      spacing="24" styleClass="admin-content">
+    <padding><Insets top="28" bottom="28" left="28" right="28" /></padding>
+
+    <!-- ── STATS CARDS ── -->
+    <HBox spacing="18">
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <StackPane styleClass="stat-icon-box stat-icon-purple">
+                    <Label text="👥" styleClass="stat-icon" />
+                </StackPane>
+                <VBox spacing="2">
+                    <Label text="UTILISATEURS TOTAL" styleClass="stat-title" />
+                    <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value" />
+                </VBox>
+            </HBox>
+        </VBox>
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <StackPane styleClass="stat-icon-box stat-icon-blue">
+                    <Label text="🎓" styleClass="stat-icon" />
+                </StackPane>
+                <VBox spacing="2">
+                    <Label text="COACHS" styleClass="stat-title" />
+                    <Label fx:id="totalCoachesLabel" text="0" styleClass="stat-value" />
+                </VBox>
+            </HBox>
+        </VBox>
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <StackPane styleClass="stat-icon-box stat-icon-green">
+                    <Label text="🎮" styleClass="stat-icon" />
+                </StackPane>
+                <VBox spacing="2">
+                    <Label text="JOUEURS" styleClass="stat-title" />
+                    <Label fx:id="totalPlayersLabel" text="0" styleClass="stat-value" />
+                </VBox>
+            </HBox>
+        </VBox>
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="8">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <StackPane styleClass="stat-icon-box stat-icon-orange">
+                    <Label text="⭐" styleClass="stat-icon" />
+                </StackPane>
+                <VBox spacing="2">
+                    <Label text="ADMINISTRATEURS" styleClass="stat-title" />
+                    <Label fx:id="totalAdminsLabel" text="0" styleClass="stat-value" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <!-- ── FILTERS + TABLE ── -->
+    <VBox styleClass="admin-table-card" spacing="16">
+        <padding><Insets top="20" bottom="20" left="20" right="20" /></padding>
+
+        <HBox spacing="14" alignment="CENTER_LEFT">
+            <VBox spacing="4">
+                <Label text="RECHERCHER" styleClass="filter-label" />
+                <TextField fx:id="searchField" styleClass="filter-input"
+                           promptText="Rechercher par email, rôle..." prefWidth="200" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text="RÔLE" styleClass="filter-label" />
+                <ComboBox fx:id="roleFilter" styleClass="filter-combo" prefWidth="140" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text="STATUT" styleClass="filter-label" />
+                <ComboBox fx:id="statusFilter" styleClass="filter-combo" prefWidth="140" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text="TRIER PAR" styleClass="filter-label" />
+                <ComboBox fx:id="sortByFilter" styleClass="filter-combo" prefWidth="120" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text="ORDRE" styleClass="filter-label" />
+                <ComboBox fx:id="orderFilter" styleClass="filter-combo" prefWidth="130" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text=" " styleClass="filter-label" />
+                <HBox spacing="8">
+                    <Button text="⚡ Appliquer"    styleClass="filter-apply-btn" onAction="#onApplyFilters" />
+                    <Button text="↺ Réinitialiser" styleClass="filter-reset-btn" onAction="#onResetFilters" />
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <Label fx:id="resultCountLabel" text="0 utilisateurs trouvés" styleClass="result-count" />
+
+        <TableView fx:id="usersTable" styleClass="admin-table" VBox.vgrow="ALWAYS" minHeight="320">
+            <columns>
+                <TableColumn fx:id="colId"      text="ID"          prefWidth="60"  />
+                <TableColumn fx:id="colUser"    text="UTILISATEUR" prefWidth="220" />
+                <TableColumn fx:id="colRole"    text="RÔLE"        prefWidth="120" />
+                <TableColumn fx:id="colEmail"   text="EMAIL"       prefWidth="230" />
+                <TableColumn fx:id="colStatus"  text="STATUT"      prefWidth="100" />
+                <TableColumn fx:id="colActions" text="ACTIONS"     prefWidth="110" />
+            </columns>
+            <placeholder>
+                <Label text="Aucun utilisateur trouvé" styleClass="table-placeholder" />
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>

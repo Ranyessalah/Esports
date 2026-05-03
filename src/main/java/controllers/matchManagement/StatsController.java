@@ -2,6 +2,7 @@ package controllers.matchManagement;
 
 import entities.matchManagement.Matchs;
 import entities.matchManagement.StatsRow;
+import javafx.scene.input.MouseEvent;
 import services.matchManagement.MatchService;
 import services.matchManagement.StatsService;
 import javafx.collections.FXCollections;
@@ -17,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.PreferencesRepository;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -394,8 +396,10 @@ public class StatsController {
     @FXML
     public void logout(javafx.event.ActionEvent event) {
         try {
+            PreferencesRepository  prefs = new PreferencesRepository();
+            prefs.clearSession();
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/matchManagement/Login.fxml")
+                    getClass().getResource("/userManagement/Login.fxml")
             );
             Parent root = loader.load();
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
@@ -843,4 +847,6 @@ public class StatsController {
         cell.setBorderColor(new com.itextpdf.text.BaseColor(229, 231, 235)); // #e5e7eb
         return cell;
     }
+
+
 }

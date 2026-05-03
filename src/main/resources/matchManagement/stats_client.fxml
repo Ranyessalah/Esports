@@ -25,10 +25,10 @@
                 </HBox>
 
                 <HBox spacing="6" alignment="CENTER">
-                    <Button text="Matchs"         styleClass="nav-link"        onAction="#goMatchs"/>
-                    <Button text="Équipes"        styleClass="nav-link"        onAction="#goEquipes"/>
-                    <Button text="Statistiques"   styleClass="nav-link-active" onAction="#goStats"/>
-                    <Button text="🚪 Déconnexion" styleClass="nav-link-danger" onAction="#logout"/>
+<!--                    <Button text="Matchs"         styleClass="nav-link"        onAction="#goMatchs"/>-->
+<!--                    <Button text="Équipes"        styleClass="nav-link"        onAction="#goEquipes"/>-->
+<!--                    <Button text="Statistiques"   styleClass="nav-link-active" onAction="#goStats"/>-->
+<!--                    <Button text="🚪 Déconnexion" styleClass="nav-link-danger" onAction="#logout"/>-->
                     <Button text="↻ Actualiser"   styleClass="btn-refresh"     onAction="#refresh"/>
                 </HBox>
             </HBox>

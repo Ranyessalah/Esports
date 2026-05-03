@@ -1,5 +1,6 @@
 package controllers.matchManagement;
 
+import controllers.MainLayoutController;
 import entities.userManagement.Coach;
 import entities.matchManagement.Equipe;
 import entities.userManagement.Player;
@@ -38,6 +39,7 @@ public class EquipeDetailsController {
     @FXML private VBox staffSection;
     @FXML private FlowPane staffContainer;
     @FXML private FlowPane playersContainer;
+    private MainLayoutController mainLayout;
 
     private PlayerService playerService = new PlayerService();
     private Runnable onBack;
@@ -47,7 +49,9 @@ public class EquipeDetailsController {
     public void setOnBack(Runnable onBack) {
         this.onBack = onBack;
     }
-
+    public void setMainLayout(MainLayoutController mainLayout) {
+        this.mainLayout = mainLayout;
+    }
     public void setEquipe(Equipe e) {
         this.currentEquipe = e;
         name.setText(e.getNom());
@@ -332,22 +336,34 @@ public class EquipeDetailsController {
     }
 
     // === MÉTHODE goBack ORIGINALE conservée ===
+//    @FXML
+//    private void goBack() {
+//        if (onBack != null) {
+//            onBack.run();
+//            return;
+//        }
+//
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/equipeIndex_client.fxml"));
+//            Parent root = loader.load();
+//
+//            Stage stage = (Stage) name.getScene().getWindow();
+//            stage.setScene(new Scene(root, 1200, 760));
+//            stage.show();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+
     @FXML
     private void goBack() {
         if (onBack != null) {
             onBack.run();
             return;
         }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/equipeIndex_client.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) name.getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 760));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (mainLayout != null) {
+            mainLayout.onEquipesClick();
         }
     }
 }

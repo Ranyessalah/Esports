@@ -96,11 +96,7 @@ public class AdminProfileViewController implements Initializable {
         rowTotp.getStyleClass().add(totp ? "row-value-green" : "row-value-amber");
     }
 
-    // ── Back: restore table in center ──
-    @FXML
-    private void onBack() {
-        mainRoot.setCenter(previousCenter);
-    }
+
 
     // ── Edit: open dialog on top, dialog only closes itself ──
     @FXML

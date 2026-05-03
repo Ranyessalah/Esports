@@ -11,7 +11,7 @@
     <top>
         <HBox styleClass="profile-topbar" alignment="CENTER_LEFT" spacing="16">
             <padding><Insets top="0" bottom="0" left="20" right="28"/></padding>
-            <Button text="← Retour" styleClass="back-btn" onAction="#onBack"/>
+<!--            <Button text="← Retour" styleClass="back-btn" onAction="#onBack"/>-->
             <Label text="Mon profil" styleClass="profile-topbar-title"/>
         </HBox>
     </top>

@@ -1,7 +1,7 @@
 package mains;
 
-import controllers.userManagement.AdminDashboardController;
-import controllers.userManagement.MainLayoutController;
+import controllers.AdminDashboardController;
+import controllers.MainLayoutController;
 import entities.userManagement.Roles;
 import entities.userManagement.User;
 import javafx.application.Application;
@@ -25,7 +25,7 @@ public class MainFX extends Application {
         primaryStage.setMinHeight(600);
 
         PreferencesRepository prefs = new PreferencesRepository();
-        User savedUser = prefs.loadSession(); // null si pas de rememberMe ou pas de session
+        User savedUser = prefs.loadSession();
         System.out.println("saved user: " + savedUser);
         if (savedUser != null) {
             routeByRole(savedUser, primaryStage);
@@ -58,7 +58,7 @@ public class MainFX extends Application {
 
     private void loadAdmin(User user, Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userManagement/AdminDashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminDashboard.fxml"));
             Parent root = loader.load();
 
             AdminDashboardController ctrl = loader.getController();
@@ -76,7 +76,7 @@ public class MainFX extends Application {
 
     private void loadMain(User user, Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userManagement/MainLayout.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainLayout.fxml"));
             Parent root = loader.load();
 
             MainLayoutController ctrl = loader.getController();

@@ -1,5 +1,6 @@
 package controllers.matchManagement;
 
+import controllers.MainLayoutController;
 import entities.matchManagement.Equipe;
 import entities.matchManagement.Matchs;
 import services.matchManagement.MatchService;
@@ -18,6 +19,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import services.matchManagement.EquipeService;
 import services.matchManagement.PredictionService;
+import utils.PreferencesRepository;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -719,30 +721,52 @@ public class MatchClientController {
         dialog.setScene(scene);
         dialog.showAndWait();
     }
-
-
-    // ================= OPEN DETAILS =================
     private void openDetailsPage(Matchs m) {
-
         try {
+            // Get MainLayoutController from scene root
+            BorderPane rootPane = (BorderPane) matchContainer.getScene().getRoot();
+            MainLayoutController mainLayout = (MainLayoutController) rootPane.getUserData();
 
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/matchManagement/matchDetails.fxml")
             );
-
-            Parent root = loader.load();
+            javafx.scene.Node node = loader.load();
 
             MatchDetailsController controller = loader.getController();
             controller.setMatch(m);
+            controller.setMainLayout(mainLayout); // pass reference directly
 
-            Stage stage = (Stage) matchContainer.getScene().getWindow(); // This one is fine as it uses the container of the cards, which is usually present
-            stage.setScene(new Scene(root, 1200, 760));
-            stage.show();
+            // Load into contentArea, not a new Scene
+            mainLayout.loadContent(null, null); // clear first
+            ((StackPane) rootPane.getCenter()).getChildren().setAll(node);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    // ================= OPEN DETAILS =================
+//    private void openDetailsPage(Matchs m) {
+//
+//        try {
+//
+//            FXMLLoader loader = new FXMLLoader(
+//                    getClass().getResource("/matchManagement/matchDetails.fxml")
+//            );
+//
+//            Parent root = loader.load();
+//
+//            MatchDetailsController controller = loader.getController();
+//            controller.setMatch(m);
+//
+//            Stage stage = (Stage) matchContainer.getScene().getWindow(); // This one is fine as it uses the container of the cards, which is usually present
+//            stage.setScene(new Scene(root, 1200, 760));
+//            stage.show();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // ================= IMAGE =================
@@ -828,8 +852,10 @@ public class MatchClientController {
     @FXML
     public void logout(ActionEvent event) {
         try {
+            PreferencesRepository prefs = new PreferencesRepository();
+            prefs.clearSession();
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/matchManagement/Login.fxml")
+                    getClass().getResource("/userManagement/Login.fxml")
             );
             Parent root = loader.load();
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();

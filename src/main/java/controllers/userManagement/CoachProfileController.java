@@ -92,7 +92,7 @@ public class CoachProfileController implements Initializable {
         try {
             // Navigate back to the dashboard or previous screen.
             // Adjust the FXML path to match your actual dashboard view.
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userManagement/MainLayout.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainLayout.fxml"));
             javafx.scene.Parent root = loader.load();
             Stage stage = (Stage) infoEmail.getScene().getWindow();
             Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());

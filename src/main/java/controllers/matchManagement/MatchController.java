@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import utils.PreferencesRepository;
 import utils.matchManagement.MatchNotificationService;
 
 import java.io.File;
@@ -835,8 +836,10 @@ public class MatchController {
     @FXML
     public void logout(ActionEvent event) {
         try {
+            PreferencesRepository prefs = new PreferencesRepository();
+            prefs.clearSession();
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/matchManagement/Login.fxml")
+                    getClass().getResource("/userManagement/Login.fxml")
             );
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

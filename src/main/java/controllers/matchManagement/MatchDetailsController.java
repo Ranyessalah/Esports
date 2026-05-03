@@ -1,5 +1,6 @@
 package controllers.matchManagement;
 
+import controllers.MainLayoutController;
 import entities.matchManagement.Matchs;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -15,19 +17,32 @@ import java.util.Locale;
 
 public class MatchDetailsController {
 
-    @FXML private Label matchTitle;
-    @FXML private Label statusLabel;
-    @FXML private Label team1Name;
-    @FXML private Label team2Name;
-    @FXML private Label scoreLabel;
-    @FXML private Label dateMatchLabel;
-    @FXML private Label dateFinLabel;
-    @FXML private ImageView team1Logo;
-    @FXML private ImageView team2Logo;
+    @FXML
+    private Label matchTitle;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Label team1Name;
+    @FXML
+    private Label team2Name;
+    @FXML
+    private Label scoreLabel;
+    @FXML
+    private Label dateMatchLabel;
+    @FXML
+    private Label dateFinLabel;
+    @FXML
+    private ImageView team1Logo;
+    @FXML
+    private ImageView team2Logo;
 
     private Matchs match;
     private Runnable onBack;
+    private MainLayoutController mainLayout;
 
+    public void setMainLayout(MainLayoutController mainLayout) {
+        this.mainLayout = mainLayout;
+    }
     public void setOnBack(Runnable onBack) {
         this.onBack = onBack;
     }
@@ -85,23 +100,52 @@ public class MatchDetailsController {
         }
     }
 
+    //    @FXML
+//    private void goBack() {
+//        if (onBack != null) {
+//            onBack.run();
+//            return;
+//        }
+//
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/matchIndex_client.fxml"));
+//            Parent root = loader.load();
+//
+//            Stage stage = (Stage) matchTitle.getScene().getWindow();
+//            stage.setScene(new Scene(root, 1200, 760));
+//            stage.show();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    @FXML
+//    private void goBack() {
+//        if (onBack != null) {
+//            onBack.run();
+//            return;
+//        }
+//        if (mainLayout != null) {
+//            mainLayout.onMatchsClick();
+//        } else {
+//            // last-resort fallback
+//            try {
+//                BorderPane rootPane = (BorderPane) matchTitle.getScene().getRoot();
+//                MainLayoutController ctrl = (MainLayoutController) rootPane.getUserData();
+//                if (ctrl != null) ctrl.onMatchsClick();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
     @FXML
     private void goBack() {
         if (onBack != null) {
             onBack.run();
             return;
         }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/matchIndex_client.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) matchTitle.getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 760));
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (mainLayout != null) {
+            mainLayout.onMatchsClick();
         }
     }
 }

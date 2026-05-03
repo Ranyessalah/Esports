@@ -30,18 +30,18 @@
                     </VBox>
 
                     <!-- NAVBAR BUTTONS -->
-                    <HBox spacing="10" alignment="CENTER">
+<!--                    <HBox spacing="10" alignment="CENTER">-->
 
-                        <Button text="Matchs" styleClass="nav-btn active" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
-                                style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 10; -fx-text-fill: white;"/>
-                        <Button text="Équipes" styleClass="nav-btn" onAction="#goEquipes" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
-                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>
-                        <Button text="Statistiques" styleClass="nav-btn" onAction="#goStats" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
-                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>
-                        <Button text="🚪 Déconnexion" styleClass="nav-btn nav-logout" onAction="#logout" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
-                                style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;" />
+<!--                        <Button text="Matchs" styleClass="nav-btn active" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"-->
+<!--                                style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 10; -fx-text-fill: white;"/>-->
+<!--                        <Button text="Équipes" styleClass="nav-btn" onAction="#goEquipes" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"-->
+<!--                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>-->
+<!--                        <Button text="Statistiques" styleClass="nav-btn" onAction="#goStats" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"-->
+<!--                                style="-fx-background-color: transparent; -fx-background-insets: 0;"/>-->
+<!--                        <Button text="🚪 Déconnexion" styleClass="nav-btn nav-logout" onAction="#logout" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"-->
+<!--                                style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;" />-->
 
-                    </HBox>
+<!--                    </HBox>-->
 
                 </HBox>
 

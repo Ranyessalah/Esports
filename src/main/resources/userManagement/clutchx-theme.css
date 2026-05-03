@@ -126,7 +126,7 @@
    SIDEBAR
    ────────────────────────────────────────── */
 .sidebar {
-    -fx-background-color: #f8f9fa;
+    -fx-background-color: #070d1a;
     -fx-border-color: #e2e8f0;
     -fx-border-width: 0 1 0 0;
     -fx-padding: 0;
@@ -160,12 +160,7 @@
     -fx-background-radius: 8;
     -fx-cursor: hand;
 }
-.nav-item:hover {
-    -fx-background-color: #edf2f7;
-}
-.nav-item-active {
-    -fx-background-color: #edf2f7;
-}
+
 
 .nav-icon-box {
     -fx-background-radius: 8;
@@ -185,8 +180,11 @@
 }
 
 .nav-label {
-    -fx-text-fill: #4a5568;
-    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+}
+.nav-item:hover .nav-label .nav-icon {
+    -fx-text-fill: #000000;
 }
 .nav-label-active {
     -fx-text-fill: #2d3748;

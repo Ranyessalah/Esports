@@ -1,5 +1,7 @@
-package controllers.userManagement;
+package controllers;
 
+import controllers.userManagement.CoachProfileController;
+import controllers.userManagement.PlayerProfileController;
 import entities.userManagement.Roles;
 import entities.userManagement.User;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Popup;
 import utils.PreferencesRepository;
@@ -38,7 +41,8 @@ public class MainLayoutController implements Initializable {
     @FXML private Label labelFormComponents;
     @FXML private Label labelCoach;
     @FXML private Label chevronComponents;
-
+    @FXML private Label labelEquipes;
+    @FXML private Label labelMatchs;
     // Avatars
     @FXML private ImageView userAvatarHeader;
     @FXML private ImageView sidebarAvatar;
@@ -51,11 +55,16 @@ public class MainLayoutController implements Initializable {
     private final PreferencesRepository prefs=new PreferencesRepository();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        rootPane.setUserData(this);  // ← must be first
+
         setupUserDropdown();
         setupResponsiveListener();
         onDashboardClick();
     }
-
+    public void loadNode(javafx.scene.Node node) {
+        contentArea.getChildren().clear();
+        contentArea.getChildren().add(node);
+    }
     // ── Responsive: auto-collapse sidebar on small windows ──
     private void setupResponsiveListener() {
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -118,7 +127,9 @@ public class MainLayoutController implements Initializable {
     private void setLabelsVisible(boolean visible) {
         for (Label l : new Label[]{
                 labelDashboard, labelComponents,
-                labelFormComponents, labelCoach, chevronComponents
+                labelFormComponents, labelCoach,
+                labelEquipes, labelMatchs,
+                chevronComponents
         }) {
             if (l != null) {
                 l.setVisible(visible);
@@ -129,16 +140,8 @@ public class MainLayoutController implements Initializable {
 
     // ── Navigation ──
     @FXML public void onDashboardClick() {
-        loadContent(null, "Dashboard");
-    }
+        loadContent("/matchManagement/stats_client.fxml", null);    }
 
-    @FXML public void onComponentsClick() {
-        loadContent(null, "Components");
-    }
-
-    @FXML public void onFormComponentsClick() {
-        loadContent(null, "Form Components");
-    }
 
 
 
@@ -146,7 +149,7 @@ public class MainLayoutController implements Initializable {
         // Close current tab or navigate back
     }
 
-    private void loadContent(String fxmlPath, String placeholderText) {
+    public void loadContent(String fxmlPath, String placeholderText) {
         contentArea.getChildren().clear();
         if (fxmlPath != null) {
             try {
@@ -276,4 +279,14 @@ public class MainLayoutController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML public void onEquipesClick() {
+        loadContent("/matchManagement/equipeIndex_client.fxml", null);
+    }
+    @FXML
+    public void onMatchsClick() {
+        loadContent("/matchManagement/matchIndex_client.fxml", null);
+    }
+
+
 }

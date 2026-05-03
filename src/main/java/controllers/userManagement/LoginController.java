@@ -1,5 +1,7 @@
 package controllers.userManagement;
 
+import controllers.AdminDashboardController;
+import controllers.MainLayoutController;
 import entities.userManagement.Roles;
 import entities.userManagement.User;
 import javafx.application.Platform;
@@ -398,7 +400,7 @@ public class LoginController implements Initializable {
         stopCaptchaServer();
         stopGoogleAuth();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userManagement/AdminDashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminDashboard.fxml"));
             Parent root = loader.load();
             AdminDashboardController ctrl = loader.getController();
             ctrl.setAdminEmail(user.getEmail());
@@ -415,7 +417,7 @@ public class LoginController implements Initializable {
         stopCaptchaServer();
         stopGoogleAuth();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userManagement/MainLayout.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainLayout.fxml"));
             Parent root = loader.load();
             MainLayoutController ctrl = loader.getController();
             ctrl.setUserEmail(user.getEmail());

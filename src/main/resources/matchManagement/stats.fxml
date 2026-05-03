@@ -11,67 +11,67 @@
             styleClass="root">
 
     <!-- SIDEBAR -->
-    <left>
-        <VBox spacing="18"
-              styleClass="sidebar"
-              prefWidth="220">
+<!--    <left>-->
+<!--        <VBox spacing="18"-->
+<!--              styleClass="sidebar"-->
+<!--              prefWidth="220">-->
 
-            <padding>
-                <Insets top="24" right="18" bottom="24" left="18"/>
-            </padding>
+<!--            <padding>-->
+<!--                <Insets top="24" right="18" bottom="24" left="18"/>-->
+<!--            </padding>-->
 
-            <Label text="E-Sports Admin"
-                   styleClass="logo"/>
+<!--            <Label text="E-Sports Admin"-->
+<!--                   styleClass="logo"/>-->
 
-            <!-- MENU -->
-            <VBox spacing="10">
+<!--            &lt;!&ndash; MENU &ndash;&gt;-->
+<!--            <VBox spacing="10">-->
 
-                <Button text="🏠 Dashboard"
-                        styleClass="menu-btn"
-                        onAction="#goDashboard"
-                        maxWidth="1.7976931348623157E308"/>
+<!--                <Button text="🏠 Dashboard"-->
+<!--                        styleClass="menu-btn"-->
+<!--                        onAction="#goDashboard"-->
+<!--                        maxWidth="1.7976931348623157E308"/>-->
 
-                <Button text="👥 Equipes"
-                        styleClass="menu-btn"
-                        onAction="#goEquipes"
-                        maxWidth="1.7976931348623157E308"/>
+<!--                <Button text="👥 Equipes"-->
+<!--                        styleClass="menu-btn"-->
+<!--                        onAction="#goEquipes"-->
+<!--                        maxWidth="1.7976931348623157E308"/>-->
 
-                <Button text="🎮 Matchs"
-                        styleClass="menu-btn"
-                        onAction="#goMatchs"
-                        maxWidth="1.7976931348623157E308"/>
+<!--                <Button text="🎮 Matchs"-->
+<!--                        styleClass="menu-btn"-->
+<!--                        onAction="#goMatchs"-->
+<!--                        maxWidth="1.7976931348623157E308"/>-->
 
-                <Button text="🏆 Statistiques"
-                        styleClass="menu-btn active"
-                        maxWidth="1.7976931348623157E308"
-                        style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 12; -fx-text-fill: white;"
-                />
+<!--                <Button text="🏆 Statistiques"-->
+<!--                        styleClass="menu-btn active"-->
+<!--                        maxWidth="1.7976931348623157E308"-->
+<!--                        style="-fx-background-color: linear-gradient(to right, #5b21b6, #7c3aed); -fx-background-insets: 0; -fx-background-radius: 12; -fx-text-fill: white;"-->
+<!--                />-->
 
-                <Region prefHeight="10.0" />
-                <Button text="🚪 Déconnexion" 
-                        styleClass="menu-btn" 
-                        onAction="#logout"
-                        maxWidth="1.7976931348623157E308"
-                        style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;"/>
+<!--                <Region prefHeight="10.0" />-->
+<!--                <Button text="🚪 Déconnexion" -->
+<!--                        styleClass="menu-btn" -->
+<!--                        onAction="#logout"-->
+<!--                        maxWidth="1.7976931348623157E308"-->
+<!--                        style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #ff6b6b;"/>-->
 
-            </VBox>
+<!--            </VBox>-->
 
-            <Region VBox.vgrow="ALWAYS"/>
+<!--            <Region VBox.vgrow="ALWAYS"/>-->
 
-            <!-- TIP -->
-            <VBox spacing="8"
-                  styleClass="sidebar-footer-card">
+<!--            &lt;!&ndash; TIP &ndash;&gt;-->
+<!--            <VBox spacing="8"-->
+<!--                  styleClass="sidebar-footer-card">-->
 
-                <Label text="Tip"
-                       styleClass="tip-title"/>
+<!--                <Label text="Tip"-->
+<!--                       styleClass="tip-title"/>-->
 
-                <Label text="Consultez le classement, performances et points des équipes."
-                       wrapText="true"
-                       styleClass="tip-text"/>
-            </VBox>
+<!--                <Label text="Consultez le classement, performances et points des équipes."-->
+<!--                       wrapText="true"-->
+<!--                       styleClass="tip-text"/>-->
+<!--            </VBox>-->
 
-        </VBox>
-    </left>
+<!--        </VBox>-->
+<!--    </left>-->
 
     <!-- MAIN -->
     <center>

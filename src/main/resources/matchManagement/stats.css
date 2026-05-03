@@ -157,7 +157,7 @@
 }
 .combo-filter .list-cell {
     -fx-text-fill: -color-text;
-    -fx-background-color: transparent;
+    -fx-background-color: -color-surface2;
 }
 .combo-filter:focused {
     -fx-border-color: -color-accent;

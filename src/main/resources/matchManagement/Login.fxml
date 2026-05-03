@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane prefHeight="760.0" prefWidth="1200.0" style="-fx-background-color: #12101F;" stylesheets="@login.css" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.esports.controller.LoginController">
+<StackPane prefHeight="760.0" prefWidth="1200.0" style="-fx-background-color: #12101F;" stylesheets="@login.css" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.userManagement.LoginController">
    <children>
       <VBox alignment="CENTER" maxWidth="350.0" maxHeight="600.0" spacing="15.0" styleClass="login-card">
          <padding>
@@ -127,7 +127,7 @@
                </font>
             </Label>
             
-            <Button fx:id="loginButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleLogin" styleClass="primary-btn" text="→  Se connecter">
+            <Button fx:id="loginButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onLogin" styleClass="primary-btn" text="→  Se connecter">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>

@@ -1,7 +1,10 @@
 package controllers.matchManagement;
 
+import controllers.MainLayoutController;
 import entities.matchManagement.Equipe;
+import javafx.scene.layout.BorderPane;
 import services.matchManagement.EquipeService;
+import utils.PreferencesRepository;
 import utils.matchManagement.QRCodeUtil;
 import utils.matchManagement.TeamWebServer;
 
@@ -219,32 +222,50 @@ public class ClientEquipeController {
             showError("Erreur lors de l'enregistrement: " + e.getMessage());
         }
     }
+//
+//    private void openDetails(Equipe e) {
+//        try {
+//            Stage stage = (Stage)this.cardContainer.getScene().getWindow();
+//            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/matchManagement/EquipeDetails.fxml"));
+//            Parent root = loader.load();
+//            EquipeDetailsController ctrl = loader.getController();
+//            ctrl.setEquipe(e);
+//            ctrl.setOnBack(() -> {
+//                try {
+//                    FXMLLoader backLoader = new FXMLLoader(this.getClass().getResource("/matchManagement/equipeIndex_client.fxml"));
+//                    Parent backRoot = backLoader.load();
+//                    stage.setScene(new Scene(backRoot, 1200.0, 760.0));
+//                    stage.show();
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            });
+//            stage.setScene(new Scene(root, 1200.0, 760.0));
+//            stage.show();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void openDetails(Equipe e) {
         try {
-            Stage stage = (Stage)this.cardContainer.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/matchManagement/EquipeDetails.fxml"));
-            Parent root = loader.load();
+            BorderPane rootPane = (BorderPane) cardContainer.getScene().getRoot();
+            MainLayoutController mainLayout = (MainLayoutController) rootPane.getUserData();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/matchManagement/EquipeDetails.fxml"));
+            javafx.scene.Node node = loader.load();
+
             EquipeDetailsController ctrl = loader.getController();
             ctrl.setEquipe(e);
-            ctrl.setOnBack(() -> {
-                try {
-                    FXMLLoader backLoader = new FXMLLoader(this.getClass().getResource("/matchManagement/equipeIndex_client.fxml"));
-                    Parent backRoot = backLoader.load();
-                    stage.setScene(new Scene(backRoot, 1200.0, 760.0));
-                    stage.show();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-            stage.setScene(new Scene(root, 1200.0, 760.0));
-            stage.show();
+            ctrl.setMainLayout(mainLayout);
+            ctrl.setOnBack(() -> mainLayout.onEquipesClick()); // ← back to equipes
+
+            mainLayout.loadNode(node);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    @FXML
+    }    @FXML
     void search() {
         String text = this.searchField.getText().toLowerCase();
         List<Equipe> filtered = this.allEquipes.stream()
@@ -313,7 +334,9 @@ public class ClientEquipeController {
     @FXML
     private void logout(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/matchManagement/Login.fxml"));
+            PreferencesRepository prefs = new PreferencesRepository();
+            prefs.clearSession();
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/userManagement/Login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root, 1200.0, 760.0));
