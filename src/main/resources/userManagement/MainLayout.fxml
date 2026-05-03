@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.userManagement.MainLayoutController"
+            fx:id="rootPane"
+            stylesheets="@/userManagement/clutchx-theme.css">
+
+    <!-- ═══ HEADER ═══ -->
+    <top>
+        <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="0">
+
+            <!-- Logo Zone — shrinks with sidebar -->
+            <HBox fx:id="logoZone" styleClass="logo-zone" alignment="CENTER"
+                  minWidth="60" prefWidth="250" maxWidth="250">
+                <Label styleClass="logo-x-btn" text="X" />
+                <Label fx:id="logoTextFull" styleClass="logo-text" text="CLUTCH" />
+                <Label fx:id="logoTextAccent" styleClass="logo-text-accent" text="X" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button styleClass="hamburger-btn" fx:id="hamburgerBtn" onAction="#toggleSidebar">
+                    <graphic><Label text="☰" styleClass="hamburger-icon" /></graphic>
+                </Button>
+            </HBox>
+
+            <!-- Header content -->
+            <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"
+                  styleClass="header-content-zone" spacing="12">
+                <Button styleClass="icon-btn-close" text="✕" onAction="#onCloseTab" />
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- User Profile -->
+                <HBox fx:id="userProfileArea" styleClass="user-profile-area"
+                      alignment="CENTER" spacing="8">
+                    <ImageView fx:id="userAvatarHeader" fitWidth="36" fitHeight="36"
+                               preserveRatio="true" styleClass="avatar-header">
+                        <image><Image url="@/images/default-avatar.png" /></image>
+                    </ImageView>
+                    <Label fx:id="userEmailLabel" styleClass="user-email-label"
+                           text="rany.essalah@esprit.tn" />
+                    <Label text="▾" styleClass="dropdown-arrow" />
+                </HBox>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <left>
+        <VBox fx:id="sidebar" styleClass="sidebar"
+              minWidth="60" prefWidth="250" maxWidth="250">
+
+            <!-- User info -->
+            <HBox fx:id="sidebarUserInfo" styleClass="sidebar-user-info"
+                  alignment="CENTER_LEFT" spacing="12">
+                <ImageView fx:id="sidebarAvatar" fitWidth="40" fitHeight="40"
+                           preserveRatio="true" styleClass="sidebar-avatar">
+                    <image><Image url="@/images/default-avatar.png" /></image>
+                </ImageView>
+                <Label fx:id="sidebarEmail" styleClass="sidebar-email"
+                       text="Rany.Essalah@Esprit.Tn" wrapText="true" />
+            </HBox>
+
+            <!-- Nav items -->
+            <VBox styleClass="nav-list" spacing="4">
+
+                <HBox fx:id="navDashboard" styleClass="nav-item nav-item-active"
+                      alignment="CENTER_LEFT" spacing="12"
+                      onMouseClicked="#onDashboardClick">
+                    <HBox styleClass="nav-icon-box nav-icon-blue"
+                          alignment="CENTER" minWidth="32" minHeight="32">
+                        <Label text="⌂" styleClass="nav-icon" />
+                    </HBox>
+                    <Label fx:id="labelDashboard" text="Dashboard"
+                           styleClass="nav-label-active" />
+                </HBox>
+
+                <HBox fx:id="navComponents" styleClass="nav-item"
+                      alignment="CENTER_LEFT" spacing="12"
+                      onMouseClicked="#onComponentsClick">
+                    <HBox styleClass="nav-icon-box nav-icon-red"
+                          alignment="CENTER" minWidth="32" minHeight="32">
+                        <Label text="⊞" styleClass="nav-icon" />
+                    </HBox>
+                    <Label fx:id="labelComponents" text="Components"
+                           styleClass="nav-label" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="chevronComponents" text="›" styleClass="nav-chevron" />
+                </HBox>
+
+                <HBox fx:id="navFormComponents" styleClass="nav-item"
+                      alignment="CENTER_LEFT" spacing="12"
+                      onMouseClicked="#onFormComponentsClick">
+                    <HBox styleClass="nav-icon-box nav-icon-green"
+                          alignment="CENTER" minWidth="32" minHeight="32">
+                        <Label text="☑" styleClass="nav-icon" />
+                    </HBox>
+                    <Label fx:id="labelFormComponents" text="Form Components"
+                           styleClass="nav-label" />
+                </HBox>
+
+
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+        </VBox>
+    </left>
+
+    <!-- ═══ CONTENT ═══ -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area" />
+    </center>
+
+</BorderPane>

@@ -1,0 +1,296 @@
+/* ═══════════════════════════════════════════════════════════
+   PROFILE SCREEN — append these rules to clutchx-theme.css
+   ═══════════════════════════════════════════════════════════ */
+
+/* Scroll wrapper */
+.profile-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+.profile-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Root padding area */
+.profile-root {
+    -fx-background-color: transparent;
+}
+
+/* Page title / subtitle */
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e2e8f0;
+}
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #718096;
+}
+
+/* Card container */
+.profile-card {
+    -fx-background-color: #1a202c;
+    -fx-background-radius: 12;
+    -fx-border-color: #2d3748;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 12, 0, 0, 4);
+}
+
+/* Banner section inside card */
+.profile-banner {
+    -fx-background-color: linear-gradient(to right, #1a202c, #2d3748);
+    -fx-background-radius: 12 12 0 0;
+}
+
+/* Avatar ring */
+.avatar-circle-bg {
+    -fx-fill: #2d3748;
+    -fx-stroke: #4a5568;
+    -fx-stroke-width: 2;
+}
+.profile-avatar-img {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 0, 2);
+}
+
+.profile-display-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e2e8f0;
+}
+
+/* Role badges */
+.role-badge-coach {
+    -fx-background-color: #553c9a;
+    -fx-text-fill: #e9d8fd;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 20;
+}
+.role-badge-player {
+    -fx-background-color: #2b6cb0;
+    -fx-text-fill: #bee3f8;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 20;
+}
+
+.disponibilite-tag {
+    -fx-font-size: 12px;
+    -fx-text-fill: #48bb78;
+}
+
+/* Edit button */
+.btn-edit-profile {
+    -fx-background-color: #3182ce;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-edit-profile:hover {
+    -fx-background-color: #2b6cb0;
+}
+
+/* Card divider */
+.card-divider {
+    -fx-background-color: #2d3748;
+    -fx-padding: 0;
+}
+
+/* Info grid labels */
+.info-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #718096;
+    -fx-font-weight: bold;
+    -fx-text-transform: uppercase;
+}
+.info-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e2e8f0;
+}
+
+/* 2FA card */
+.twofa-card {
+    /* inherits .profile-card */
+}
+.twofa-icon-box {
+    -fx-background-color: #553c9a;
+    -fx-background-radius: 8;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
+    -fx-alignment: center;
+}
+.twofa-icon {
+    -fx-font-size: 18px;
+}
+.card-section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e2e8f0;
+}
+.card-section-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #718096;
+}
+.twofa-warning {
+    -fx-background-color: #744210;
+    -fx-text-fill: #fbd38d;
+    -fx-font-size: 13px;
+    -fx-padding: 10 14 10 14;
+    -fx-background-radius: 6;
+}
+.btn-activate-2fa {
+    -fx-background-color: #3182ce;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 10 0;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-activate-2fa:hover {
+    -fx-background-color: #2b6cb0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIALOG STYLES
+   ═══════════════════════════════════════════════════════════ */
+
+.dialog-root {
+    -fx-background-color: #1a202c;
+}
+.dialog-header {
+    -fx-background-color: #1a202c;
+}
+.dialog-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e2e8f0;
+}
+.dialog-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #718096;
+}
+.dialog-close-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #718096;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-padding: 4 8 4 8;
+}
+.dialog-close-btn:hover {
+    -fx-text-fill: #e2e8f0;
+    -fx-background-color: #2d3748;
+    -fx-background-radius: 6;
+}
+
+.dialog-body {
+    -fx-background-color: #1a202c;
+}
+.dialog-footer {
+    -fx-background-color: #171923;
+}
+
+/* Form elements */
+.form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a0aec0;
+}
+.form-input {
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #e2e8f0;
+    -fx-prompt-text-fill: #4a5568;
+    -fx-border-color: #4a5568;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 13px;
+}
+.form-input:focused {
+    -fx-border-color: #3182ce;
+    -fx-background-color: #2d3748;
+}
+.form-combo {
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #e2e8f0;
+    -fx-border-color: #4a5568;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 4 8 4 8;
+    -fx-font-size: 13px;
+}
+.form-combo .list-cell {
+    -fx-text-fill: #e2e8f0;
+    -fx-background-color: #2d3748;
+}
+.form-combo .combo-box-popup .list-view {
+    -fx-background-color: #2d3748;
+    -fx-border-color: #4a5568;
+}
+.form-combo .combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #3182ce;
+}
+.form-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #718096;
+}
+.form-radio {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 13px;
+}
+.form-error {
+    -fx-text-fill: #fc8181;
+    -fx-font-size: 12px;
+    -fx-background-color: rgba(252,129,129,0.1);
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 6;
+}
+.btn-choose-file {
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #e2e8f0;
+    -fx-border-color: #4a5568;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-padding: 6 12 6 12;
+}
+.btn-choose-file:hover {
+    -fx-background-color: #3d4a5c;
+}
+
+/* Primary / Secondary buttons */
+.btn-primary {
+    -fx-background-color: #3182ce;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 9 20 9 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-primary:hover { -fx-background-color: #2b6cb0; }
+
+.btn-secondary {
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #a0aec0;
+    -fx-font-size: 13px;
+    -fx-padding: 9 16 9 16;
+    -fx-background-radius: 8;
+    -fx-border-color: #4a5568;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover { -fx-background-color: #3d4a5c; }
